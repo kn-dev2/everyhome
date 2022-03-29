@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories;
 
-Interface CustomerRepository
+Interface MaidRepository
 {
     public function listAll($roles);
 

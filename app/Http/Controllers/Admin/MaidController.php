@@ -4,27 +4,27 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;  
-use App\Http\Requests\Customers\CustomerCreateRequest;
-use App\Http\Requests\Customers\CustomerEditRequest;
-use App\Repositories\CustomerRepository;
+use App\Http\Requests\Maids\MaidCreateRequest;
+use App\Http\Requests\Maids\MaidEditRequest;
+use App\Repositories\MaidRepository;
 use Illuminate\Support\Facades\Hash;
-use App\User as Customer;
+use App\User as Maid;
 use Auth;
 
-class CustomerController extends Controller
+class MaidController extends Controller
 {
-    protected $customerRepository;
+    protected $maidRepository;
     public $roles;
     public $status_dropdown;
 
-    public function __construct(CustomerRepository $customerRepository)
+    public function __construct(MaidRepository $maidRepository)
     {
         $this->roles = config('global.roles');
         $this->status_dropdown = config('global.status_dropdown');
-        $this->customerRepository = $customerRepository;
+        $this->maidRepository = $maidRepository;
     }
 
-
+ 
     /**
      * Display a listing of the resource.
      *
@@ -32,8 +32,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = $this->customerRepository->listAll($this->roles);
-        return view('backend.customers.index', compact('customers'));
+        $maids = $this->maidRepository->listAll($this->roles);
+        return view('backend.maids.index', compact('maids'));
     }
 
     /**
@@ -44,7 +44,7 @@ class CustomerController extends Controller
     public function create()
     {
         //
-        return view('backend.customers.create')->with(['status_dropdown'=>$this->status_dropdown]);
+        return view('backend.maids.create')->with(['status_dropdown'=>$this->status_dropdown]);
     }
 
     /**
@@ -53,27 +53,27 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CustomerCreateRequest $request)
+    public function store(MaidCreateRequest $request)
     {
         //
         try {
 
-            $Customer = new Customer();
-            $Customer->role = $this->roles['Customer'];
-            $Customer->name = $request->name;
-            $Customer->email = $request->email;
-            $Customer->status = $request->status;
-            $Customer->password = Hash::make($request->password);
+            $Maid = new Maid();
+            $Maid->role = $this->roles['Maid'];
+            $Maid->name = $request->name;
+            $Maid->email = $request->email;
+            $Maid->status = $request->status;
+            $Maid->password = Hash::make($request->password);
 
-            $SaveCustomer = $Customer->save();
+            $SaveCustomer = $Maid->save();
 
             if($SaveCustomer)
             {
-                    session()->flash('error', 'Customer  Data is not saved.');
-                    return redirect()->route('customers.index');
+                    session()->flash('error', 'Maid  Data is not saved.');
+                    return redirect()->route('maids.index');
             } else {
-                session()->flash('error', 'Customer Data is not saved.');
-                return redirect()->route('backend.customers.index');
+                session()->flash('error', 'Maid Data is not saved.');
+                return redirect()->route('backend.maids.index');
             }
         } catch (\Illuminate\Database\QueryException $exception) {
 
@@ -102,14 +102,14 @@ class CustomerController extends Controller
     {
         //
         try {
-            $customer = Customer::findOrFail($id)->where('role',$this->roles['Customer'])->first();
+            $Maid = Maid::findOrFail($id)->where('role',$this->roles['Maid'])->first();
         } catch (ModelNotFoundException $exception) {
             // print_r($exception->getMessage()); die;
             session()->flash('error', 'No data found of this id');
-            return redirect()->route('customers.index');
+            return redirect()->route('maids.index');
         }
 
-        return view('backend.customers.update')->with(['customer'=>$customer,'status_dropdown'=>$this->status_dropdown]);
+        return view('backend.maids.update')->with(['maid'=>$Maid,'status_dropdown'=>$this->status_dropdown]);
     }
 
     /**
@@ -119,30 +119,30 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CustomerEditRequest $request, $id)
+    public function update(MaidEditRequest $request, $id)
     {
         try {
 
-            $Customer = Customer::find($id);
-            $Customer->name = $request->name;
-            $Customer->email = $request->email;
-            $Customer->status = $request->status;
+            $Maid = Maid::find($id);
+            $Maid->name = $request->name;
+            $Maid->email = $request->email;
+            $Maid->status = $request->status;
 
             if(isset($request->password) && $request->password!='')
             {
-                $Customer->password = Hash::make($request->password);
+                $Maid->password = Hash::make($request->password);
             }           
 
-            $SaveCustomer = $Customer->save();
+            $SaveMaid = $Maid->save();
 
-            if ($SaveCustomer) 
+            if ($SaveMaid) 
             {
-                session()->flash('error', 'Customer details has been updated.');
-                return redirect()->route('customers.index');
+                session()->flash('success', 'Maid details has been updated.');
+                return redirect()->route('maids.index');
   
             } else {
-                session()->flash('error', 'Customer Data is not updated.');
-                return redirect()->route('customers.index');
+                session()->flash('error', 'Maid Data is not updated.');
+                return redirect()->route('maids.index');
             }
         } catch (\Illuminate\Database\QueryException $exception) {
 

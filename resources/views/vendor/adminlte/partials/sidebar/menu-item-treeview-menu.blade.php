@@ -1,6 +1,6 @@
 <li @isset($item['id']) id="{{ $item['id'] }}" @endisset class="nav-item has-treeview {{ $item['submenu_class'] }}">
 
-    {{-- Menu toggler --}}
+    {{-- Menu toggler --}} 
     <a class="nav-link {{ $item['class'] }} @isset($item['shift']) {{ $item['shift'] }} @endisset"
        href="" {!! $item['data-compiled'] ?? '' !!}>
 

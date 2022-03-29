@@ -37,6 +37,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::group(['middleware' => ['auth']], function () {
 		Route::get('/dashboard', '\App\Http\Controllers\Admin\DashboardController@index')->name('dashboard');
 		Route::resource('customers', '\App\Http\Controllers\Admin\CustomerController');
+		Route::resource('maids', '\App\Http\Controllers\Admin\MaidController');
 
 	});
 });

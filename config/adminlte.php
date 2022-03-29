@@ -271,37 +271,21 @@ return [
             'icon'    => 'fas fa-fw fa-users',
             'submenu' => [
                 [
-                    'text' => 'List',
+                    'text' => 'List of customers',
                     'route'  => 'customers.index',
+                    'active' => ['/admin/customers/','/admin/customers/create/','regex:@^admin/customers/[0-9]+$@'],
                 ],
-                // [
-                //     'text'    => 'level_one',
-                //     'url'     => '#',
-                //     'submenu' => [
-                //         [
-                //             'text' => 'level_two',
-                //             'url'  => '#',
-                //         ],
-                //         [
-                //             'text'    => 'level_two',
-                //             'url'     => '#',
-                //             'submenu' => [
-                //                 [
-                //                     'text' => 'level_three',
-                //                     'url'  => '#',
-                //                 ],
-                //                 [
-                //                     'text' => 'level_three',
-                //                     'url'  => '#',
-                //                 ],
-                //             ],
-                //         ],
-                //     ],
-                // ],
-                // [
-                //     'text' => 'level_one',
-                //     'url'  => '#',
-                // ],
+            ],
+        ],
+        [
+            'text'    => 'Maids',
+            'icon'    => 'fas fa-fw fa-users',
+            'submenu' => [
+                [
+                    'text' => 'List of maids',
+                    'route'  => 'maids.index',
+                    'active' => ['/admin/maids/','/admin/maids/create/','regex:@^admin/maids/[0-9]+$@'],
+                ],
             ],
         ],
         // ['header' => 'labels'],
