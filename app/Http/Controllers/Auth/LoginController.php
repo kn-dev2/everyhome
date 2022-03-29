@@ -42,7 +42,7 @@ class LoginController extends Controller
     {
         if(\Request::route()->getName() == 'admin.login')
         {
-            return view('admin.login'); 
+            return view('auth.admin.login'); 
         } else {
             return view('auth.login'); 
         }

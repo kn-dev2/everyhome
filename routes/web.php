@@ -35,6 +35,8 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::post('logout', '\App\Http\Controllers\Admin\DashboardController@logout')->name('logout');
 
 	Route::group(['middleware' => ['auth']], function () {
+		Route::get('/profile', '\App\Http\Controllers\Admin\ProfileController@edit')->name('profile');
+		Route::post('/profile/update', '\App\Http\Controllers\Admin\ProfileController@update')->name('profile.update');
 		Route::get('/dashboard', '\App\Http\Controllers\Admin\DashboardController@index')->name('dashboard');
 		Route::resource('customers', '\App\Http\Controllers\Admin\CustomerController');
 		Route::resource('maids', '\App\Http\Controllers\Admin\MaidController');

@@ -23,7 +23,7 @@
                  alt="{{ Auth::user()->name }}">
         @endif
         <span @if(config('adminlte.usermenu_image')) class="d-none d-md-inline" @endif>
-            {{ Auth::user()->name }}
+            {{ ucfirst(Auth::user()->name) }}
         </span>
     </a>
 
@@ -40,7 +40,7 @@
                          alt="{{ Auth::user()->name }}">
                 @endif
                 <p class="@if(!config('adminlte.usermenu_image')) mt-0 @endif">
-                    {{ Auth::user()->name }}
+                    {{ ucfirst(Auth::user()->name) }}
                     @if(config('adminlte.usermenu_desc'))
                         <small>{{ Auth::user()->adminlte_desc() }}</small>
                     @endif
@@ -59,6 +59,9 @@
                 @yield('usermenu_body')
             </li>
         @endif
+        <li class="user-footer">
+            <a href="{{ route('profile') }}" class="btn btn-default btn-flat float-right  btn-block">Profile</a>
+        </li>
 
         {{-- User menu footer --}}
         <li class="user-footer">

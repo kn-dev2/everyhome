@@ -137,7 +137,7 @@ class CustomerController extends Controller
 
             if ($SaveCustomer) 
             {
-                session()->flash('error', 'Customer details has been updated.');
+                session()->flash('success', 'Customer details has been updated.');
                 return redirect()->route('customers.index');
   
             } else {
