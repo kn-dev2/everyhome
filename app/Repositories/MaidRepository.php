@@ -5,6 +5,6 @@ Interface MaidRepository
 {
     public function listAll($roles);
 
-    public function dropdown();
+    public function maidDetails($id,$roles);
 
 }

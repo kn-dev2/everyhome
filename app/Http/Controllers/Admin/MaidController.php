@@ -69,7 +69,7 @@ class MaidController extends Controller
 
             if($SaveCustomer)
             {
-                    session()->flash('error', 'Maid  Data is not saved.');
+                    session()->flash('success', 'Maid  Data is saved.');
                     return redirect()->route('maids.index');
             } else {
                 session()->flash('error', 'Maid Data is not saved.');
@@ -102,13 +102,11 @@ class MaidController extends Controller
     {
         //
         try {
-            $Maid = Maid::findOrFail($id)->where('role',$this->roles['Maid'])->first();
+            $Maid = $this->maidRepository->maidDetails($id,$this->roles);
         } catch (ModelNotFoundException $exception) {
-            // print_r($exception->getMessage()); die;
             session()->flash('error', 'No data found of this id');
             return redirect()->route('maids.index');
         }
-
         return view('backend.maids.update')->with(['maid'=>$Maid,'status_dropdown'=>$this->status_dropdown]);
     }
 
@@ -123,7 +121,7 @@ class MaidController extends Controller
     {
         try {
 
-            $Maid = Maid::find($id);
+            $Maid = Maid::findOrFail($id);
             $Maid->name = $request->name;
             $Maid->email = $request->email;
             $Maid->status = $request->status;

@@ -11,13 +11,15 @@ use App\User as Maid;
 
 class MaidClass implements MaidRepository
 {
+    // list of all maids
     public function listAll($roles)
     {
         return Maid::where('role',$roles['Maid'])->paginate(10);
     }
 
-    public function dropdown()
+    // Maid details
+    public function maidDetails($id,$roles)
     {
-        return Maid::where('id', 2)->pluck('name','id');
+        return Maid::findOrFail($id)->where('role',$roles['Maid'])->first();
     }
 }

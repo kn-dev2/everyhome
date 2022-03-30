@@ -11,13 +11,15 @@ use App\User as Customer;
 
 class CustomerClass implements CustomerRepository
 {
+    // All customers list
     public function listAll($roles)
     {
         return Customer::where('role',$roles['Customer'])->paginate(10);
     }
 
-    public function dropdown()
+    // Customer details
+    public function customerDetails($id,$roles)
     {
-        return Customer::where('role', 2)->pluck('name','id');
+            return Customer::findOrFail($id)->where('role',$roles['Customer'])->first();
     }
 }

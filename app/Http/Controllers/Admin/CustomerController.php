@@ -64,12 +64,11 @@ class CustomerController extends Controller
             $Customer->email = $request->email;
             $Customer->status = $request->status;
             $Customer->password = Hash::make($request->password);
-
             $SaveCustomer = $Customer->save();
 
             if($SaveCustomer)
             {
-                    session()->flash('error', 'Customer  Data is not saved.');
+                    session()->flash('success', 'Customer Data is saved.');
                     return redirect()->route('customers.index');
             } else {
                 session()->flash('error', 'Customer Data is not saved.');
@@ -100,15 +99,12 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        //
         try {
-            $customer = Customer::findOrFail($id)->where('role',$this->roles['Customer'])->first();
+             $customer = $this->customerRepository->customerDetails($id,$this->roles);
         } catch (ModelNotFoundException $exception) {
-            // print_r($exception->getMessage()); die;
             session()->flash('error', 'No data found of this id');
             return redirect()->route('customers.index');
         }
-
         return view('backend.customers.update')->with(['customer'=>$customer,'status_dropdown'=>$this->status_dropdown]);
     }
 
@@ -123,7 +119,7 @@ class CustomerController extends Controller
     {
         try {
 
-            $Customer = Customer::find($id);
+            $Customer = Customer::findOrFail($id);
             $Customer->name = $request->name;
             $Customer->email = $request->email;
             $Customer->status = $request->status;

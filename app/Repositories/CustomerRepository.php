@@ -5,6 +5,6 @@ Interface CustomerRepository
 {
     public function listAll($roles);
 
-    public function dropdown();
+    public function customerDetails($id, $roles);
 
 }
