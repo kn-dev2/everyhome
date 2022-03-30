@@ -288,6 +288,18 @@ return [
                 ],
             ],
         ],
+        [
+            'text'    => 'Services',
+            'icon'    => 'fas fa fa-th',
+            'submenu' => [
+                [
+                    'text' => 'List of services',
+                    'icon' =>  'nav-icon far fa-circle text-danger',
+                    'route'  => 'services.index',
+                    'active' => ['/admin/services/','/admin/services/create/','regex:@^admin/services/[0-9]+$@'],
+                ],
+            ],
+        ],
         // ['header' => 'labels'],
         // [
         //     'text'       => 'important',

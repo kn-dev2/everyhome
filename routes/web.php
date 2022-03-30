@@ -40,6 +40,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 		Route::get('/dashboard', '\App\Http\Controllers\Admin\DashboardController@index')->name('dashboard');
 		Route::resource('customers', '\App\Http\Controllers\Admin\CustomerController');
 		Route::resource('maids', '\App\Http\Controllers\Admin\MaidController');
+		Route::resource('services', '\App\Http\Controllers\Admin\ServiceController');
 
 	});
 });
