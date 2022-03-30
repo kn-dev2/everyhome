@@ -92,7 +92,7 @@ class ServiceController extends Controller
     public function edit($id)
     {
         try {
-             $service = $this->serviceRepository->serviceDetails($id);
+             $service = $this->serciceRepository->serviceDetails($id);
         } catch (ModelNotFoundException $exception) {
             session()->flash('error', 'No data found of this id');
             return redirect()->route('services.index');

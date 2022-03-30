@@ -20,6 +20,6 @@ class ServiceClass implements ServiceRepository
     // Maid details
     public function serviceDetails($id)
     {
-        return Service::findOrFail($id)->first();
+        return Service::findOrFail($id);
     }
 }

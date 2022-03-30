@@ -20,6 +20,6 @@ class MaidClass implements MaidRepository
     // Maid details
     public function maidDetails($id,$roles)
     {
-        return Maid::findOrFail($id)->where('role',$roles['Maid'])->first();
+        return Maid::where(['role'=>$roles['Maid'],'id'=>$id])->firstOrFail();
     }
 }

@@ -20,6 +20,6 @@ class HomeTypesClass implements HomeTypesRepository
     // home type details
     public function Details($id)
     {
-            return HomeType::findOrFail($id)->first();
+            return HomeType::findOrFail($id);
     }
 }

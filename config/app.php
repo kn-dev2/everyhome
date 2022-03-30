@@ -178,6 +178,7 @@ return [
         App\Providers\MaidServiceProvider::class,
         App\Providers\ServiceServiceProvider::class,
         App\Providers\HomeTypesServiceProvider::class,
+        App\Providers\HomeSubTypesServiceProvider::class,
 
     ],
 

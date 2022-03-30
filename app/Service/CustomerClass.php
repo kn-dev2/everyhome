@@ -20,6 +20,6 @@ class CustomerClass implements CustomerRepository
     // Customer details
     public function customerDetails($id,$roles)
     {
-            return Customer::findOrFail($id)->where('role',$roles['Customer'])->first();
+            return Customer::where(['role'=>$roles['Customer'],'id'=>$id])->firstOrFail();
     }
 }

@@ -312,6 +312,19 @@ return [
                 ],
             ],
         ],
+        [
+            'text'    => 'Home Subtypes',
+            'icon'    => 'fas fa fa-tree',
+            'submenu' => [
+                [
+                    'text' => 'List of home sub types',
+                    'icon' =>  'nav-icon far fa-circle text-danger',
+                    'route'  => 'homesubtypes.index',
+                    'active' => ['/admin/homesubtypes/','/admin/homesubtypes/create/','regex:@^admin/homesubtypes/[0-9]+$@'],
+                ],
+            ],
+        ]
+
     
         // ['header' => 'labels'],
         // [
