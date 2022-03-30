@@ -300,6 +300,19 @@ return [
                 ],
             ],
         ],
+        [
+            'text'    => 'Home Types',
+            'icon'    => 'fas fa fa-chart-pie',
+            'submenu' => [
+                [
+                    'text' => 'List of home types',
+                    'icon' =>  'nav-icon far fa-circle text-danger',
+                    'route'  => 'hometypes.index',
+                    'active' => ['/admin/hometypes/','/admin/hometypes/create/','regex:@^admin/hometypes/[0-9]+$@'],
+                ],
+            ],
+        ],
+    
         // ['header' => 'labels'],
         // [
         //     'text'       => 'important',

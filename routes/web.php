@@ -41,6 +41,8 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 		Route::resource('customers', '\App\Http\Controllers\Admin\CustomerController');
 		Route::resource('maids', '\App\Http\Controllers\Admin\MaidController');
 		Route::resource('services', '\App\Http\Controllers\Admin\ServiceController');
+		Route::resource('hometypes', '\App\Http\Controllers\Admin\HomeTypesController');
+		
 
 	});
 });
