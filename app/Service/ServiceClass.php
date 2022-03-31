@@ -7,7 +7,7 @@
 namespace App\Service;
 
 use App\Repositories\ServiceRepository;
-use App\Service;
+use App\Models\Service;
 
 class ServiceClass implements ServiceRepository
 {

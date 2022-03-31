@@ -7,8 +7,8 @@
 namespace App\Service;
 
 use App\Repositories\HomeSubTypesRepository;
-use App\HomeSubType;
-use App\HomeType;
+use App\Models\HomeSubType;
+use App\Models\HomeType;
 
 class HomeSubTypesClass implements HomeSubTypesRepository
 {

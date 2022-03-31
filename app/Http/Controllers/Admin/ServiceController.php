@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\Services\ServiceCreateRequest;
 use App\Http\Requests\Services\ServiceEditRequest;
 use App\Repositories\ServiceRepository;
-use App\Service;
+use App\Models\Service;
 
 class ServiceController extends Controller
 {

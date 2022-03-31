@@ -7,7 +7,7 @@
 namespace App\Service;
 
 use App\Repositories\MaidRepository;
-use App\User as Maid;
+use App\Models\User as Maid;
 
 class MaidClass implements MaidRepository
 {

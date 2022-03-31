@@ -8,8 +8,7 @@ use App\Http\Requests\Customers\CustomerCreateRequest;
 use App\Http\Requests\Customers\CustomerEditRequest;
 use App\Repositories\CustomerRepository;
 use Illuminate\Support\Facades\Hash;
-use App\User as Customer;
-use Auth;
+use App\Models\User as Customer;
 
 class CustomerController extends Controller
 {

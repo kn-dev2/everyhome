@@ -7,7 +7,7 @@
 namespace App\Service;
 
 use App\Repositories\HomeTypesRepository;
-use App\HomeType;
+use App\Models\HomeType;
 
 class HomeTypesClass implements HomeTypesRepository
 {

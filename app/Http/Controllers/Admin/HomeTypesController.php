@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\HomeTypes\HomeTypesCreateRequest;
 use App\Http\Requests\HomeTypes\HomeTypesEditRequest;
 use App\Repositories\HomeTypesRepository;
-use App\HomeType;
+use App\Models\HomeType;
 
 class HomeTypesController extends Controller
 {

@@ -7,7 +7,7 @@
 namespace App\Service;
 
 use App\Repositories\CustomerRepository;
-use App\User as Customer;
+use App\Models\User as Customer;
 
 class CustomerClass implements CustomerRepository
 {

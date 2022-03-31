@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;  
 use App\Http\Requests\Profile\ProfileEditRequest;
 use Illuminate\Support\Facades\Hash;
-use App\User as Profile;
+use App\Models\User as Profile;
 use Auth;
 
 class ProfileController extends Controller

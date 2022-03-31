@@ -8,7 +8,7 @@ use App\Http\Requests\Maids\MaidCreateRequest;
 use App\Http\Requests\Maids\MaidEditRequest;
 use App\Repositories\MaidRepository;
 use Illuminate\Support\Facades\Hash;
-use App\User as Maid;
+use App\Models\User as Maid;
 use Auth;
 
 class MaidController extends Controller
