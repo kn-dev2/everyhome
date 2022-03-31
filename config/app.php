@@ -179,6 +179,7 @@ return [
         App\Providers\ServiceServiceProvider::class,
         App\Providers\HomeTypesServiceProvider::class,
         App\Providers\HomeSubTypesServiceProvider::class,
+        App\Providers\ExtraServiceServiceProvider::class,
 
     ],
 

@@ -43,5 +43,6 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 		Route::resource('services', '\App\Http\Controllers\Admin\ServiceController');
 		Route::resource('hometypes', '\App\Http\Controllers\Admin\HomeTypesController');
 		Route::resource('homesubtypes', '\App\Http\Controllers\Admin\HomeSubTypesController');
+		Route::resource('extra_services', '\App\Http\Controllers\Admin\ExtraServicesController');
 	});
 });

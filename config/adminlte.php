@@ -318,12 +318,25 @@ return [
             'submenu' => [
                 [
                     'text' => 'List of home sub types',
-                    'icon' =>  'nav-icon far fa-circle text-danger',
+                    'icon' =>  'nav-icon far fa-circle text-warning',
                     'route'  => 'homesubtypes.index',
                     'active' => ['/admin/homesubtypes/','/admin/homesubtypes/create/','regex:@^admin/homesubtypes/[0-9]+$@'],
                 ],
             ],
+        ],
+        [
+            'text'    => 'Extra Services',
+            'icon'    => 'fas fa fa-tree',
+            'submenu' => [
+                [
+                    'text' => 'List of extra services',
+                    'icon' =>  'nav-icon far fa-circle text-success',
+                    'route'  => 'extra_services.index',
+                    'active' => ['/admin/extra_services/','/admin/extra_services/create/','regex:@^admin/extra_services/[0-9]+$@'],
+                ],
+            ],
         ]
+
 
     
         // ['header' => 'labels'],
