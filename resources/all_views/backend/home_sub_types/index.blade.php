@@ -21,6 +21,7 @@
             <tr>
                 <th>Home Type</th>
                 <th>Title</th>
+                <th>Price</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -30,6 +31,7 @@
             <tr>
                 <td>{{ $homesubType->hometype->title }}</td>
                 <td>{{ $homesubType->title }}</td>
+                <td>${{ $homesubType->price }}</td>
                 <td>{{ $homesubType->status==0 ? 'In-Active' : 'Active' }}</td>
                 <td>
                     <a href="{{route('homesubtypes.edit',$homesubType->id)}}" class="btn btn-warning btn-mini">Edit</a>

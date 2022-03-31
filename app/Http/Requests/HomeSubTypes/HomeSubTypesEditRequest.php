@@ -4,7 +4,7 @@ namespace App\Http\Requests\HomeSubTypes;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class HomeSubTypesCreateRequest extends FormRequest
+class HomeSubTypesEditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,8 @@ class HomeSubTypesCreateRequest extends FormRequest
     {
         return [
             'home_type_id' => ['required'],
-            'title' => ['required', 'string', 'min:3', 'max:255','unique:home_sub_types'],
-            'price' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'min:3', 'max:255',\Illuminate\Validation\Rule::unique('home_sub_types')->ignore(request()->id)],
+            'price' => ['required', 'string'],
             'status' => ['required']
 
         ];

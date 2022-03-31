@@ -1,9 +1,10 @@
 <div class="row">
 <div class="col-md-6">
 <div class="form-group row @error('title') is-invalid @enderror">
-    <label class="col-sm-4 col-form-label">Name</label>
+    <label class="col-sm-4 col-form-label">Title</label>
     <div class="col-sm-6">
-    
+    {{ Form::hidden('id',null, ['class' => 'form-control']) }}
+
         {{ Form::text('title',old('title'), ['class' => 'form-control', 'placeholder' =>'Title', 'required' => 'required']) }}
         @error('title')
         <span class="invalid-feedback" role="alert">

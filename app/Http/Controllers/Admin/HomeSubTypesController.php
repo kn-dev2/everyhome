@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\HomeSubType;
+use App\Models\HomeSubType;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException; 
 use Illuminate\Http\Request;
 use App\Http\Requests\HomeSubTypes\HomeSubTypesCreateRequest;
+use App\Http\Requests\HomeTypes\HomeTypesEditRequest;
 use App\Repositories\HomeSubTypesRepository;
+
 class HomeSubTypesController extends Controller
 {
     protected $homesubtypesRepository;
@@ -108,7 +110,7 @@ class HomeSubTypesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(HomeTypesEditRequest $request, $id)
     {
         //
         try {
