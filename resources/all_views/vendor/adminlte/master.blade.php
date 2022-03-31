@@ -31,517 +31,517 @@
         }
 
 
-.mytooltip {
-    display: inline;
-    position: relative;
-    z-index: 999
-}
+        .mytooltip {
+            display: inline;
+            position: relative;
+            z-index: 999
+        }
 
-.mytooltip .tooltip-item {
-    background: rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    display: inline-block;
-    font-weight: 500;
-    padding: 0 10px
-}
+        .mytooltip .tooltip-item {
+            background: rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 500;
+            padding: 0 10px
+        }
 
-.mytooltip .tooltip-content {
-    position: absolute;
-    z-index: 9999;
-    width: 360px;
-    left: 50%;
-    margin: 0 0 20px -180px;
-    bottom: 100%;
-    text-align: left;
-    font-size: 14px;
-    line-height: 30px;
-    -webkit-box-shadow: -5px -5px 15px rgba(48, 54, 61, 0.2);
-    box-shadow: -5px -5px 15px rgba(48, 54, 61, 0.2);
-    background: #2b2b2b;
-    opacity: 0;
-    cursor: default;
-    pointer-events: none
-}
+        .mytooltip .tooltip-content {
+            position: absolute;
+            z-index: 9999;
+            width: 360px;
+            left: 50%;
+            margin: 0 0 20px -180px;
+            bottom: 100%;
+            text-align: left;
+            font-size: 14px;
+            line-height: 30px;
+            -webkit-box-shadow: -5px -5px 15px rgba(48, 54, 61, 0.2);
+            box-shadow: -5px -5px 15px rgba(48, 54, 61, 0.2);
+            background: #2b2b2b;
+            opacity: 0;
+            cursor: default;
+            pointer-events: none
+        }
 
-.mytooltip .tooltip-content::after {
-    content: '';
-    top: 100%;
-    left: 50%;
-    border: solid transparent;
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: #2a3035 transparent transparent;
-    border-width: 10px;
-    margin-left: -10px
-}
+        .mytooltip .tooltip-content::after {
+            content: '';
+            top: 100%;
+            left: 50%;
+            border: solid transparent;
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-color: #2a3035 transparent transparent;
+            border-width: 10px;
+            margin-left: -10px
+        }
 
-.mytooltip .tooltip-content img {
-    position: relative;
-    height: 140px;
-    display: block;
-    float: left;
-    margin-right: 1em
-}
+        .mytooltip .tooltip-content img {
+            position: relative;
+            height: 140px;
+            display: block;
+            float: left;
+            margin-right: 1em
+        }
 
-.mytooltip .tooltip-item::after {
-    content: '';
-    position: absolute;
-    width: 360px;
-    height: 20px;
-    bottom: 100%;
-    left: 50%;
-    pointer-events: none;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%)
-}
+        .mytooltip .tooltip-item::after {
+            content: '';
+            position: absolute;
+            width: 360px;
+            height: 20px;
+            bottom: 100%;
+            left: 50%;
+            pointer-events: none;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%)
+        }
 
-.mytooltip:hover .tooltip-item::after {
-    pointer-events: auto
-}
+        .mytooltip:hover .tooltip-item::after {
+            pointer-events: auto
+        }
 
-.mytooltip:hover .tooltip-content {
-    pointer-events: auto;
-    opacity: 1;
-    -webkit-transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0);
-    transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0)
-}
+        .mytooltip:hover .tooltip-content {
+            pointer-events: auto;
+            opacity: 1;
+            -webkit-transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0);
+            transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0)
+        }
 
-.mytooltip:hover .tooltip-content2 {
-    opacity: 1;
-    font-size: 18px
-}
+        .mytooltip:hover .tooltip-content2 {
+            opacity: 1;
+            font-size: 18px
+        }
 
-.mytooltip:hover .tooltip-content2 i {
-    opacity: 1;
-    font-size: 18px
-}
+        .mytooltip:hover .tooltip-content2 i {
+            opacity: 1;
+            font-size: 18px
+        }
 
-.mytooltip:hover .tooltip-content2 {
-    opacity: 1;
-    font-size: 18px;
-    pointer-events: auto;
-    -webkit-transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
-    transform: translate3d(0, 0, 0) scale3d(1, 1, 1)
-}
+        .mytooltip:hover .tooltip-content2 {
+            opacity: 1;
+            font-size: 18px;
+            pointer-events: auto;
+            -webkit-transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+            transform: translate3d(0, 0, 0) scale3d(1, 1, 1)
+        }
 
-.mytooltip:hover .tooltip-content2 i {
-    opacity: 1;
-    font-size: 18px;
-    pointer-events: auto;
-    -webkit-transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
-    transform: translate3d(0, 0, 0) scale3d(1, 1, 1)
-}
+        .mytooltip:hover .tooltip-content2 i {
+            opacity: 1;
+            font-size: 18px;
+            pointer-events: auto;
+            -webkit-transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+            transform: translate3d(0, 0, 0) scale3d(1, 1, 1)
+        }
 
-.mytooltip:hover .tooltip-item2 {
-    color: #fff;
-    -webkit-transform: translate3d(0, -0.9em, 0);
-    transform: translate3d(0, -0.9em, 0)
-}
+        .mytooltip:hover .tooltip-item2 {
+            color: #fff;
+            -webkit-transform: translate3d(0, -0.9em, 0);
+            transform: translate3d(0, -0.9em, 0)
+        }
 
-.mytooltip:hover .tooltip-text3 {
-    -webkit-transition-delay: 0s;
-    transition-delay: 0s;
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1)
-}
+        .mytooltip:hover .tooltip-text3 {
+            -webkit-transition-delay: 0s;
+            transition-delay: 0s;
+            -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1)
+        }
 
-.mytooltip:hover .tooltip-content3 {
-    opacity: 1;
-    pointer-events: auto;
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1)
-}
+        .mytooltip:hover .tooltip-content3 {
+            opacity: 1;
+            pointer-events: auto;
+            -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1)
+        }
 
-.mytooltip:hover .tooltip-content4 {
-    pointer-events: auto;
-    opacity: 1;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0)
-}
+        .mytooltip:hover .tooltip-content4 {
+            pointer-events: auto;
+            opacity: 1;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0)
+        }
 
-.mytooltip:hover .tooltip-text2 {
-    pointer-events: auto;
-    opacity: 1;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0)
-}
+        .mytooltip:hover .tooltip-text2 {
+            pointer-events: auto;
+            opacity: 1;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0)
+        }
 
-.mytooltip:hover .tooltip-inner2 {
-    -webkit-transition-delay: 0.3s;
-    transition-delay: 0.3s;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0)
-}
+        .mytooltip:hover .tooltip-inner2 {
+            -webkit-transition-delay: 0.3s;
+            transition-delay: 0.3s;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0)
+        }
 
-.mytooltip:hover .tooltip-content5 {
-    opacity: 1;
-    pointer-events: auto;
-    -webkit-transition-delay: 0s;
-    transition-delay: 0s
-}
+        .mytooltip:hover .tooltip-content5 {
+            opacity: 1;
+            pointer-events: auto;
+            -webkit-transition-delay: 0s;
+            transition-delay: 0s
+        }
 
-.mytooltip .tooltip-text {
-    font-size: 14px;
-    line-height: 24px;
-    display: block;
-    padding: 1.31em 1.21em 1.21em 0;
-    color: #fff
-}
+        .mytooltip .tooltip-text {
+            font-size: 14px;
+            line-height: 24px;
+            display: block;
+            padding: 1.31em 1.21em 1.21em 0;
+            color: #fff
+        }
 
-.mytooltip .tooltip-item2 {
-    color: #01a9ac;
-    cursor: pointer;
-    z-index: 100;
-    position: relative;
-    display: inline-block;
-    font-weight: 700;
-    font-size: 14px;
-    -webkit-transition: background-color 0.3s, color 0.3s, -webkit-transform 0.3s;
-    transition: background-color 0.3s, color 0.3s, -webkit-transform 0.3s;
-    transition: background-color 0.3s, color 0.3s, transform 0.3s;
-    transition: background-color 0.3s, color 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .mytooltip .tooltip-item2 {
+            color: #01a9ac;
+            cursor: pointer;
+            z-index: 100;
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+            font-size: 14px;
+            -webkit-transition: background-color 0.3s, color 0.3s, -webkit-transform 0.3s;
+            transition: background-color 0.3s, color 0.3s, -webkit-transform 0.3s;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip.tooltip-effect-2:hover .tooltip-content {
-    -webkit-transform: perspective(1000px) rotate3d(1, 0, 0, 0deg);
-    transform: perspective(1000px) rotate3d(1, 0, 0, 0deg)
-}
+        .tooltip.tooltip-effect-2:hover .tooltip-content {
+            -webkit-transform: perspective(1000px) rotate3d(1, 0, 0, 0deg);
+            transform: perspective(1000px) rotate3d(1, 0, 0, 0deg)
+        }
 
-.tooltip-effect-5 .tooltip-text {
-    padding: 1.4em
-}
+        .tooltip-effect-5 .tooltip-text {
+            padding: 1.4em
+        }
 
-.tooltip-effect-1 .tooltip-content {
-    -webkit-transform: translate3d(0, -10px, 0);
-    transform: translate3d(0, -10px, 0);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
-    color: #fff
-}
+        .tooltip-effect-1 .tooltip-content {
+            -webkit-transform: translate3d(0, -10px, 0);
+            transform: translate3d(0, -10px, 0);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
+            color: #fff
+        }
 
-.tooltip-effect-2 .tooltip-content {
-    -webkit-transform-origin: 50% calc(110%);
-    transform-origin: 50% calc(110%);
-    -webkit-transform: perspective(1000px) rotate3d(1, 0, 0, 45deg);
-    transform: perspective(1000px) rotate3d(1, 0, 0, 45deg);
-    -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
-    transition: opacity 0.2s, -webkit-transform 0.2s;
-    transition: opacity 0.2s, transform 0.2s;
-    transition: opacity 0.2s, transform 0.2s, -webkit-transform 0.2s
-}
+        .tooltip-effect-2 .tooltip-content {
+            -webkit-transform-origin: 50% calc(110%);
+            transform-origin: 50% calc(110%);
+            -webkit-transform: perspective(1000px) rotate3d(1, 0, 0, 45deg);
+            transform: perspective(1000px) rotate3d(1, 0, 0, 45deg);
+            -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
+            transition: opacity 0.2s, -webkit-transform 0.2s;
+            transition: opacity 0.2s, transform 0.2s;
+            transition: opacity 0.2s, transform 0.2s, -webkit-transform 0.2s
+        }
 
-.tooltip-effect-3 .tooltip-content {
-    -webkit-transform: translate3d(0, 10px, 0) rotate3d(1, 1, 0, 25deg);
-    transform: translate3d(0, 10px, 0) rotate3d(1, 1, 0, 25deg);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-3 .tooltip-content {
+            -webkit-transform: translate3d(0, 10px, 0) rotate3d(1, 1, 0, 25deg);
+            transform: translate3d(0, 10px, 0) rotate3d(1, 1, 0, 25deg);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-4 .tooltip-content {
-    -webkit-transform-origin: 50% 100%;
-    transform-origin: 50% 100%;
-    -webkit-transform: scale3d(0.7, 0.3, 1);
-    transform: scale3d(0.7, 0.3, 1);
-    -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
-    transition: opacity 0.2s, -webkit-transform 0.2s;
-    transition: opacity 0.2s, transform 0.2s;
-    transition: opacity 0.2s, transform 0.2s, -webkit-transform 0.2s
-}
+        .tooltip-effect-4 .tooltip-content {
+            -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+            -webkit-transform: scale3d(0.7, 0.3, 1);
+            transform: scale3d(0.7, 0.3, 1);
+            -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
+            transition: opacity 0.2s, -webkit-transform 0.2s;
+            transition: opacity 0.2s, transform 0.2s;
+            transition: opacity 0.2s, transform 0.2s, -webkit-transform 0.2s
+        }
 
-.tooltip-effect-5 .tooltip-content {
-    width: 180px;
-    margin-left: -90px;
-    -webkit-transform-origin: 50% calc(106%);
-    transform-origin: 50% calc(106%);
-    -webkit-transform: rotate3d(0, 0, 1, 15deg);
-    transform: rotate3d(0, 0, 1, 15deg);
-    -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
-    transition: opacity 0.2s, -webkit-transform 0.2s;
-    transition: opacity 0.2s, transform 0.2s;
-    transition: opacity 0.2s, transform 0.2s, -webkit-transform 0.2s;
-    -webkit-transition-timing-function: ease, cubic-bezier(0.17, 0.67, 0.4, 1.39);
-    transition-timing-function: ease, cubic-bezier(0.17, 0.67, 0.4, 1.39)
-}
+        .tooltip-effect-5 .tooltip-content {
+            width: 180px;
+            margin-left: -90px;
+            -webkit-transform-origin: 50% calc(106%);
+            transform-origin: 50% calc(106%);
+            -webkit-transform: rotate3d(0, 0, 1, 15deg);
+            transform: rotate3d(0, 0, 1, 15deg);
+            -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
+            transition: opacity 0.2s, -webkit-transform 0.2s;
+            transition: opacity 0.2s, transform 0.2s;
+            transition: opacity 0.2s, transform 0.2s, -webkit-transform 0.2s;
+            -webkit-transition-timing-function: ease, cubic-bezier(0.17, 0.67, 0.4, 1.39);
+            transition-timing-function: ease, cubic-bezier(0.17, 0.67, 0.4, 1.39)
+        }
 
-.tooltip-effect-6 .tooltip-content2 {
-    -webkit-transform: translate3d(0, 10px, 0) rotate3d(1, 1, 1, 45deg);
-    transform: translate3d(0, 10px, 0) rotate3d(1, 1, 1, 45deg);
-    -webkit-transform-origin: 50% 100%;
-    transform-origin: 50% 100%;
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-6 .tooltip-content2 {
+            -webkit-transform: translate3d(0, 10px, 0) rotate3d(1, 1, 1, 45deg);
+            transform: translate3d(0, 10px, 0) rotate3d(1, 1, 1, 45deg);
+            -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-6 .tooltip-content2 i {
-    -webkit-transform: scale3d(0, 0, 1);
-    transform: scale3d(0, 0, 1);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-6 .tooltip-content2 i {
+            -webkit-transform: scale3d(0, 0, 1);
+            transform: scale3d(0, 0, 1);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-7 .tooltip-content2 {
-    -webkit-transform: translate3d(0, 10px, 0);
-    transform: translate3d(0, 10px, 0);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-7 .tooltip-content2 {
+            -webkit-transform: translate3d(0, 10px, 0);
+            transform: translate3d(0, 10px, 0);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-7 .tooltip-content2 i {
-    -webkit-transform: translate3d(0, 15px, 0);
-    transform: translate3d(0, 15px, 0);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-7 .tooltip-content2 i {
+            -webkit-transform: translate3d(0, 15px, 0);
+            transform: translate3d(0, 15px, 0);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-8 .tooltip-content2 {
-    -webkit-transform: translate3d(0, 10px, 0) rotate3d(0, 1, 0, 90deg);
-    transform: translate3d(0, 10px, 0) rotate3d(0, 1, 0, 90deg);
-    -webkit-transform-origin: 50% 100%;
-    transform-origin: 50% 100%;
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-8 .tooltip-content2 {
+            -webkit-transform: translate3d(0, 10px, 0) rotate3d(0, 1, 0, 90deg);
+            transform: translate3d(0, 10px, 0) rotate3d(0, 1, 0, 90deg);
+            -webkit-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-8 .tooltip-content2 i {
-    -webkit-transform: scale3d(0, 0, 1);
-    transform: scale3d(0, 0, 1);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-8 .tooltip-content2 i {
+            -webkit-transform: scale3d(0, 0, 1);
+            transform: scale3d(0, 0, 1);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-9 .tooltip-content2 {
-    -webkit-transform: translate3d(0, -20px, 0);
-    transform: translate3d(0, -20px, 0);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-9 .tooltip-content2 {
+            -webkit-transform: translate3d(0, -20px, 0);
+            transform: translate3d(0, -20px, 0);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-9 .tooltip-content2 i {
-    -webkit-transform: translate3d(0, 20px, 0);
-    transform: translate3d(0, 20px, 0);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-effect-9 .tooltip-content2 i {
+            -webkit-transform: translate3d(0, 20px, 0);
+            transform: translate3d(0, 20px, 0);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-effect-6:hover .tooltip-content2 i {
-    -webkit-transform: rotate3d(1, 1, 1, 0);
-    transform: rotate3d(1, 1, 1, 0)
-}
+        .tooltip-effect-6:hover .tooltip-content2 i {
+            -webkit-transform: rotate3d(1, 1, 1, 0);
+            transform: rotate3d(1, 1, 1, 0)
+        }
 
-.tooltip-content2 {
-    position: absolute;
-    z-index: 9999;
-    width: 80px;
-    height: 80px;
-    padding-top: 25px;
-    left: 50%;
-    margin-left: -40px;
-    bottom: 100%;
-    border-radius: 50%;
-    text-align: center;
-    background: #01a9ac;
-    color: #fff;
-    opacity: 0;
-    margin-bottom: 20px;
-    cursor: default;
-    pointer-events: none
-}
+        .tooltip-content2 {
+            position: absolute;
+            z-index: 9999;
+            width: 80px;
+            height: 80px;
+            padding-top: 25px;
+            left: 50%;
+            margin-left: -40px;
+            bottom: 100%;
+            border-radius: 50%;
+            text-align: center;
+            background: #01a9ac;
+            color: #fff;
+            opacity: 0;
+            margin-bottom: 20px;
+            cursor: default;
+            pointer-events: none
+        }
 
-.tooltip-content2 i {
-    opacity: 0
-}
+        .tooltip-content2 i {
+            opacity: 0
+        }
 
-.tooltip-content2::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin: -7px 0 0 -15px;
-    width: 30px;
-    height: 20px;
-    background: url("../images/tooltip/tooltip1.svg") center center no-repeat;
-    background-size: 100%
-}
+        .tooltip-content2::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin: -7px 0 0 -15px;
+            width: 30px;
+            height: 20px;
+            background: url("../images/tooltip/tooltip1.svg") center center no-repeat;
+            background-size: 100%
+        }
 
-.tooltip-content3 {
-    position: absolute;
-    background: url("../images/tooltip/shape1.svg") center bottom no-repeat;
-    background-size: 100% 100%;
-    z-index: 9999;
-    width: 200px;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -100px;
-    padding: 50px 30px;
-    text-align: center;
-    color: #fff;
-    opacity: 0;
-    cursor: default;
-    font-size: 14px;
-    line-height: 27px;
-    pointer-events: none;
-    -webkit-transform: scale3d(0.1, 0.2, 1);
-    transform: scale3d(0.1, 0.2, 1);
-    -webkit-transform-origin: 50% 120%;
-    transform-origin: 50% 120%;
-    -webkit-transition: opacity 0.4s, -webkit-transform 0.4s;
-    transition: opacity 0.4s, -webkit-transform 0.4s;
-    transition: opacity 0.4s, transform 0.4s;
-    transition: opacity 0.4s, transform 0.4s, -webkit-transform 0.4s;
-    -webkit-transition-timing-function: ease, cubic-bezier(0.6, 0, 0.4, 1);
-    transition-timing-function: ease, cubic-bezier(0.6, 0, 0.4, 1)
-}
+        .tooltip-content3 {
+            position: absolute;
+            background: url("../images/tooltip/shape1.svg") center bottom no-repeat;
+            background-size: 100% 100%;
+            z-index: 9999;
+            width: 200px;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -100px;
+            padding: 50px 30px;
+            text-align: center;
+            color: #fff;
+            opacity: 0;
+            cursor: default;
+            font-size: 14px;
+            line-height: 27px;
+            pointer-events: none;
+            -webkit-transform: scale3d(0.1, 0.2, 1);
+            transform: scale3d(0.1, 0.2, 1);
+            -webkit-transform-origin: 50% 120%;
+            transform-origin: 50% 120%;
+            -webkit-transition: opacity 0.4s, -webkit-transform 0.4s;
+            transition: opacity 0.4s, -webkit-transform 0.4s;
+            transition: opacity 0.4s, transform 0.4s;
+            transition: opacity 0.4s, transform 0.4s, -webkit-transform 0.4s;
+            -webkit-transition-timing-function: ease, cubic-bezier(0.6, 0, 0.4, 1);
+            transition-timing-function: ease, cubic-bezier(0.6, 0, 0.4, 1)
+        }
 
-.tooltip-content3::after {
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    left: 50%;
-    margin-left: -8px;
-    top: 100%;
-    background: #00AEEF;
-    -webkit-transform: translate3d(0, -60%, 0) rotate3d(0, 0, 1, 45deg);
-    transform: translate3d(0, -60%, 0) rotate3d(0, 0, 1, 45deg)
-}
+        .tooltip-content3::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            left: 50%;
+            margin-left: -8px;
+            top: 100%;
+            background: #00AEEF;
+            -webkit-transform: translate3d(0, -60%, 0) rotate3d(0, 0, 1, 45deg);
+            transform: translate3d(0, -60%, 0) rotate3d(0, 0, 1, 45deg)
+        }
 
-.tooltip-content4 {
-    position: absolute;
-    z-index: 99;
-    width: 360px;
-    left: 50%;
-    margin-left: -180px;
-    bottom: -5px;
-    text-align: left;
-    background: #01a9ac;
-    opacity: 0;
-    font-size: 14px;
-    line-height: 27px;
-    padding: 1.5em;
-    color: #fff;
-    border-bottom: 55px solid #004547;
-    cursor: default;
-    pointer-events: none;
-    border-radius: 5px;
-    -webkit-transform: translate3d(0, -0.5em, 0);
-    transform: translate3d(0, -0.5em, 0);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-content4 {
+            position: absolute;
+            z-index: 99;
+            width: 360px;
+            left: 50%;
+            margin-left: -180px;
+            bottom: -5px;
+            text-align: left;
+            background: #01a9ac;
+            opacity: 0;
+            font-size: 14px;
+            line-height: 27px;
+            padding: 1.5em;
+            color: #fff;
+            border-bottom: 55px solid #004547;
+            cursor: default;
+            pointer-events: none;
+            border-radius: 5px;
+            -webkit-transform: translate3d(0, -0.5em, 0);
+            transform: translate3d(0, -0.5em, 0);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-content4 a {
-    color: #2b2b2b
-}
+        .tooltip-content4 a {
+            color: #2b2b2b
+        }
 
-.tooltip-content4 .tooltip-text2 {
-    opacity: 0;
-    -webkit-transform: translate3d(0, 1.5em, 0);
-    transform: translate3d(0, 1.5em, 0);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-content4 .tooltip-text2 {
+            opacity: 0;
+            -webkit-transform: translate3d(0, 1.5em, 0);
+            transform: translate3d(0, 1.5em, 0);
+            -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, -webkit-transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s
+        }
 
-.tooltip-content5 {
-    position: absolute;
-    z-index: 9999;
-    width: 300px;
-    left: 50%;
-    bottom: 100%;
-    font-size: 20px;
-    line-height: 1.4;
-    text-align: center;
-    font-weight: 400;
-    color: #fff;
-    background: 0 0;
-    opacity: 0;
-    margin: 0 0 20px -150px;
-    cursor: default;
-    pointer-events: none;
-    -webkit-font-smoothing: antialiased;
-    -webkit-transition: opacity 0.3s 0.3s;
-    transition: opacity 0.3s 0.3s
-}
+        .tooltip-content5 {
+            position: absolute;
+            z-index: 9999;
+            width: 300px;
+            left: 50%;
+            bottom: 100%;
+            font-size: 20px;
+            line-height: 1.4;
+            text-align: center;
+            font-weight: 400;
+            color: #fff;
+            background: 0 0;
+            opacity: 0;
+            margin: 0 0 20px -150px;
+            cursor: default;
+            pointer-events: none;
+            -webkit-font-smoothing: antialiased;
+            -webkit-transition: opacity 0.3s 0.3s;
+            transition: opacity 0.3s 0.3s
+        }
 
-.tooltip-content5 span {
-    display: block
-}
+        .tooltip-content5 span {
+            display: block
+        }
 
-.tooltip-content5::after {
-    content: '';
-    bottom: -20px;
-    left: 50%;
-    border: solid transparent;
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: #01a9ac transparent transparent;
-    border-width: 10px;
-    margin-left: -10px
-}
+        .tooltip-content5::after {
+            content: '';
+            bottom: -20px;
+            left: 50%;
+            border: solid transparent;
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-color: #01a9ac transparent transparent;
+            border-width: 10px;
+            margin-left: -10px
+        }
 
-.tooltip-content5 .tooltip-text3 {
-    border-bottom: 10px solid #01a9ac;
-    overflow: hidden;
-    -webkit-transform: scale3d(0, 1, 1);
-    transform: scale3d(0, 1, 1);
-    -webkit-transition: -webkit-transform 0.3s 0.3s;
-    transition: -webkit-transform 0.3s 0.3s;
-    transition: transform 0.3s 0.3s;
-    transition: transform 0.3s 0.3s, -webkit-transform 0.3s 0.3s
-}
+        .tooltip-content5 .tooltip-text3 {
+            border-bottom: 10px solid #01a9ac;
+            overflow: hidden;
+            -webkit-transform: scale3d(0, 1, 1);
+            transform: scale3d(0, 1, 1);
+            -webkit-transition: -webkit-transform 0.3s 0.3s;
+            transition: -webkit-transform 0.3s 0.3s;
+            transition: transform 0.3s 0.3s;
+            transition: transform 0.3s 0.3s, -webkit-transform 0.3s 0.3s
+        }
 
-.tooltip-content5 .tooltip-inner2 {
-    background: #2b2b2b;
-    padding: 40px;
-    -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);
-    -webkit-transition: -webkit-transform 0.3s;
-    transition: -webkit-transform 0.3s;
-    transition: transform 0.3s;
-    transition: transform 0.3s, -webkit-transform 0.3s
-}
+        .tooltip-content5 .tooltip-inner2 {
+            background: #2b2b2b;
+            padding: 40px;
+            -webkit-transform: translate3d(0, 100%, 0);
+            transform: translate3d(0, 100%, 0);
+            -webkit-transition: -webkit-transform 0.3s;
+            transition: -webkit-transform 0.3s;
+            transition: transform 0.3s;
+            transition: transform 0.3s, -webkit-transform 0.3s
+        }
 
-a.mytooltip {
-    font-weight: 700;
-    color: #01a9ac;
-    z-index: 9
-}
+        a.mytooltip {
+            font-weight: 700;
+            color: #01a9ac;
+            z-index: 9
+        }
 
-.tooltip-link a {
-    margin-left: 10px;
-    color: #01a9ac
-}
+        .tooltip-link a {
+            margin-left: 10px;
+            color: #01a9ac
+        }
 
-.tooltip-icon button i {
-    margin-right: 0
-}
+        .tooltip-icon button i {
+            margin-right: 0
+        }
     </style>
     @yield('adminlte_css_pre')
 
@@ -557,6 +557,7 @@ a.mytooltip {
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
     <link href="https://adminlte.io/themes/v3/plugins/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/jquery.timepicker.css') }}" rel="stylesheet" type="text/css">
+
 
     @else
     <link rel="stylesheet" href="{{ mix(config('adminlte.laravel_mix_css_path', 'css/app.css')) }}">
@@ -636,6 +637,42 @@ a.mytooltip {
     <livewire:scripts />
     @endif
     @endif
+    <script type="text/javascript">
+        $(function() {
+            $("#dt1").datepicker({
+                dateFormat: "dd-M-yy",
+                minDate: 0,
+                // minDate: 0,
+                onSelect: function() {
+                    var dt2 = $('#dt2');
+                    var startDate = $(this).datepicker('getDate');
+                    var minDate = $(this).datepicker('getDate');
+                    var dt2Date = dt2.datepicker('getDate');
+                    //difference in days. 86400 seconds in day, 1000 ms in second
+                    var dateDiff = (dt2Date - minDate) / (86400 * 1000);
+
+                    startDate.setDate(startDate.getDate() + 30);
+                    if (dt2Date == null || dateDiff < 0) {
+                        dt2.datepicker('setDate', minDate);
+                    } else if (dateDiff > 30) {
+                        dt2.datepicker('setDate', startDate);
+                    }
+                    //sets dt2 maxDate to the last day of 30 days window
+                    dt2.datepicker('option', 'maxDate', startDate);
+                    dt2.datepicker('option', 'minDate', minDate);
+
+                }
+            });
+
+            $('#dt2').datepicker({
+                dateFormat: "dd-M-yy",
+                // minDate: 0
+                onSelect: function() {
+
+                },
+            });
+        });
+    </script>
     @yield('adminlte_js')
 </body>
 

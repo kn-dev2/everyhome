@@ -8,7 +8,9 @@ return [
   
     'status_dropdown' => ['In-Active','Active'],
 
-    'extra_service_img_path' => '/frontend/img/extra_services/'
+    'extra_service_img_path' => '/frontend/img/extra_services/',
+
+    'discount_type' => [1=>'Percentage',2=>'Flat']
 ]
   
 ?>

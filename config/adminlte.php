@@ -326,13 +326,25 @@ return [
         ],
         [
             'text'    => 'Extra Services',
-            'icon'    => 'fas fa fa-tree',
+            'icon'    => 'fas fa fa-table',
             'submenu' => [
                 [
                     'text' => 'List of extra services',
                     'icon' =>  'nav-icon far fa-circle text-success',
                     'route'  => 'extra_services.index',
                     'active' => ['/admin/extra_services/','/admin/extra_services/create/','regex:@^admin/extra_services/[0-9]+$@'],
+                ],
+            ],
+        ],
+        [
+            'text'    => 'Discount Codes',
+            'icon'    => 'fas fa fa-plus-square',
+            'submenu' => [
+                [
+                    'text' => 'List of discount codes',
+                    'icon' =>  'nav-icon far fa-circle text-success',
+                    'route'  => 'discount_codes.index',
+                    'active' => ['/admin/discount_codes/','/admin/discount_codes/create/','regex:@^admin/discount_codes/[0-9]+$@'],
                 ],
             ],
         ]
