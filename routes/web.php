@@ -39,6 +39,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 		Route::post('/profile/update', '\App\Http\Controllers\Admin\ProfileController@update')->name('profile.update');
 		Route::get('/dashboard', '\App\Http\Controllers\Admin\DashboardController@index')->name('dashboard');
 		Route::resource('customers', '\App\Http\Controllers\Admin\CustomerController');
+		Route::get('customers/{id}', '\App\Http\Controllers\Admin\CustomerController@search')->name('customers.search');
 		Route::resource('maids', '\App\Http\Controllers\Admin\MaidController');
 		Route::resource('services', '\App\Http\Controllers\Admin\ServiceController');
 		Route::resource('hometypes', '\App\Http\Controllers\Admin\HomeTypesController');

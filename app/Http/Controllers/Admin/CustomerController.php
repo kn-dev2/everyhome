@@ -7,20 +7,23 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\Customers\CustomerCreateRequest;
 use App\Http\Requests\Customers\CustomerEditRequest;
 use App\Repositories\CustomerRepository;
+use App\Repositories\BookingRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User as Customer;
 
 class CustomerController extends Controller
 {
     protected $customerRepository;
+    protected $bookingRepository;
     public $roles;
     public $status_dropdown;
 
-    public function __construct(CustomerRepository $customerRepository)
+    public function __construct(CustomerRepository $customerRepository, BookingRepository $bookingRepository)
     {
         $this->roles = config('global.roles');
         $this->status_dropdown = config('global.status_dropdown');
         $this->customerRepository = $customerRepository;
+        $this->bookingRepository = $bookingRepository;
     }
 
 
@@ -88,6 +91,15 @@ class CustomerController extends Controller
     public function show($id)
     {
         //
+        try {
+            $customer = $this->customerRepository->customerDetails($id,$this->roles);
+            $booking_list = $this->bookingRepository->listAll($id);
+
+       } catch (ModelNotFoundException $exception) {
+           session()->flash('error', 'No data found of this id');
+           return redirect()->route('customers.index');
+       }
+       return view('backend.customers.show')->with(['customer'=>$customer,'booking_list'=>$booking_list]);
     }
 
     /**

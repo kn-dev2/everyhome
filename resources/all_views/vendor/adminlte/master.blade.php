@@ -666,11 +666,52 @@
 
             $('#dt2').datepicker({
                 dateFormat: "dd-M-yy",
-                // minDate: 0
+                minDate: 0,
                 onSelect: function() {
 
                 },
             });
+
+            $("#dt3").datepicker({
+                dateFormat: "dd-M-yy",
+                // minDate: 0,
+                onSelect: function() {
+                    var dt4 = $('#dt4');
+                    var startDate = $(this).datepicker('getDate');
+                    var minDate = $(this).datepicker('getDate');
+                    var dt4Date = dt4.datepicker('getDate');
+                    //difference in days. 86400 seconds in day, 1000 ms in second
+                    var dateDiff = (dt4Date - minDate) / (86400 * 1000);
+
+                    startDate.setDate(startDate.getDate() + 30);
+                    if (dt4Date == null || dateDiff < 0) {
+                        dt4.datepicker('setDate', minDate);
+                    } else if (dateDiff > 30) {
+                        dt4.datepicker('setDate', startDate);
+                    }
+                    //sets dt4 maxDate to the last day of 30 days window
+                    dt4.datepicker('option', 'maxDate', startDate);
+                    dt4.datepicker('option', 'minDate', minDate);
+
+                }
+            });
+
+            $('#dt4').datepicker({
+                dateFormat: "dd-M-yy",
+                onSelect: function() {
+
+                },
+            });
+        });
+
+        $(document).ready(function(){
+            $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if(activeTab){
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
+            }
         });
     </script>
     @yield('adminlte_js')

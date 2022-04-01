@@ -180,7 +180,8 @@ return [
         App\Providers\HomeTypesServiceProvider::class,
         App\Providers\HomeSubTypesServiceProvider::class,
         App\Providers\ExtraServiceServiceProvider::class,
-        App\Providers\DiscountCodesServiceProvider::class
+        App\Providers\DiscountCodesServiceProvider::class,
+        App\Providers\BookingServiceProvider::class
 
     ],
 

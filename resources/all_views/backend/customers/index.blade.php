@@ -33,6 +33,7 @@
                 <td>{{ $customer->status==0 ? 'In-Active' : 'Active' }}</td>
                 <td>
                     <a href="{{route('customers.edit',$customer->id)}}" class="btn btn-warning btn-mini">Edit</a>
+                    <a href="{{route('customers.show',$customer->id)}}" class="btn btn-info btn-mini">Show</a>
                 </td>
             </tr>
             @empty
