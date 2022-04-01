@@ -347,6 +347,18 @@ return [
                     'active' => ['/admin/discount_codes/','/admin/discount_codes/create/','regex:@^admin/discount_codes/[0-9]+$@'],
                 ],
             ],
+        ],
+        [
+            'text'    => 'Bookings',
+            'icon'    => 'fas fa fa-plus-square',
+            'submenu' => [
+                [
+                    'text' => 'List of All Bookings',
+                    'icon' =>  'nav-icon far fa-circle text-success',
+                    'route'  => 'bookings.index',
+                    'active' => ['/admin/bookings/','/admin/bookings/create/','regex:@^admin/bookings/[0-9]+$@'],
+                ],
+            ],
         ]
 
 

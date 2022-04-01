@@ -7,4 +7,7 @@ Interface MaidRepository
 
     public function maidDetails($id,$roles);
 
+    public function countAll($roles);
+
+
 }

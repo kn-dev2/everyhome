@@ -25,4 +25,9 @@ class Booking extends Model
     {
         return $this->hasMany(BookingItem::class, 'booking_id','id');
     }
+
+    public function customer()
+    {
+        return $this->hasOne(User::class, 'id','customer_id');
+    }
 }

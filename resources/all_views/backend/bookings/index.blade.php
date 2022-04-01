@@ -1,85 +1,54 @@
 @extends('adminlte::page')
 
-@section('title', 'AdminLTE')
-
 @section('content_header')
-<h1 class="m-0">Dashboard</h1>
+<h1>All Bookings</h1>
 @stop
 
 @section('content')
-
-<div class="row">
-  <div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box">
-      <span class="info-box-icon bg-info elevation-1"><i class="fas fa-shopping-cart"></i></span>
-
-      <div class="info-box-content">
-        <span class="info-box-text">No. of Bookings</span>
-        <span class="info-box-number">
-          {{$Countbookings}}
-        </span>
-      </div>
-      <!-- /.info-box-content -->
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">List of Bookings</h3>
     </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
-  <div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box mb-3">
-      <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+    <div class="card-body">
+        @include("backend.alerts.success")
+        @include("backend.alerts.error")
+        <div class="row">
+                {{ Form::open(['route' => ['bookings.index'], 'method' => 'get','id' => 'search-booking','enctype'=>"multipart/form-data"]) }}
 
-      <div class="info-box-content">
-        <span class="info-box-text">No. of Customers</span>
-        <span class="info-box-number">{{$Countcustomers}}</span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
-  <div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box mb-3">
-      <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
+            <div class="col-md-10" style="display: flex;">
+                <div class="form-group" style="width: 200px;margin-right: 20px;">
+                    <label><strong>Booking ID :</strong></label>
+                    {{ Form::text('booking_id',isset($_GET['booking_id']) ? $_GET['booking_id'] : '', ['class' => 'form-control','id'=>'status', 'placeholder' =>'Booking Id']) }}
+                </div>
 
-      <div class="info-box-content">
-        <span class="info-box-text">No. of Maids</span>
-        <span class="info-box-number">{{$Countmaids}}</span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
+                <div class="form-group" style="width: 200px;margin-right: 20px;">
+                    <label><strong>Customer :</strong></label>
+                    {{ Form::select('customer_id',$customers,isset($_GET['customer_id']) ? $_GET['customer_id'] : '', ['class' => 'form-control','placeholder' =>'Select Customer']) }}
+                </div>
 
-  <!-- fix for small devices only -->
-  <div class="clearfix hidden-md-up"></div>
+                <div class="form-group" style="width: 200px;margin-right: 20px;">
+                    <label><strong>Start Date :</strong></label>
+                    {{ Form::text('start_date',isset($_GET['start_date']) ? $_GET['start_date'] : '', ['class' => 'form-control','id'=>'dt3', 'placeholder' =>'Start Date','autocomplete'=>'off']) }}
+                </div>
 
-  <div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box mb-3">
-      <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+                <div class="form-group" style="width: 200px;margin-right: 20px;">
+                    <label><strong>End Date :</strong></label>
+                    {{ Form::text('end_date',isset($_GET['end_date']) ? $_GET['end_date'] : '', ['class' => 'form-control','id'=>'dt4', 'placeholder' =>'End Date','autocomplete'=>'off']) }}
+                </div>
+                <div class="form-group" style="width: 150px;margin-top: 22px;">
+                {{ Form::submit('Search', ['class' => 'btn btn-lg btn-warning']) }}
+                </div>
+                <div class="form-group" style="width: 150px;margin-top: 22px;">
+                <a href="{{route('bookings.index')}}"> {{ Form::button('Reset', ['class' => 'btn btn-lg btn-danger']) }}</a>
 
-      <div class="info-box-content">
-        <span class="info-box-text">Payment</span>
-        <span class="info-box-number">${{$Sumbookings}}</span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
+                </div>
 
-  <!-- /.col -->
-</div>
+            </div>
+            {{ Form::close() }}
+        </div>    
 
-<div class="card">
-  <div class="card-header ui-sortable-handle" style="cursor: move;">
-    <h3 class="card-title">
-      <i class="ion ion-clipboard mr-1"></i>
-      Today Bookings
-    </h3>
-  </div>
-  <!-- /.card-header -->
-  <div class="card-body">
-  <div class="table-responsive dt-responsive">
+        <br><br>
+        <div class="table-responsive dt-responsive">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -98,7 +67,7 @@
                 </thead>
                 <tbody>
                     @php $i=1; $Status;@endphp
-                    @foreach($todaybookings as $SingleBooking)
+                    @foreach($booking_list as $SingleBooking)
 
                     @if($SingleBooking->status == 'failed')
                     @php $Status = 'bg-danger'; @endphp
@@ -126,9 +95,9 @@
                 </tbody>
             </table>
 
-            <span>{{$todaybookings->links()}}</span>
+            <span>{{$booking_list->links()}}</span>
 
-            @foreach($todaybookings as $SingleBooking)
+            @foreach($booking_list as $SingleBooking)
 
             <div class="modal fade" id="modal{{$SingleBooking->id}}" aria-modal="true" role="dialog">
                 <div class="modal-dialog">
@@ -171,7 +140,9 @@
             @endforeach
 
         </div>
-  </div>
+    </div>
+
+</div>
 </div>
 
 @stop

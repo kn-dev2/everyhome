@@ -22,4 +22,16 @@ class CustomerClass implements CustomerRepository
     {
             return Customer::where(['role'=>$roles['Customer'],'id'=>$id])->firstOrFail();
     }
+
+    // Customer dropdown
+    public function customerDropdown($roles)
+    {
+            return Customer::where(['role'=>$roles['Customer']])->pluck('name','id');
+    }
+
+     // All customers count
+     public function countAll($roles)
+     {
+         return Customer::where('role',$roles['Customer'])->count();
+     }
 }

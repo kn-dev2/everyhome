@@ -24,6 +24,7 @@ class CustomerController extends Controller
         $this->status_dropdown = config('global.status_dropdown');
         $this->customerRepository = $customerRepository;
         $this->bookingRepository = $bookingRepository;
+        
     }
 
 
@@ -34,8 +35,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = $this->customerRepository->listAll($this->roles);
-        return view('backend.customers.index', compact('customers'));
+        return view('backend.customers.index');
     }
 
     /**

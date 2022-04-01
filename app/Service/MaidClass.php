@@ -22,4 +22,10 @@ class MaidClass implements MaidRepository
     {
         return Maid::where(['role'=>$roles['Maid'],'id'=>$id])->firstOrFail();
     }
+
+    // All maid count
+    public function countAll($roles)
+    {
+        return Maid::where('role',$roles['Maid'])->count();
+    }
 }
