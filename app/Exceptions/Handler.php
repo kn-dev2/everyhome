@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Http\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -48,8 +51,27 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
+    // public function render($request, Throwable $exception)
+    // {
+    //     return parent::render($request, $exception);
+    // }
+
     public function render($request, Throwable $exception)
     {
-        return parent::render($request, $exception);
+        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            if(\Auth::User()->role==3)
+            {
+                $view = 'admin.login';
+            } else {
+                $view = 'login';
+            }
+
+            session()->flash('error', 'CSRF Token mismatched');
+            return redirect()->route($view);
+            
+            // return response()
+            //     ->view($view, ['error' => 'Haha, no CSRF token. No attacks on my watch :)'], 401);
+        }
+            return parent::render($request, $exception);
     }
 }

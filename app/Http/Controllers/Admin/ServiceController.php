@@ -13,10 +13,12 @@ class ServiceController extends Controller
 {
     protected $serciceRepository;
     public $status_dropdown;
+    public $service_img_path;
 
     public function __construct(ServiceRepository $serciceRepository)
     {
         $this->status_dropdown = config('global.status_dropdown');
+        $this->service_img_path = config('global.service_img_path');
         $this->serciceRepository = $serciceRepository;
     }
 
@@ -56,6 +58,12 @@ class ServiceController extends Controller
 
             $Service = new Service();
             $Service->title = $request->title;
+            if(isset($request->icon))
+            {
+                $iconName = time().'.'.$request->icon->getClientOriginalExtension();
+                $request->icon->move(public_path($this->service_img_path), $iconName);
+                $Service->icon        = $iconName;
+            }
             $Service->status = $request->status;
             $SaveService = $Service->save();
             if($SaveService)
@@ -113,8 +121,13 @@ class ServiceController extends Controller
 
             $Service = Service::findOrFail($id);
             $Service->title = $request->title;
+            if(isset($request->icon))
+            {
+                $iconName = time().'.'.$request->icon->getClientOriginalExtension();
+                $request->icon->move(public_path($this->service_img_path), $iconName);
+                $Service->icon        = $iconName;
+            }
             $Service->status = $request->status;
-
             $SaveService = $Service->save();
 
             if ($SaveService) 

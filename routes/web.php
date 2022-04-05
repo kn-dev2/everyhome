@@ -37,15 +37,27 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::group(['middleware' => ['auth']], function () {
 		Route::get('/profile', '\App\Http\Controllers\Admin\ProfileController@edit')->name('profile');
 		Route::post('/profile/update', '\App\Http\Controllers\Admin\ProfileController@update')->name('profile.update');
+
 		Route::get('/dashboard', '\App\Http\Controllers\Admin\DashboardController@index')->name('dashboard');
+
 		Route::resource('customers', '\App\Http\Controllers\Admin\CustomerController');
 		Route::get('customers/{id}', '\App\Http\Controllers\Admin\CustomerController@search')->name('customers.search');
+
 		Route::resource('maids', '\App\Http\Controllers\Admin\MaidController');
+
 		Route::resource('services', '\App\Http\Controllers\Admin\ServiceController');
+
 		Route::resource('hometypes', '\App\Http\Controllers\Admin\HomeTypesController');
+
 		Route::resource('homesubtypes', '\App\Http\Controllers\Admin\HomeSubTypesController');
+
 		Route::resource('extra_services', '\App\Http\Controllers\Admin\ExtraServicesController');
+
 		Route::resource('discount_codes', '\App\Http\Controllers\Admin\DiscountCodesController');
+
 		Route::resource('bookings', '\App\Http\Controllers\Admin\BookingsController');
+
+		Route::get('/setting', '\App\Http\Controllers\Admin\SettingController@index')->name('setting');
+		Route::post('/setting/update', '\App\Http\Controllers\Admin\SettingController@update')->name('setting.update');
 	});
 });

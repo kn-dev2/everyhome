@@ -10,6 +10,8 @@ return [
 
     'extra_service_img_path' => '/frontend/img/extra_services/',
 
+    'service_img_path' => '/frontend/img/services/',
+
     'discount_type' => [1=>'Percentage',2=>'Flat']
 ]
   

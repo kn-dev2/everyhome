@@ -12,7 +12,17 @@
         @enderror
     </div>
 </div>
-
+<div class="form-group row @error('icon') is-invalid @enderror">
+    <label class="col-sm-4 col-form-label">Icon</label>
+    <div class="col-sm-6">
+        {{ Form::file('icon',null,['class' => 'form-control', 'placeholder' =>'Select File']) }}
+        @error('icon')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+        @enderror
+    </div>
+</div>
 
 <div class="form-group row @error('status') is-invalid @enderror">
     <label class="col-sm-4 col-form-label">Status</label>

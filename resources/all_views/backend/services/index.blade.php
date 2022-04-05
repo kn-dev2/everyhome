@@ -19,6 +19,7 @@
     <table id="dom-jqry" class="table table-striped table-bordered nowrap">
         <thead>
             <tr>
+                <th>Icon</th>
                 <th>Title</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -27,6 +28,7 @@
         <tbody>
             @forelse($services as $service)
             <tr>
+                <td><img src="{{ asset(config('global.service_img_path')).'/'.$service->icon }}" width="50px"/></td>
                 <td>{{ $service->title }}</td>
                 <td>{{ $service->status==0 ? 'In-Active' : 'Active' }}</td>
                 <td>

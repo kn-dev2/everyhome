@@ -256,8 +256,13 @@ return [
         // ],
         ['header' => 'account_settings'],
         [
+            'text' => 'Home',
+            'route'  => 'home',
+            'icon' => 'fas fa-home',
+        ],
+        [
             'text' => 'Dashboard',
-            'url'  => 'admin/dashboard',
+            'route'  => 'dashboard',
             'icon' => 'fas fa-tachometer-alt',
         ],
         
@@ -359,7 +364,14 @@ return [
                     'active' => ['/admin/bookings/','/admin/bookings/create/','regex:@^admin/bookings/[0-9]+$@'],
                 ],
             ],
+        ],
+        [
+            'text'    => 'Setting',
+            'icon'    => 'fas fa fa-cog',
+            'route'  => 'setting',
         ]
+
+
 
 
     
