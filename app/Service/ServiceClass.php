@@ -11,13 +11,25 @@ use App\Models\Service;
 
 class ServiceClass implements ServiceRepository
 {
-    // list of all maids
-    public function listAll()
+    // list of all Services
+    public function listAll($status=null)
     {
-        return Service::paginate(10);
+        if($status==null)
+        {
+            return Service::paginate(10);
+
+        } else {
+            return Service::where('status',$status)->paginate(10);
+        }
     }
 
-    // Maid details
+    // dropdown of all Services
+    public function dropdown()
+    {
+        return Service::where('status',1)->pluck('title','id');
+    }
+
+    // Service details
     public function serviceDetails($id)
     {
         return Service::findOrFail($id);

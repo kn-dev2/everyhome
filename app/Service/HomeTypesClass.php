@@ -17,6 +17,12 @@ class HomeTypesClass implements HomeTypesRepository
         return HomeType::paginate(10);
     }
 
+     // All home types dropdown
+     public function dropdown()
+     {
+         return HomeType::where('status',1)->pluck('title','id');
+     }
+
     // home type details
     public function Details($id)
     {

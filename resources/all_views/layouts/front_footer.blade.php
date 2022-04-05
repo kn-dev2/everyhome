@@ -125,3 +125,13 @@
             });
 		});
 	</script>
+	<script>
+		$('.check_options').click(function() {
+			let id = $(this).val();
+			if ($(this).is(":checked")) {
+				$(".qty_" + id).css('display','block');
+			} else {
+				$(".qty_" + id).css('display','none');
+			}
+		});
+    </script>

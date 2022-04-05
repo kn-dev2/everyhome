@@ -3,17 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Repositories\ServiceRepository;
+use App\Repositories\HomeTypesRepository;
+use App\Repositories\ExtraServiceRepository;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $serciceRepository;
+    protected $extraserviceRepository;
+    protected $hometypesRepository;
+
+    public function __construct(ServiceRepository $serciceRepository,HomeTypesRepository $hometypesRepository,ExtraServiceRepository $extraserviceRepository )
     {
-        // $this->middleware('auth');
+        $this->serciceRepository        = $serciceRepository;
+        $this->hometypesRepository      = $hometypesRepository;
+        $this->extraserviceRepository   = $extraserviceRepository;
+
     }
 
     /**
@@ -23,7 +28,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.home');
+        $services = $this->serciceRepository->listAll(1);
+
+        return view('frontend.home',['services'=>$services]);
     }
 
     /**
@@ -33,7 +40,11 @@ class HomeController extends Controller
      */
     public function book_now()
     {
-        return view('frontend.book_now');
+        $services = $this->serciceRepository->dropdown();
+        $home_types = $this->hometypesRepository->dropdown();
+        $extra_services = $this->extraserviceRepository->get();
+
+        return view('frontend.book_now',['services'=>$services,'home_types'=>$home_types,'extra_services'=>$extra_services]);
     }
 
     /**

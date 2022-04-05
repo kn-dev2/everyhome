@@ -17,6 +17,12 @@ class ExtraServiceClass implements ExtraServiceRepository
         return ExtraService::paginate(10);
     }
 
+    // get
+    public function get()
+    {
+        return ExtraService::where('status',1)->get();
+    }
+
     // details
     public function Details($id)
     {

@@ -1,7 +1,7 @@
 html{scroll-padding-top:100px;}
 
 body{background:#e8fcfa url("../img/inner-bg.jpg") top center no-repeat; font-family: 'Titillium Web', sans-serif; font-size:18px; line-height:28px; color:#1c1c1c; overflow-x: hidden; position: relative; height: auto;}
-body::before{content: ""; background: url("../img/inner-bg-circle.png") top right no-repeat; position: absolute; width: 100%; height: 100%; top: 0; right: -90px;}
+/* body::before{content: ""; background: url("../img/inner-bg-circle.png") top right no-repeat; position: absolute; width: 100%; height: 100%; top: 0; right: -90px;} */
 body::after{content: ""; background: url("../img/circle-faded.png") top left no-repeat; position: absolute; width: 100%; height: 420px; top: 100px; z-index: -1;}
 
 body.homepage{background:#e8fcfa url("../img/home-bg.jpg") top center no-repeat;}
@@ -328,3 +328,20 @@ body::before{right: -280px;}
 .card-body form {
     max-width: 50%;
 }
+
+
+.booking-form{
+  margin-bottom:20px;
+}
+.booking-form .col-md-8 {
+    width: 55%;
+    float: left;
+    background: #c2e3e9 !important;
+    margin-right: 20px;
+    padding: 40px 50px;
+  }
+  .booking-form .col-md-4 {
+    width: 40%;
+    float: left;
+    background: #c2e3e9 !important;
+  }

@@ -31,41 +31,22 @@
 		<div class="container">
 			<h3 class="heading">What We <span>Do</span></h3>
 			<ul class="small-block-grid-2 medium-block-grid-4">
-				<li data-aos="flip-left">
+				@foreach($services as $key=>$singleService)
+				@if($singleService->delay ==0)
+					<li data-aos="flip-left">
+				@else 
+					<li data-aos="flip-left" data-aos-delay="{{$singleService->delay}}">
+				@endif
 					<div class="service-block">
-						<img src="{{ asset('frontend/img/icon-standard-clean.png') }}" alt="" title="">
-						<strong>Standard Clean</strong>
+						<img src="{{ asset('frontend/img/services/'.$singleService->icon) }}" alt="" title="">
+						<strong>{{$singleService->title}}</strong>
 						<a class="button" href="{{route('book.now')}}">Book Now</a>
 						<a class="button reverse" href="{{route('services')}}">Learn More</a>
 					</div>
 				</li>
+				<!-- data-aos-delay="200" -->
+				@endforeach
 				
-				<li data-aos="flip-left" data-aos-delay="200">
-					<div class="service-block">
-						<img src="{{ asset('frontend/img/icon-deluxe-clean.png') }}" alt="" title="">
-						<strong>Deluxe Clean</strong>
-						<a class="button" href="{{route('book.now')}}">Book Now</a>
-						<a class="button reverse" href="{{route('services')}}">Learn More</a>
-					</div>
-				</li>
-				
-				<li data-aos="flip-left" data-aos-delay="350">
-					<div class="service-block">
-						<img src="{{ asset('frontend/img/icon-deep-clean.png') }}" alt="" title="">
-						<strong>Deep Clean</strong>
-						<a class="button" href="{{route('book.now')}}">Book Now</a>
-						<a class="button reverse" href="{{route('services')}}">Learn More</a>
-					</div>
-				</li>
-				
-				<li data-aos="flip-left" data-aos-delay="450">
-					<div class="service-block">
-						<img src="{{ asset('frontend/img/icon-move-in-out-clean.png') }}" alt="" title="">
-						<strong>Move Out Clean</strong>
-						<a class="button" href="{{route('book.now')}}">Book Now</a>
-						<a class="button reverse" href="{{route('services')}}">Learn More</a>
-					</div>
-				</li>
 			</ul>
 		</div>
 	</div><!--class main-services ends-->
