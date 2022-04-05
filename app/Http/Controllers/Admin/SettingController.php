@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Setting\SettingRequest;
+use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
-use App\Models\Setting;
 
 class SettingController extends Controller
 {
+    protected $settingRepository;
+
+    public function __construct(SettingRepository $settingRepository)
+    {
+        $this->settingRepository = $settingRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +23,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $setting = Setting::first();
+        $setting = $this->settingRepository->details();
         return view('backend.setting.update')->with(['setting'=>$setting]);
     }
 
@@ -74,7 +81,7 @@ class SettingController extends Controller
     {
         try {
 
-            $Setting = Setting::find(1);
+            $Setting = $this->settingRepository->details();
             $Setting->commision = $request->commision;
             $SaveSetting = $Setting->save();
 
