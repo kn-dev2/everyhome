@@ -34,6 +34,7 @@ class ServiceController extends Controller
         return view('backend.services.index', compact('services'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      *

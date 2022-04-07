@@ -18,9 +18,14 @@ class ExtraServiceClass implements ExtraServiceRepository
     }
 
     // get
-    public function get()
+    public function get($sid=null)
     {
-        return ExtraService::where('status',1)->get();
+        if($sid==null)
+        {
+            return ExtraService::where('status',1)->get();
+        } else {
+            return ExtraService::where(['status'=>1,'service_id'=>$sid])->get();
+        }
     }
 
     // details
@@ -28,4 +33,10 @@ class ExtraServiceClass implements ExtraServiceRepository
     {
         return ExtraService::findOrFail($id);
     }
+
+     // details via service id
+     public function DetailsbyserviceId($sid)
+     {
+         return ExtraService::where(['service_id'=>$sid,'status'=>1])->get();
+     }
 }

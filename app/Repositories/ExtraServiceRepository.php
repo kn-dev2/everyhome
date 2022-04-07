@@ -5,8 +5,11 @@ Interface ExtraServiceRepository
 {
     public function listAll();
 
-    public function get();
+    public function get($sid=null);
 
     public function Details($id);
+
+    public function DetailsbyserviceId($sid);
+
 
 }

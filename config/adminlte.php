@@ -354,6 +354,18 @@ return [
             ],
         ],
         [
+            'text'    => 'Time Slots',
+            'icon'    => 'fas fa fa-calendar-alt',
+            'submenu' => [
+                [
+                    'text' => 'List of time slots',
+                    'icon' =>  'nav-icon far fa-circle text-success',
+                    'route'  => 'timeslots.index',
+                    'active' => ['/admin/timeslots/','/admin/timeslots/create/','regex:@^admin/timeslots/[0-9]+$@'],
+                ],
+            ],
+        ],
+        [
             'text'    => 'Bookings',
             'icon'    => 'fas fa fa-plus-square',
             'submenu' => [

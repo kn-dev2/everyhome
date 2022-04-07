@@ -22,6 +22,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('book-now', 'HomeController@book_now')->name('book.now');
+
 Route::get('gift-cards', 'HomeController@gift_card')->name('gift.card');
 Route::get('services', 'HomeController@services')->name('services');
 Route::get('hiring', 'HomeController@hiring')->name('hiring');
@@ -57,7 +58,15 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 
 		Route::resource('bookings', '\App\Http\Controllers\Admin\BookingsController');
 
+		Route::resource('timeslots', '\App\Http\Controllers\Admin\TimeSlotsController');
+
 		Route::get('/setting', '\App\Http\Controllers\Admin\SettingController@index')->name('setting');
 		Route::post('/setting/update', '\App\Http\Controllers\Admin\SettingController@update')->name('setting.update');
 	});
+
+	Route::get('ajax.timeslots', '\App\Http\Controllers\Admin\TimeSlotsController@ajaxGetSlots')->name('ajax.time.slots');
+	Route::get('ajax.getServicedata', '\App\Http\Controllers\Admin\HomeTypesController@ajaxGetServiceData')->name('ajax.service.data');
+	Route::post('ajax-book-order-now', '\App\Http\Controllers\HomeController@book_order')->name('ajax.book.order.now');
+
+
 });

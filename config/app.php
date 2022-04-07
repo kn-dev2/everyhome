@@ -182,7 +182,8 @@ return [
         App\Providers\ExtraServiceServiceProvider::class,
         App\Providers\DiscountCodesServiceProvider::class,
         App\Providers\BookingServiceProvider::class,
-        App\Providers\SettingServiceProvider::class
+        App\Providers\SettingServiceProvider::class,
+        App\Providers\TimeSlotsServiceProvider::class
 
     ],
 

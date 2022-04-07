@@ -12,8 +12,13 @@ class HomeType extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'price','status'
+        'service_id','title', 'price','hour','min','status'
     ];
+
+    public function service()
+    {
+        return $this->hasOne(Service::class,'id','service_id');
+    }
 
     public function homeSubTypes()
     {

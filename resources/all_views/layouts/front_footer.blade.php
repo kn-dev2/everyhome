@@ -13,6 +13,8 @@
 	
 	<script src="{{ asset('frontend/js/vendor/jquery.js') }}"></script>
     <script src="{{ asset('frontend/js/foundation.min.js') }}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
 	<script>
         $(document).foundation({
             orbit: {
@@ -124,8 +126,7 @@
 				]
             });
 		});
-	</script>
-	<script>
+
 		$('.check_options').click(function() {
 			let id = $(this).val();
 			if ($(this).is(":checked")) {
@@ -134,4 +135,132 @@
 				$(".qty_" + id).css('display','none');
 			}
 		});
+
+		$(".select_extras input[type='number']").bind('keyup mouseup', function () {
+			var value = $(this).val();
+			var ID = $(this).attr('id');
+			console.log(ID);
+			console.log(value);
+			if(value>10000)
+			{
+				$(this).val(10000);
+			}
+		});
+
+		$('#dt2').datepicker({
+                dateFormat: "mm/dd/yy",
+                minDate: 0,
+				beforeShowDay: $.datepicker.noWeekends,
+                onSelect: function(date, instance) {
+					var selectDate = $(this).datepicker('getDate');
+					$('.service_date_summary').html(date);
+					// console.log($(".select_time_slot").val());
+					$.ajaxSetup({
+							headers: {
+								'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+							}
+						});
+						jQuery.ajax({
+							url: "{{ route('ajax.time.slots') }}",
+							method: 'get',
+							data: {
+								date : date
+							},
+							type:'html',
+							success: function(result){
+								$('#my_select').html(result);
+					}});
+                },
+            });
+			$("#my_select").on('change', function(){
+				$('input[name="time_slot"]').val($(this).val());
+			});
+
+			// function Options(value)
+			// {
+			// 	$.each(value, function(i, v) {
+			// 		return '<OPTION LABEL="'+v.maid_id+'">'+v.maid_id+'</OPTION>';
+			// 	});
+			// }
+
+			$(".select_time_slot").on('change', function(){
+				var id = $(this).val();
+				var result = id.split('#');
+				var date = new Date(result[0]);
+                // var newDate = date.toString('d-M-y');
+				var dt2 = $('#dt2');
+                var startDate = dt2.datepicker('setDate', date);
+				$('.service_date_summary').html(result[0]+' @ '+result[2]);
+				// alert(newDate);
+				return false;
+			})
+
+			$("input[name='schedule_type']").on('change', function(){
+				var cValue = $(this).val();
+				$('.frequency_summary').html(cValue);
+			})
+
+			$('#Boooking-form select[name="service_id"]').on('change',function(){
+				var CurrentValue = $(this).val();
+				var url = "{{route('book.now','service_id=:id')}}";
+				url = url.replace(':id', CurrentValue);
+				window.location.href = url;
+
+				// $('select[name="home_type"]').prop("selectedIndex", 0);
+
+				// $.ajaxSetup({
+				// 			headers: {
+				// 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+				// 			}
+				// 		});
+				// 		jQuery.ajax({
+				// 			url: "{{ route('ajax.service.data') }}",
+				// 			method: 'get',
+				// 			data: {
+				// 				service_id : CurrentValue
+				// 			},
+				// 			type:'json',
+				// 			success: function(result){
+				// 				var Options = '';
+				// 				$('select[name="home_type"]').empty();
+				// 				$.each(result.home_drop_down, function(key,val) {
+				// 					Options += '<option value="'+key+'">'+val+'</option>'
+				// 				});
+
+				// 				$('select[name="home_type"]').append(Options);
+								
+				// 			}
+				// 	});
+			})
+			$("#Boooking-form button").click(function(e){
+        			e.preventDefault();
+					// $("#Boooking-form").submit();
+					jQuery.ajax({
+							url: "{{ route('ajax.book.order.now') }}",
+							method: 'POST',
+							data: $('#Boooking-form').serialize(),
+							type:'json',
+							success: function(result){		
+
+								var GetErrors = result.errors;
+								var Message = result.message;
+								if(result.status==false)
+								{
+									var ErrorDisplay = "";
+									for (var error in GetErrors)
+									{
+										ErrorDisplay += "<p>"+GetErrors[error]+"</p>";
+									}
+
+									$('.alert_message').empty().append(ErrorDisplay);
+									$('.alert_message').show(500).delay(3000).hide(500);
+								} else {
+									$('.alert_success_message').empty().append(Message);
+									$('.alert_success_message').show(500).delay(5000).hide(500);
+									location.reload();
+								}
+
+							}
+						});
+			});
     </script>

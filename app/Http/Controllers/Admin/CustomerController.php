@@ -35,7 +35,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('backend.customers.index');
+        $customers = $this->customerRepository->listAll($this->roles);
+        return view('backend.customers.index',['customers'=>$customers]);
     }
 
     /**

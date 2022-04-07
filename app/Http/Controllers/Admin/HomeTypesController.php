@@ -7,17 +7,24 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\HomeTypes\HomeTypesCreateRequest;
 use App\Http\Requests\HomeTypes\HomeTypesEditRequest;
 use App\Repositories\HomeTypesRepository;
+use App\Repositories\ServiceRepository;
+use App\Repositories\ExtraServiceRepository;
 use App\Models\HomeType;
 
 class HomeTypesController extends Controller
 {
     protected $hometypesRepository;
+    protected $extraserviceRepository;
+    protected $serviceRepository;
     public $status_dropdown;
 
-    public function __construct(HomeTypesRepository $hometypesRepository)
+    public function __construct(HomeTypesRepository $hometypesRepository,ServiceRepository $serviceRepository,ExtraServiceRepository $extraserviceRepository)
     {
         $this->status_dropdown = config('global.status_dropdown');
         $this->hometypesRepository = $hometypesRepository;
+        $this->serviceRepository = $serviceRepository;
+        $this->extraserviceRepository = $extraserviceRepository;
+
     }
 
 
@@ -32,6 +39,22 @@ class HomeTypesController extends Controller
         return view('backend.home_types.index', compact('home_types'));
     }
 
+
+    public function ajaxGetServiceData()
+    {
+        if (request()->ajax()) {
+
+            $service_id      = request()->input('service_id');
+            $homeDropDown    = $this->hometypesRepository->dropdown($service_id);
+            $id              = $homeDropDown->take(1)->keys()->first();
+            $HomeDetails     = $this->hometypesRepository->Details($id);
+            $ExtraServices   = $this->extraserviceRepository->DetailsbyserviceId($service_id);
+
+            return response()->json(['home_drop_down'=>$homeDropDown,'home_details'=>$HomeDetails,'extra_services'=>$ExtraServices]);
+
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -40,7 +63,8 @@ class HomeTypesController extends Controller
     public function create()
     {
         //
-        return view('backend.home_types.create')->with(['status_dropdown'=>$this->status_dropdown]);
+        $services = $this->serviceRepository->dropdown();
+        return view('backend.home_types.create')->with(['status_dropdown'=>$this->status_dropdown,'services'=>$services]);
     }
 
     /**
@@ -55,7 +79,10 @@ class HomeTypesController extends Controller
         try {
 
             $HomeType = new HomeType();
+            $HomeType->service_id = $request->service_id;
             $HomeType->title = $request->title;
+            $HomeType->hour = $request->hour;
+            $HomeType->min = $request->min;
             $HomeType->price = $request->price;
             $HomeType->status = $request->status;
             $SaveHomeTypes = $HomeType->save();
@@ -94,12 +121,13 @@ class HomeTypesController extends Controller
     public function edit($id)
     {
         try {
+             $services = $this->serviceRepository->dropdown();
              $home_type = $this->hometypesRepository->Details($id);
         } catch (ModelNotFoundException $exception) {
             session()->flash('error', 'No data found of this id');
             return redirect()->route('hometypes.index');
         }
-        return view('backend.home_types.update')->with(['home_type'=>$home_type,'status_dropdown'=>$this->status_dropdown]);
+        return view('backend.home_types.update')->with(['home_type'=>$home_type,'status_dropdown'=>$this->status_dropdown,'services'=>$services]);
     }
 
     /**
@@ -113,10 +141,12 @@ class HomeTypesController extends Controller
     {
         try {
             $HomeType = HomeType::findOrFail($id);
+            $HomeType->service_id = $request->service_id;
             $HomeType->title = $request->title;
+            $HomeType->hour = $request->hour;
+            $HomeType->min = $request->min;
             $HomeType->price = $request->price;
             $HomeType->status = $request->status;       
-
             $SaveHomeType = $HomeType->save();
 
             if ($SaveHomeType) 
