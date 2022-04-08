@@ -6,7 +6,7 @@
     <div class="col-sm-6">
     {{ Form::hidden('id',null, ['class' => 'form-control']) }}
 
-        {{ Form::select('service_id',$home_types,null,['class' => 'form-control', 'placeholder' =>'Select HomeType']) }}
+        {{ Form::select('service_id',$services,null,['class' => 'form-control', 'placeholder' =>'Select Service']) }}
         @error('service_id')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>

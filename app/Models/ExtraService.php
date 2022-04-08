@@ -14,9 +14,9 @@ class ExtraService extends Model
       /**
      * Get the home type that owns the phone.
      */
-    public function hometype()
+    public function service()
     {
-        return $this->hasOne(HomeType::class, 'id','service_id');
+        return $this->hasOne(Service::class, 'id','service_id');
     }
 
 }

@@ -8,20 +8,20 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Requests\ExtraServices\ExtraServicesCreateRequest;
 use App\Http\Requests\ExtraServices\ExtraServicesEditRequest;
-use App\Repositories\HomeSubTypesRepository;
 use App\Repositories\ExtraServiceRepository;
+use App\Repositories\ServiceRepository;
 
 class ExtraServicesController extends Controller
 {
-    protected $homesubtypesRepository;
+    protected $servicesRepository;
     protected $extraserviceRepository;
     public $status_dropdown;
     public $extra_service_type_dropdown;
     public $extra_service_img_path;
 
-    public function  __construct(HomeSubTypesRepository $homesubtypesRepository,ExtraServiceRepository $extraserviceRepository)
+    public function  __construct(ServiceRepository $servicesRepository,ExtraServiceRepository $extraserviceRepository)
     {
-        $this->homesubtypesRepository = $homesubtypesRepository;
+        $this->servicesRepository = $servicesRepository;
         $this->extraserviceRepository = $extraserviceRepository;
         $this->extra_service_img_path = config('global.extra_service_img_path');
         $this->status_dropdown = config('global.status_dropdown');
@@ -45,8 +45,8 @@ class ExtraServicesController extends Controller
      */
     public function create()
     {
-        $home_types = $this->homesubtypesRepository->getHometype();
-        return view('backend.extra_services.create')->with(['status_dropdown'=>$this->status_dropdown,'extra_service_type_dropdown'=>$this->extra_service_type_dropdown,'home_types' => $home_types]);
+        $services = $this->servicesRepository->dropdown();
+        return view('backend.extra_services.create')->with(['status_dropdown'=>$this->status_dropdown,'extra_service_type_dropdown'=>$this->extra_service_type_dropdown,'services' => $services]);
     }
 
     /**
@@ -109,12 +109,12 @@ class ExtraServicesController extends Controller
         //
         try {
             $extra_service = $this->extraserviceRepository->Details($id);
-            $home_types = $this->homesubtypesRepository->getHometype();
+            $services = $this->servicesRepository->dropdown();
         } catch (ModelNotFoundException $exception) {
            session()->flash('error', 'No data found of this id');
            return redirect()->route('extra_services.index');
         }
-        return view('backend.extra_services.update')->with(['extra_service'=>$extra_service,'extra_service_type_dropdown'=>$this->extra_service_type_dropdown,'status_dropdown'=>$this->status_dropdown,'home_types'=>$home_types]);
+        return view('backend.extra_services.update')->with(['extra_service'=>$extra_service,'extra_service_type_dropdown'=>$this->extra_service_type_dropdown,'status_dropdown'=>$this->status_dropdown,'services'=>$services]);
     }
 
     /**
