@@ -137,7 +137,7 @@
                     <li>
                         {{ Form::checkbox('extra_service[]',$singleExtraService->id,null,['placeholder' =>$singleExtraService->title,'id'=>"extra_service".$singleExtraService->id,'class'=>'check_options']) }}
                         <label for="extra_service{{$singleExtraService->id}}"><img src="{{asset('frontend/img/extra_services/').'/'.$singleExtraService->icon}}" />
-                            <p>{{$singleExtraService->title}}</p>
+                            <p data-price="{{$singleExtraService->price}}">{{$singleExtraService->title}}</p>
                         </label>
                         @if($singleExtraService->type==1)
                         <div class="qty_{{$singleExtraService->id}}" style="display:none;margin-left: 17px;">

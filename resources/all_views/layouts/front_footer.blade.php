@@ -130,18 +130,105 @@
 		$('.check_options').click(function() {
 			let id = $(this).val();
 			if ($(this).is(":checked")) {
+				
+				var ExtraServiceTitle 	= $('label[for="extra_service'+id+'"] p').text();
+
+				var ExtraServicePrice 	= $('label[for="extra_service'+id+'"] p').attr('data-price');
+
+				var SubTotal			= $('.sub-total-value').text().replace('$','');
+
+				var qty 				= $('#extra_service_qty'+id).val();
+				console.log(qty);
+				if(qty == undefined)
+					{
+						var TotalExtraServicePrice =  parseInt(ExtraServicePrice);
+
+					} else {
+
+						var TotalExtraServicePrice = parseInt(qty) * parseInt(ExtraServicePrice);
+
+					}
+
+				var Total				= parseInt(SubTotal) + parseInt(TotalExtraServicePrice);
+
+				$('.home_sub_type_class').append('<li class="extra_service_list" id="extra_service'+id+'"><span>'+ExtraServiceTitle+'</span> - <b>$'+ExtraServicePrice+'</b></li>');
+				$('.sub-total-value').text('$'+Total);
+				$('.final-price-value').text('$'+Total);
+				$('.home_sub_type_class').show();
+
 				$(".qty_" + id).css('display','block');
 			} else {
+
+
+
+					var qty 				= $('#extra_service_qty'+id).val();
+
+					var ExtraServicePrice 	= $('label[for="extra_service'+id+'"] p').attr('data-price');
+
+					if(qty == undefined)
+					{
+						var TotalExtraServicePrice =  parseInt(ExtraServicePrice);
+
+					} else {
+
+						var TotalExtraServicePrice = parseInt(qty) * parseInt(ExtraServicePrice);
+
+					}
+
+				var SubTotal			= $('.sub-total-value').text().replace('$','');
+
+				var Total				= parseInt(SubTotal) - parseInt(TotalExtraServicePrice);
+
+				$('.sub-total-value').text('$'+Total);
+
+				$('.final-price-value').text('$'+Total);
+				$('.home_sub_type_class').show();
+				$('#extra_service_qty'+id).val(1);
+
 				$(".qty_" + id).css('display','none');
+				$('.home_sub_type_class #extra_service'+id).remove();
+
 			}
 		});
 
 		$(".select_extras input[type='number']").bind('keyup mouseup', function () {
-			var value = $(this).val();
-			var ID = $(this).attr('id');
-			console.log(ID);
-			console.log(value);
-			if(value>10000)
+			var qty 			= $(this).val();
+			var ID 				= $(this).attr('id');
+			var SingleValue 	= $('label[for="extra_service'+ID.match(/\d+/)+'"] p').attr('data-price');
+
+
+			var MultiValue 		= qty * SingleValue;
+			var SubTotal		= $('.sub-total-value').text().replace('$','');
+			var Total 			= parseInt(SubTotal) + parseInt(MultiValue);
+
+
+			var HomeTypePrice 	 = $('.home_type_class_price').text().replace('$','');
+			var HomeSubTypePrice = $('.home_sub_type_price').text().replace('$','');
+			 
+			$('#extra_service'+ID.match(/\d+/)+' b').text('$'+MultiValue);
+
+			var ExtraServicesum = 0;
+			$('.extra_service_list b').each(function(i, obj) {
+				//test
+				var extraServiceValue = $(this).text();
+				var EValue = extraServiceValue.match(/\d+/);
+				ExtraServicesum += parseInt(EValue[0]);
+			});
+
+			if(HomeSubTypePrice == undefined || HomeSubTypePrice == '')
+			{
+				var TotalValue = parseInt(HomeTypePrice) + parseInt(ExtraServicesum);
+
+			} else {
+				var TotalValue = parseInt(HomeTypePrice) + parseInt(HomeSubTypePrice) + parseInt(ExtraServicesum);
+
+			}
+
+			$('.sub-total-value').text('$'+TotalValue);
+			$('.final-price-value').text('$'+TotalValue);
+			
+			// console.log(MultiValue);
+			if(qty>10000)
 			{
 				$(this).val(10000);
 			}
@@ -250,6 +337,7 @@
 
 									$('.home_sub_type').hide();
 									$('.home_sub_type_class').hide();
+									$('.home_sub_type_added').hide();
 									$('.home_sub_type_added span').hide().empty();
 									$('.home_sub_type_price').hide().empty();
 									$('.sub-total-value').html('$'+TotalAmount);
@@ -274,7 +362,13 @@
 
 								var HomeSubTypeResponse = result.home_sub_type_details;
 
-								var HomeTypePrice = $('.home_type_class_price').html().replace('$','');
+								if($(".home_sub_type_class").hasClass("extra_service_list"))
+								{
+									var HomeTypePrice = $('.sub-total-value').html().replace('$','');
+
+								} else {
+									var HomeTypePrice = $('.home_type_class_price').html().replace('$','');
+								}
 
 								if(HomeSubTypeResponse)
 								{
@@ -300,6 +394,7 @@
 
 									$('.home_sub_type').hide();
 									$('.home_sub_type_class').hide();
+									$('.home_sub_type_added').hide();
 									$('.home_sub_type_added span').hide().empty();
 									$('.home_sub_type_price').hide().empty();
 									$('.sub-total-value').html('$'+TotalAmount);
@@ -316,32 +411,6 @@
 				var url = "{{route('book.now','service_id=:id')}}";
 				url = url.replace(':id', CurrentValue);
 				window.location.href = url;
-
-				// $('select[name="home_type"]').prop("selectedIndex", 0);
-
-				// $.ajaxSetup({
-				// 			headers: {
-				// 				'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-				// 			}
-				// 		});
-				// 		jQuery.ajax({
-				// 			url: "{{ route('ajax.service.data') }}",
-				// 			method: 'get',
-				// 			data: {
-				// 				service_id : CurrentValue
-				// 			},
-				// 			type:'json',
-				// 			success: function(result){
-				// 				var Options = '';
-				// 				$('select[name="home_type"]').empty();
-				// 				$.each(result.home_drop_down, function(key,val) {
-				// 					Options += '<option value="'+key+'">'+val+'</option>'
-				// 				});
-
-				// 				$('select[name="home_type"]').append(Options);
-								
-				// 			}
-				// 	});
 			})
 			$("#Boooking-form button").click(function(e){
         			e.preventDefault();
