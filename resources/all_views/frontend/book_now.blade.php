@@ -33,13 +33,20 @@
             <div class="form-group row @error('home_type') is-invalid @enderror">
                 <label class="col-sm-4 col-form-label">STEP 2: TELL US ABOUT YOUR HOME</label>
                 <p>Home Type</p>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     {{ Form::select('home_type',$home_types,null,['class' => 'form-control']) }}
                     @error('home_type')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                     @enderror
+                </div>
+                @if(isset($home_sub_type_details->title))
+                <div class="col-sm-3 home_sub_type">
+                @else
+                <div class="col-sm-3 home_sub_type" style="display:none;">
+                @endif
+                {{ Form::select('home_sub_type',$home_sub_type_dropdown,null,['class' => 'form-control']) }}
                 </div>
             </div>
 
@@ -288,9 +295,17 @@
                                         </div>
                                         <div class="service-summary-total home_type_class_price">
                                         ${{isset($single_home_type->price) ? $single_home_type->price : 0}}
+                                        
                                         </div>
                                     </div>
                                     <ul class="summary-items home_sub_type_class">
+                                        @if(isset($home_sub_type_details->title))
+                                        <li class="home_sub_type_added">
+                                        @else
+                                        <li class="home_sub_type_added" style="display:none">
+                                        @endif
+                                        <span>{{isset($home_sub_type_details->title) ? $home_sub_type_details->title : ''}}</span> - <b class="home_sub_type_price">${{isset($home_sub_type_details->price) ? $home_sub_type_details->price : ''}}</b>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -329,7 +344,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 text-right sub-total-value">
-                        ${{isset($single_home_type->price) ? $single_home_type->price : 0}}
+                        ${{$total_price}}
                         </div>
                     </div>
 
@@ -367,7 +382,7 @@
                             </strong>
                         </div>
                         <div class="col-sm-8 text-right amount final-price-value">
-                        ${{isset($single_home_type->price) ? $single_home_type->price : 0}}
+                        ${{$total_price}}
                         </div>
                     </div>
                 </fieldset>

@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('content_header')
-<h1>Home Types</h1>
+<h1>Home Sub Types</h1>
 @stop
 
 @section('content')

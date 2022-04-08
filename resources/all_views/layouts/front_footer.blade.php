@@ -200,6 +200,117 @@
 				$('.frequency_summary').html(cValue);
 			})
 
+			$("select[name='home_type']").on('change', function(){
+				var cValue = $(this).val();
+				jQuery.ajax({
+							url: "{{ route('ajax.home_type.data') }}",
+							method: 'GET',
+							data: {home_type:cValue},
+							type:'json',
+							success: function(result){		
+								var HomeTypeResponse = result.home_type_details;
+								var home_sub_type_dropdown = result.home_sub_type_dropdown;
+								var single_home_sub_type = result.single_home_sub_type;
+
+								$('.home_type_class').html(HomeTypeResponse.title);
+								$('.home_type_class_price').html('$'+HomeTypeResponse.price);
+								var HomeTypePrice = HomeTypeResponse.price;
+								var HomeSubTypePrice = single_home_sub_type.price;
+
+								var Options = '';
+								$('.home_sub_type select[name="home_sub_type"]').empty();
+								$.each(home_sub_type_dropdown, function(key,val) {
+									Options += '<option value="'+val.id+'">'+val.title+'</option>'
+								});
+
+								$('.home_sub_type select[name="home_sub_type"]').html(Options);
+								$('.home_sub_type').show(500);
+
+								if(HomeSubTypePrice)
+								{
+									var TotalAmount = parseInt(HomeTypePrice) + parseInt(HomeSubTypePrice);
+
+								} else {
+									var TotalAmount = parseInt(HomeTypePrice);
+
+								}
+
+								if(single_home_sub_type)
+								{
+									$('.home_sub_type_class .home_sub_type_added span').empty().append(single_home_sub_type.title);
+									$('.home_sub_type_class .home_sub_type_price').empty().append('$'+single_home_sub_type.price);
+									$('.home_sub_type_added').show();
+									$('.home_sub_type_class').show();
+									$('.home_sub_type_added span').show();
+									$('.home_sub_type_price').show();
+									$('.sub-total-value').html('$'+TotalAmount);
+									$('.final-price-value').html('$'+TotalAmount);
+
+								} else {
+
+									$('.home_sub_type').hide();
+									$('.home_sub_type_class').hide();
+									$('.home_sub_type_added span').hide().empty();
+									$('.home_sub_type_price').hide().empty();
+									$('.sub-total-value').html('$'+TotalAmount);
+									$('.final-price-value').html('$'+TotalAmount);
+
+								}
+
+
+							}
+						});
+			})
+
+			$("select[name='home_sub_type']").on('change', function(){
+				var cSubValue = $(this).val();
+
+				jQuery.ajax({
+							url: "{{ route('ajax.home_sub_type.data') }}",
+							method: 'GET',
+							data: {home_sub_type:cSubValue},
+							type:'json',
+							success: function(result){	
+
+								var HomeSubTypeResponse = result.home_sub_type_details;
+
+								var HomeTypePrice = $('.home_type_class_price').html().replace('$','');
+
+								if(HomeSubTypeResponse)
+								{
+									var TotalAmount = parseInt(HomeTypePrice) + parseInt(HomeSubTypeResponse.price);
+
+								} else {
+									var TotalAmount = parseInt(HomeTypePrice);
+
+								}
+
+								if(HomeSubTypeResponse)
+								{
+									$('.home_sub_type_class .home_sub_type_added span').empty().append(HomeSubTypeResponse.title);
+									$('.home_sub_type_class .home_sub_type_price').empty().append('$'+HomeSubTypeResponse.price);
+									$('.home_sub_type_added').show();
+									$('.home_sub_type_class').show();
+									$('.home_sub_type_added span').show();
+									$('.home_sub_type_price').show();
+									$('.sub-total-value').html('$'+TotalAmount);
+									$('.final-price-value').html('$'+TotalAmount);
+
+								} else {
+
+									$('.home_sub_type').hide();
+									$('.home_sub_type_class').hide();
+									$('.home_sub_type_added span').hide().empty();
+									$('.home_sub_type_price').hide().empty();
+									$('.sub-total-value').html('$'+TotalAmount);
+									$('.final-price-value').html('$'+TotalAmount);
+
+								}
+
+							}
+						});
+			})
+
 			$('#Boooking-form select[name="service_id"]').on('change',function(){
 				var CurrentValue = $(this).val();
 				var url = "{{route('book.now','service_id=:id')}}";

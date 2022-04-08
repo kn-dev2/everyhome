@@ -9,4 +9,6 @@ Interface HomeSubTypesRepository
 
     public function getHometype();
 
+    public function DropDown($id,$type='');
+
 }

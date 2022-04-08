@@ -29,6 +29,7 @@ Route::get('hiring', 'HomeController@hiring')->name('hiring');
 
 Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::namespace('Auth')->group(function(){
+		Route::get('/', '\App\Http\Controllers\Auth\LoginController@showLoginForm')->name('admin');
 		Route::get('/login', '\App\Http\Controllers\Auth\LoginController@showLoginForm')->name('admin.login');
 		Route::post('/login', '\App\Http\Controllers\Auth\LoginController@login');
 		Route::post('logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('admin.logout');
@@ -66,6 +67,9 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 
 	Route::get('ajax.timeslots', '\App\Http\Controllers\Admin\TimeSlotsController@ajaxGetSlots')->name('ajax.time.slots');
 	Route::get('ajax.getServicedata', '\App\Http\Controllers\Admin\HomeTypesController@ajaxGetServiceData')->name('ajax.service.data');
+	Route::get('ajax.getHomeTypedata', '\App\Http\Controllers\Admin\HomeTypesController@ajaxGetHomeTypeData')->name('ajax.home_type.data');
+	Route::get('ajax.getHomeSubTypedata', '\App\Http\Controllers\Admin\HomeSubTypesController@ajaxGetHomeSubTypeData')->name('ajax.home_sub_type.data');
+
 	Route::post('ajax-book-order-now', '\App\Http\Controllers\HomeController@book_order')->name('ajax.book.order.now');
 
 

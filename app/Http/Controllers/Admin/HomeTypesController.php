@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\HomeTypes\HomeTypesCreateRequest;
 use App\Http\Requests\HomeTypes\HomeTypesEditRequest;
 use App\Repositories\HomeTypesRepository;
+use App\Repositories\HomeSubTypesRepository;
 use App\Repositories\ServiceRepository;
 use App\Repositories\ExtraServiceRepository;
 use App\Models\HomeType;
@@ -14,14 +15,16 @@ use App\Models\HomeType;
 class HomeTypesController extends Controller
 {
     protected $hometypesRepository;
+    protected $homesubtypesRepository;
     protected $extraserviceRepository;
     protected $serviceRepository;
     public $status_dropdown;
 
-    public function __construct(HomeTypesRepository $hometypesRepository,ServiceRepository $serviceRepository,ExtraServiceRepository $extraserviceRepository)
+    public function __construct(HomeTypesRepository $hometypesRepository,HomeSubTypesRepository $homesubtypesRepository,ServiceRepository $serviceRepository,ExtraServiceRepository $extraserviceRepository)
     {
         $this->status_dropdown = config('global.status_dropdown');
         $this->hometypesRepository = $hometypesRepository;
+        $this->homesubtypesRepository = $homesubtypesRepository;
         $this->serviceRepository = $serviceRepository;
         $this->extraserviceRepository = $extraserviceRepository;
 
@@ -51,6 +54,20 @@ class HomeTypesController extends Controller
             $ExtraServices   = $this->extraserviceRepository->DetailsbyserviceId($service_id);
 
             return response()->json(['home_drop_down'=>$homeDropDown,'home_details'=>$HomeDetails,'extra_services'=>$ExtraServices]);
+
+        }
+    }
+
+    public function ajaxGetHomeTypeData()
+    {
+        if (request()->ajax()) {
+
+            $home_type_id           = request()->input('home_type');
+            $HomeTypeDetails        = $this->hometypesRepository->Details($home_type_id);
+            $HomeSubTypeDropdown    = $this->homesubtypesRepository->DropDown($home_type_id,'');
+            $SingleHomeSubType      = isset($HomeSubTypeDropdown[0]) ? $HomeSubTypeDropdown[0] : '';
+
+            return response()->json(['home_type_details'=>$HomeTypeDetails,'home_sub_type_dropdown'=>$HomeSubTypeDropdown,'single_home_sub_type'=>$SingleHomeSubType]);
 
         }
     }

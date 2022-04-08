@@ -31,6 +31,18 @@ class HomeSubTypesController extends Controller
         return view('backend.home_sub_types.index', compact('home_sub_types'));
     }
 
+    public function ajaxGetHomeSubTypeData()
+    {
+        if (request()->ajax()) {
+
+            $home_sub_type_id        = request()->input('home_sub_type');
+            $HomeSubTypeDetails      = $this->homesubtypesRepository->Details($home_sub_type_id);
+
+            return response()->json(['home_sub_type_details'=>$HomeSubTypeDetails]);
+
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
