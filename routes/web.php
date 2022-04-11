@@ -69,8 +69,8 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::get('ajax.getServicedata', '\App\Http\Controllers\Admin\HomeTypesController@ajaxGetServiceData')->name('ajax.service.data');
 	Route::get('ajax.getHomeTypedata', '\App\Http\Controllers\Admin\HomeTypesController@ajaxGetHomeTypeData')->name('ajax.home_type.data');
 	Route::get('ajax.getHomeSubTypedata', '\App\Http\Controllers\Admin\HomeSubTypesController@ajaxGetHomeSubTypeData')->name('ajax.home_sub_type.data');
-
-	Route::post('ajax-book-order-now', '\App\Http\Controllers\HomeController@book_order')->name('ajax.book.order.now');
-
+	Route::post('ajax-check-discount', '\App\Http\Controllers\HomeController@ajaxCheckDiscountCode')->name('ajax.check.discount.code');
+	Route::post('ajax-book-order-now', '\App\Http\Controllers\HomeController@ajaxBookOrder')->name('ajax.book.order.now');
 
 });
+

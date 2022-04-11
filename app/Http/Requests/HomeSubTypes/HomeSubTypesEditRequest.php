@@ -25,8 +25,9 @@ class HomeSubTypesEditRequest extends FormRequest
     {
         return [
             'home_type_id' => ['required'],
-            'title' => ['required', 'string', 'min:3', 'max:255',\Illuminate\Validation\Rule::unique('home_sub_types')->ignore(request()->id)],
+            'title' => ['required', 'string', 'min:3', 'max:255'],
             'price' => ['required', 'string'],
+            'min'  => ['required', 'numeric'],
             'status' => ['required']
 
         ];

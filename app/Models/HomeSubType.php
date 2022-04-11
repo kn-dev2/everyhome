@@ -12,7 +12,7 @@ class HomeSubType extends Model
      * @var array
      */
     protected $fillable = [
-        'home_type_id', 'title','status','price'
+        'home_type_id', 'title','status','price','hour','min'
     ];
 
      /**

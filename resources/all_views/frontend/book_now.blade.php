@@ -52,37 +52,27 @@
 
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">STEP 3: CONTACT INFORMATION</label>
-                <div class="col-sm-3 @error('first_name') is-invalid @enderror">
+                <div class="col-sm-3 is-invalid">
                     {{ Form::text('first_name',old('first_name'),['class' => 'form-control', 'placeholder' =>'Enter First Name*']) }}
-                    @error('first_name')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="first_name">
                     </span>
-                    @enderror
+                   
                 </div>
                 <div class="col-sm-3 @error('last_name') is-invalid @enderror">
                     {{ Form::text('last_name',old('last_name'),['class' => 'form-control', 'placeholder' =>'Enter Last Name*']) }}
-                    @error('last_name')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="last_name">
                     </span>
-                    @enderror
+                   
                 </div>
                 <div class="col-sm-3 @error('email') is-invalid @enderror">
                     {{ Form::text('email',old('email'),['class' => 'form-control', 'placeholder' =>'Enter Email*']) }}
-                    @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="email">
                     </span>
-                    @enderror
                 </div>
                 <div class="col-sm-3 @error('phone') is-invalid @enderror">
                     {{ Form::text('phone',old('phone'),['class' => 'form-control', 'placeholder' =>'Enter Phone*']) }}
-                    @error('phone')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="phone">
                     </span>
-                    @enderror
                 </div>
             </div>
 
@@ -90,43 +80,28 @@
                 <label class="col-sm-4 col-form-label">STEP 4: ADDRESS INFORMATION</label>
                 <div class="col-sm-3 @error('address') is-invalid @enderror">
                     {{ Form::text('address',old('address'),['class' => 'form-control', 'placeholder' =>'Enter Address*']) }}
-                    @error('address')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="address">
                     </span>
-                    @enderror
                 </div>
                 <div class="col-sm-3 @error('suite') is-invalid @enderror">
                     {{ Form::text('suite',old('suite'),['class' => 'form-control', 'placeholder' =>'Enter Apt/Suite #']) }}
-                    @error('suite')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="suite">
                     </span>
-                    @enderror
                 </div>
                 <div class="col-sm-3 @error('city') is-invalid @enderror">
                     {{ Form::text('city',old('city'),['class' => 'form-control', 'placeholder' =>'Enter City*']) }}
-                    @error('city')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="city">
                     </span>
-                    @enderror
                 </div>
                 <div class="col-sm-3 @error('state') is-invalid @enderror">
                     {{ Form::select('state',$states,null,['class' => 'form-control', 'placeholder' =>'Select State*']) }}
-                    @error('state')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="state">
                     </span>
-                    @enderror
                 </div>
                 <div class="col-sm-3 @error('zipcode') is-invalid @enderror">
                     {{ Form::text('zipcode',old('zipcode'),['class' => 'form-control', 'placeholder' =>'Enter Zipcode*']) }}
-                    @error('zipcode')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="zipcode">
                     </span>
-                    @enderror
                 </div>
             </div>
             <div class="form-group row select_extras">
@@ -141,7 +116,7 @@
                         </label>
                         @if($singleExtraService->type==1)
                         <div class="qty_{{$singleExtraService->id}}" style="display:none;margin-left: 17px;">
-                            {{ Form::number('extra_service_qty[]',1,['min'=>1,'max'=>10000,'placeholder' =>'Quantity','id'=>"extra_service_qty".$singleExtraService->id,'class'=>'qty_extra_service']) }}
+                            {{ Form::number('extra_service_qty['.$singleExtraService->id.']',1,['min'=>1,'max'=>10000,'placeholder' =>'Quantity','id'=>"extra_service_qty".$singleExtraService->id,'class'=>'qty_extra_service']) }}
                         </div>
                         @endif
                     </li>
@@ -153,14 +128,11 @@
                 <div class="col-sm-3 @error('discount_code') is-invalid @enderror">
                 <label class="col-sm-4 col-form-label">Discount Code</label>
                     {{ Form::text('discount_code',old('discount_code'),['class' => 'form-control', 'placeholder' =>'Enter Discount Code*']) }}
-                    @error('discount_code')
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
                     </span>
-                    @enderror
                 </div>
                 <div class="col-sm-3">
-                    {{ Form::button('Apply', ['class' => 'btn btn-lg btn-primary']) }}
+                    {{ Form::button('Apply', ['class' => 'btn btn-lg btn-primary','id'=>'discount_code_apply']) }}
                 </div>
             </div>
 
@@ -169,22 +141,16 @@
                 <br>
                 <div class="col-sm-3 @error('date') is-invalid @enderror">
                     {{ Form::text('date',null,['class' => 'form-control', 'placeholder' =>'Click to choose a date','id'=>'dt2','readyonly'=>'readonly']) }}
-                    @error('date')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="date">
                     </span>
-                    @enderror
                 </div>
 
                 <div class="col-sm-3 @error('time_slot') is-invalid @enderror">
                 <!-- <SELECT ID="my_select" class="select_time_slot"></SELECT> -->
                     {{ Form::select('time_slot_select',array(),null,['class' => 'form-control select_time_slot', 'placeholder' =>'--','id'=>'my_select']) }}
                     {{ Form::hidden('time_slot',null,['class' => 'form-control']) }}
-                    @error('time_slot')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                    <span class="invalid-feedback" role="alert" id="time_slot_select">
                     </span>
-                    @enderror
                 </div>
             </div>
 
@@ -223,7 +189,7 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-8">
-                    {{ Form::button('Book Now', ['class' => 'btn btn-lg btn-primary']) }}
+                    {{ Form::button('Book Now', ['class' => 'btn btn-lg btn-primary','id'=>'booking_form_submit']) }}
                 </div>
             </div>
         </div>
@@ -320,8 +286,8 @@
                         <li class="booking-summary-duration editable can-be-hidden" style="display: list-item;">
                             <i class="fa fa-clock-o fa-li fa-2x">
                             </i>
-                            <p class="summary service_duration">
-                            {{isset($single_home_type->hour) ? $single_home_type->hour : 0}} Hours {{isset($single_home_type->min) ? $single_home_type->min : 0}} Minutes
+                            <p class="summary service_duration">    
+                            {{$hours}} Hours {{$minutes}} Minutes
                             </p>
                         </li>
                         <li class="select-frequency">
@@ -574,6 +540,14 @@
     background: wheat;
     padding: 15px;
     margin: 10px;
+}
+
+.invalid-feedback {
+    top: -16px;
+    position: relative;
+    color: red;
+    font-size: 15px;
+    padding: 10px;
 }
 
 </style>

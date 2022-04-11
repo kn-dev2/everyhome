@@ -14,6 +14,8 @@
 	<script src="{{ asset('frontend/js/vendor/jquery.js') }}"></script>
     <script src="{{ asset('frontend/js/foundation.min.js') }}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<link media="screen" rel="stylesheet" type="text/css" href="{{ asset('frontend/css/jquery.toast.css') }}" />
+<script type="text/javascript" src="{{ asset('frontend/js/jquery.toast.js') }}"></script>
 
 	<script>
         $(document).foundation({
@@ -138,7 +140,7 @@
 				var SubTotal			= $('.sub-total-value').text().replace('$','');
 
 				var qty 				= $('#extra_service_qty'+id).val();
-				console.log(qty);
+
 				if(qty == undefined)
 					{
 						var TotalExtraServicePrice =  parseInt(ExtraServicePrice);
@@ -158,8 +160,6 @@
 
 				$(".qty_" + id).css('display','block');
 			} else {
-
-
 
 					var qty 				= $('#extra_service_qty'+id).val();
 
@@ -196,8 +196,7 @@
 			var ID 				= $(this).attr('id');
 			var SingleValue 	= $('label[for="extra_service'+ID.match(/\d+/)+'"] p').attr('data-price');
 
-
-			var MultiValue 		= qty * SingleValue;
+			var MultiValue 		= qty <= 1 ? qty * SingleValue : qty * SingleValue + '(' + qty + ')';
 			var SubTotal		= $('.sub-total-value').text().replace('$','');
 			var Total 			= parseInt(SubTotal) + parseInt(MultiValue);
 
@@ -223,7 +222,6 @@
 				var TotalValue = parseInt(HomeTypePrice) + parseInt(HomeSubTypePrice) + parseInt(ExtraServicesum);
 
 			}
-
 			$('.sub-total-value').text('$'+TotalValue);
 			$('.final-price-value').text('$'+TotalValue);
 			
@@ -289,6 +287,11 @@
 
 			$("select[name='home_type']").on('change', function(){
 				var cValue = $(this).val();
+				$.ajaxSetup({
+							headers: {
+								'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+							}
+						});
 				jQuery.ajax({
 							url: "{{ route('ajax.home_type.data') }}",
 							method: 'GET',
@@ -352,6 +355,11 @@
 
 			$("select[name='home_sub_type']").on('change', function(){
 				var cSubValue = $(this).val();
+				$.ajaxSetup({
+							headers: {
+								'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+							}
+						});
 
 				jQuery.ajax({
 							url: "{{ route('ajax.home_sub_type.data') }}",
@@ -359,7 +367,7 @@
 							data: {home_sub_type:cSubValue},
 							type:'json',
 							success: function(result){	
-
+                                
 								var HomeSubTypeResponse = result.home_sub_type_details;
 
 								if($(".home_sub_type_class").hasClass("extra_service_list"))
@@ -381,6 +389,8 @@
 
 								if(HomeSubTypeResponse)
 								{
+									var service_duration = result.Hours + " Hours " + result.Minutes + " Minutes";
+									$('.service_duration').text(service_duration);
 									$('.home_sub_type_class .home_sub_type_added span').empty().append(HomeSubTypeResponse.title);
 									$('.home_sub_type_class .home_sub_type_price').empty().append('$'+HomeSubTypeResponse.price);
 									$('.home_sub_type_added').show();
@@ -391,7 +401,7 @@
 									$('.final-price-value').html('$'+TotalAmount);
 
 								} else {
-
+                                    $('.service_duration').text('');
 									$('.home_sub_type').hide();
 									$('.home_sub_type_class').hide();
 									$('.home_sub_type_added').hide();
@@ -412,7 +422,7 @@
 				url = url.replace(':id', CurrentValue);
 				window.location.href = url;
 			})
-			$("#Boooking-form button").click(function(e){
+			$("#Boooking-form button#booking_form_submit").click(function(e){
         			e.preventDefault();
 					// $("#Boooking-form").submit();
 					jQuery.ajax({
@@ -426,21 +436,76 @@
 								var Message = result.message;
 								if(result.status==false)
 								{
-									var ErrorDisplay = "";
-									for (var error in GetErrors)
-									{
-										ErrorDisplay += "<p>"+GetErrors[error]+"</p>";
-									}
+									$.each(GetErrors, function(i, v) {
+										var res= v.join(',');
+										$("#"+i).text(res);
+									});
+									// var ErrorDisplay = "";
+									// for (var error in GetErrors)
+									// {
+									// 	ErrorDisplay += "<p>"+GetErrors[error]+"</p>";
+									// }
 
-									$('.alert_message').empty().append(ErrorDisplay);
-									$('.alert_message').show(500).delay(3000).hide(500);
+									// $('.alert_message').empty().append(ErrorDisplay);
+									// $('.alert_message').show(500).delay(3000).hide(500);
 								} else {
 									$('.alert_success_message').empty().append(Message);
 									$('.alert_success_message').show(500).delay(5000).hide(500);
-									location.reload();
+									//location.reload();
 								}
 
 							}
 						});
 			});
+
+			$("#Boooking-form button#discount_code_apply").click(function(e){
+        			e.preventDefault();
+					jQuery.ajax({
+							url: "{{ route('ajax.check.discount.code') }}",
+							method: 'POST',
+							data: { "_token": "{{ csrf_token() }}",discount_code : $('input[name="discount_code"]').val()},
+							type:'json',
+							success: function(result){		
+
+								var GetErrors = result.errors;
+								var Message = result.message;
+								if(result.status==false)
+								{
+									ToastMessage(GetErrors,'Errors','warning');
+								} else {
+									var Data = result.data;
+									console.log(Data);
+									$('.discount-value').text('$'+Data.amount);
+									var SubTotal = $('.sub-total-value').html().replace('$','');
+									var DiscountCalculate = parseInt(SubTotal) - parseInt(Data.amount);
+									$('.sub-total-value').html('$'+DiscountCalculate);
+									$('.final-price-value').html('$'+DiscountCalculate);
+									$('input[name="discount_code"]').attr('readonly',true);
+									$('#discount_code_apply').attr('disabled',true);
+									ToastMessage(Message,'Success','success');
+								}
+
+							}
+						});
+			});
+
+			function ToastMessage(message,heading,icon) {
+				return $.toast({
+										text: message, // Text that is to be shown in the toast
+										heading: heading, // Optional heading to be shown on the toast
+										icon: icon, // Type of toast icon
+										showHideTransition: 'fade', // fade, slide or plain
+										allowToastClose: true, // Boolean value true or false
+										hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+										stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+										position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values										
+										textAlign: 'left',  // Text alignment i.e. left, right or center
+										loader: true,  // Whether to show loader or not. True by default
+										loaderBg: '#9EC600',  // Background color of the toast loader
+										beforeShow: function () {}, // will be triggered before the toast is shown
+										afterShown: function () {}, // will be triggered after the toat has been shown
+										beforeHide: function () {}, // will be triggered before the toast gets hidden
+										afterHidden: function () {}  // will be triggered after the toast has been hidden
+								})
+			}
     </script>

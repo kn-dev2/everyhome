@@ -7,17 +7,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException; 
 use Illuminate\Http\Request;
 use App\Http\Requests\HomeSubTypes\HomeSubTypesCreateRequest;
-use App\Http\Requests\HomeTypes\HomeTypesEditRequest;
+use App\Http\Requests\HomeSubTypes\HomeSubTypesEditRequest;
 use App\Repositories\HomeSubTypesRepository;
+use App\Repositories\HomeTypesRepository;
 
 class HomeSubTypesController extends Controller
 {
     protected $homesubtypesRepository;
+    protected $hometypesRepository;
     public $status_dropdown;
 
-    public function  __construct(HomeSubTypesRepository $homesubtypesRepository)
+    public function  __construct(HomeSubTypesRepository $homesubtypesRepository,HomeTypesRepository $hometypesRepository)
     {
         $this->homesubtypesRepository = $homesubtypesRepository;
+        $this->hometypesRepository = $hometypesRepository;
         $this->status_dropdown = config('global.status_dropdown');
     }
     /**
@@ -37,8 +40,18 @@ class HomeSubTypesController extends Controller
 
             $home_sub_type_id        = request()->input('home_sub_type');
             $HomeSubTypeDetails      = $this->homesubtypesRepository->Details($home_sub_type_id);
-
-            return response()->json(['home_sub_type_details'=>$HomeSubTypeDetails]);
+            $Single_home_type         = $this->hometypesRepository->first($HomeSubTypeDetails->home_type_id);
+            //sum of time 
+            if(isset($HomeSubTypeDetails->min)) {
+                $total_min = $Single_home_type->min + $HomeSubTypeDetails->min;
+                $Hours   = floor($total_min/60);
+                $Minutes = ($total_min -   floor($total_min / 60) * 60); 
+            } else {
+                $total_min = $Single_home_type->min;
+                $Hours   = floor($total_min/60);
+                $Minutes = ($total_min -   floor($total_min / 60) * 60); 
+            }
+            return response()->json(['home_sub_type_details'=>$HomeSubTypeDetails,'Minutes' => $Minutes,'Hours' => $Hours]);
 
         }
     }
@@ -69,6 +82,8 @@ class HomeSubTypesController extends Controller
             $HomeSubType->title        = $request->title;
             $HomeSubType->price        = $request->price;
             $HomeSubType->status       = $request->status;
+            $HomeSubType->hour         = $request->hour;
+            $HomeSubType->min          = $request->min;
             $SaveHomeSubTypes = $HomeSubType->save();
 
             if($SaveHomeSubTypes)
@@ -122,7 +137,7 @@ class HomeSubTypesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(HomeTypesEditRequest $request, $id)
+    public function update(HomeSubTypesEditRequest $request, $id)
     {
         //
         try {
@@ -131,7 +146,8 @@ class HomeSubTypesController extends Controller
             $HomeSubType->title        = $request->title;
             $HomeSubType->price        = $request->price;
             $HomeSubType->status       = $request->status;       
-
+            $HomeSubType->hour         = $request->hour;
+            $HomeSubType->min          = $request->min;
             $SaveHomeType = $HomeSubType->save();
 
             if ($SaveHomeType) 
@@ -145,6 +161,7 @@ class HomeSubTypesController extends Controller
             }
         } catch (\Illuminate\Database\QueryException $exception) {
 
+            echo "ss"; die;
             return back()->withError($exception->errorInfo)->withInput();
         }
     }

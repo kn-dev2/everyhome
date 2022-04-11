@@ -27,6 +27,8 @@ class HomeSubTypesCreateRequest extends FormRequest
             'home_type_id' => ['required'],
             'title' => ['required', 'string', 'min:3', 'max:255','unique:home_sub_types'],
             'price' => ['required', 'string', 'max:255'],
+            'status' => ['required'],
+            'min' => ['required', 'numeric'],
             'status' => ['required']
 
         ];

@@ -53,6 +53,17 @@
         @enderror
     </div>
 </div>
+<div class="form-group row">
+    <label class="col-sm-4 col-form-label">Total Time(In Min.)</label>
+    <div class="col-sm-6 @error('min') is-invalid @enderror">
+        {{ Form::number('min',old('min'), ['min'=>0,'class' => 'form-control', 'placeholder' =>'Min', 'required' => 'required']) }}
+        @error('min')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+        @enderror
+    </div>
+</div>
 </div>
 </div>
 

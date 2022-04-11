@@ -2,15 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Repositories\ServiceRepository;
 use App\Repositories\HomeTypesRepository;
 use App\Repositories\ExtraServiceRepository;
 use App\Repositories\HomeSubTypesRepository;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;  
+use Carbon\Carbon;
 use App\Models\State;
+use App\Models\DiscountCode;
+use App\Models\Service;
+use App\Models\HomeType;
+use App\Models\HomeSubType;
+use App\Models\ExtraService;
+use App\Models\BookingItem;
+use Faker\Core\Uuid;
 use Validator;
 use Response;
+use Illuminate\Support\Str;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -47,7 +58,7 @@ class HomeController extends Controller
      */
     public function book_now()
     {
-        $Service_id = isset($_GET['service_id']) ? $_GET['service_id'] : null;
+        $Service_id = isset($_GET['service_id']) ? $_GET['service_id'] : 1;
 
         $services                 = $this->serciceRepository->dropdown();
         $home_types               = $this->hometypesRepository->dropdown($Service_id);
@@ -67,7 +78,16 @@ class HomeController extends Controller
                 $SubTypePrice             = 0;
             }
             $TotalPrice               = $Single_home_type->price + $SubTypePrice;
-
+            if(isset($HomeSubTypeDetails->min)) {
+                $total_min = $Single_home_type->min + $HomeSubTypeDetails->min;
+                $hours   = floor($total_min/60);
+                $minutes = ($total_min -   floor($total_min / 60) * 60); 
+                
+            } else {
+                $total_min = $Single_home_type->min;
+                $hours   = floor($total_min/60);
+                $minutes = ($total_min -   floor($total_min / 60) * 60); 
+            }
 
         } else {
 
@@ -76,18 +96,15 @@ class HomeController extends Controller
             $HomeSubTypeDetails       = '';
             $SubTypePrice             = 0;
             $TotalPrice               = 0;
+            $minutes = '';
+            $hours   = '';
         }
 
-
-
-
-        // print_r($HomeSubType); die;
-
         $States = State::where('status',1)->pluck('title','id');
-        return view('frontend.book_now',['services'=>$services,'home_types'=>$home_types,'extra_services'=>$extra_services,'single_home_type'=>$Single_home_type,'states'=>$States,'service_id'=>$Service_id,'home_sub_type_dropdown'=>$HomeSubTypeDropdown,'home_sub_type_details'=>$HomeSubTypeDetails,'total_price'=>$TotalPrice]);
+        return view('frontend.book_now',['services'=>$services,'home_types'=>$home_types,'extra_services'=>$extra_services,'single_home_type'=>$Single_home_type,'states'=>$States,'service_id'=>$Service_id,'home_sub_type_dropdown'=>$HomeSubTypeDropdown,'home_sub_type_details'=>$HomeSubTypeDetails,'total_price'=>$TotalPrice,'hours' => $hours,'minutes' => $minutes]);
     }
 
-    public function book_order(Request $request)
+    public function ajaxBookOrder(Request $request)
     {
         $rules = [
                     'service_id' => 'required', 
@@ -101,11 +118,79 @@ class HomeController extends Controller
                     'city' => 'required',
                     'state' => 'required',
                     'zipcode' => 'required',
-                    'extra_service' => 'required|array',
                     'date' => 'required',
                     'time_slot' => 'required',
                     'schedule_type'=> 'required'
 
+                ];
+        $validator = Validator::make($request->all(), $rules);
+
+        // Validate the input and return correct response
+        if ($validator->fails())
+        {
+            return Response::json(array(
+                'status' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+            ), 200); // 400 being the HTTP code for an invalid request.
+
+        } else {
+            $time_slot = explode("#",$request->time_slot);
+            //get_total detail 
+            $total_detail = $this->get_total_detail($request->all());
+
+            //insert booking detail in booking table
+            $insertData['booking_date'] = Carbon::parse($request->date)->format('Y-m-d');
+            $insertData['time_slot_id'] = $time_slot[1];
+            $insertData['booking_id'] = (string) Str::uuid();
+            $insertData['customer_id'] = Auth::user()->id;
+            $insertData['services_id'] = $request->service_id;
+            $insertData['home_type_id']   = $request->has('home_type') ? $request->home_type : '';
+            $insertData['home_sub_type_id']   = $request->has('home_sub_type') ? $request->home_sub_type : '';
+            $insertData['discout_coupan_id']  = $total_detail['disId'];
+            $insertData['discout_price'] = $total_detail['disAmt'];
+            $insertData['total_price'] = $total_detail['total_amount'];
+            $insertData['schedule_type'] = $request->schedule_type;
+            $insertData['status'] = 'success';
+            //save into booking table
+            $insertId = Booking::create($insertData)->id;
+            unset($insertData);
+            $data = $request->except(['_token']);
+            // save extra service id with amount and qty 
+            if(count($data['extra_service']) > 0) {
+                foreach($data['extra_service'] as $key => $value) {
+                    //get extra service price
+                    $extra_service = ExtraService::find($value);
+                    $qty=0;
+                     if(isset($data['extra_service_qty'][$value])) {
+                         $qty = $data['extra_service_qty'][$value];
+                         if($qty > 0) {
+                             $ex_price = $extra_service->price*$qty;
+                         } else {
+                             $ex_price = $extra_service->price;
+                         }
+                     } else {
+                         $ex_price = $extra_service->price;
+                     }
+                     $insertData['booking_id'] = $insertId;
+                     $insertData['extra_service_id'] = $extra_service->id;
+                     $insertData['qty'] = $qty;
+                     $insertData['base_price'] = $extra_service->price;
+                     $insertData['price'] = $ex_price;
+                     BookingItem::create($insertData);
+                }
+             }
+
+             return Response::json(array(
+                'status' => true,
+                'message'  => 'New Booking has been created successfully',
+            ), 200);
+        }
+    }
+
+    public function ajaxCheckDiscountCode(Request $request)
+    {
+        $rules = [
+                    'discount_code' => 'required', 
                 ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -119,15 +204,26 @@ class HomeController extends Controller
             ), 200); // 400 being the HTTP code for an invalid request.
 
         } else {
+            try {
+                $DiscountCode = DiscountCode::where('discount_code',$request->discount_code)->whereRaw('? between vaild_from and valid_till', [Carbon::now()->format('Y-m-d')])->firstOrFail();
 
             return Response::json(array(
-                'status' => true,
-                'message' => 'Booking data is ready for submit'
+                    'status' => true,
+                    'message'  => 'Discount code has been applied Successfully.',
+                    'data' => $DiscountCode
 
-            ), 200);
+                ), 200);
+            } catch (ModelNotFoundException $exception) {
+
+                return Response::json(array(
+                    'status' => false,
+                    // 'errors' => $exception->getMessage()
+                    'errors' => 'This discount code is not vaild'
+
+                ), 200);
+
+            }
         }
-
-        // print_r($request->all()); die;
     }
 
     /**
@@ -158,5 +254,64 @@ class HomeController extends Controller
     public function hiring()
     {
         return view('frontend.hiring');
+    }
+
+    private function get_total_detail($data) {
+        //get service price 
+        $service_detail = Service::find($data['service_id']);
+        //get home type 
+        if(isset($data['home_type'])) {
+            $home_type_detail = HomeType::find($data['home_type']);
+            $home_type_price = $home_type_detail->price;
+        } else {
+            $home_type_price = 0;
+        }
+        
+        //get home sub type 
+        if(isset($data['home_sub_type'])) {
+            $home_sub_type_detail = HomeSubType::find($data['home_sub_type']);
+            $home_sub_type_price = $home_sub_type_detail->price;
+        } else {
+            $home_sub_type_price = 0;
+        }
+
+        //check extra service
+        $extra_services_price = 0;
+        if(count($data['extra_service']) > 0) {
+           foreach($data['extra_service'] as $key => $value) {
+               //get extra service price
+               $extra_service = ExtraService::find($value);
+                if(isset($data['extra_service_qty'][$value])) {
+                    $qty = $data['extra_service_qty'][$value];
+                    if($qty > 0) {
+                        $ex_price = $extra_service->price*$qty;
+                    } else {
+                        $ex_price = $extra_service->price;
+                    }
+                } else {
+                    $ex_price = $extra_service->price;
+                }
+                $extra_services_price = $extra_services_price+$ex_price;
+           }
+        }
+        //discount coupan 
+        $discount = 0;$disId='';
+        if(isset($data['discount_code'])) {
+            if($data['discount_code'] != '') {
+                $discount_detail = DiscountCode::where('discount_code',$data['discount_code'])->first();
+                if($discount_detail) {
+                    $discount = $discount_detail->amount;
+                    $disId = $discount_detail->id;
+                }
+            }
+        }
+
+        //get total amount
+        $total_amount = round(($home_type_price + $home_sub_type_price + $extra_services_price) - $discount,2);
+        $data1['total_amount'] = $total_amount;
+        $data1['disAmt'] = $discount;
+        $data1['disId'] = $disId;
+
+        return $data1;
     }
 }
