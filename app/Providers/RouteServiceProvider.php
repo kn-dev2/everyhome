@@ -25,6 +25,7 @@ class RouteServiceProvider extends ServiceProvider
 
     public const DASHBOARD = '/admin/dashboard';
 
+    public const BOOKING = '/book-now';
 
     /**
      * Define your route model bindings, pattern filters, etc.

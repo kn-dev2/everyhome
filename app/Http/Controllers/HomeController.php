@@ -22,6 +22,7 @@ use Validator;
 use Response;
 use Illuminate\Support\Str;
 use Auth;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -51,6 +52,11 @@ class HomeController extends Controller
         return view('frontend.home',['services'=>$services]);
     }
 
+    public function booknow_login() 
+    {
+        return view('frontend.booknowlogin');
+    }
+
     /**
      * Show the book now page.
      *
@@ -58,8 +64,11 @@ class HomeController extends Controller
      */
     public function book_now()
     {
+        if (!Auth::check()) {
+            request()->session()->put('BOOKNOW',true);
+            return redirect()->route('booknow.login');
+        }
         $Service_id = isset($_GET['service_id']) ? $_GET['service_id'] : 1;
-
         $services                 = $this->serciceRepository->dropdown();
         $home_types               = $this->hometypesRepository->dropdown($Service_id);
         $extra_services           = $this->extraserviceRepository->get($Service_id);
@@ -134,6 +143,19 @@ class HomeController extends Controller
             ), 200); // 400 being the HTTP code for an invalid request.
 
         } else {
+
+            //save user detail 
+            $user = User::find(Auth::user()->id);
+            $user->name  = $request->first_name." ".$request->last_name;
+            $user->email = $request->email;
+            $user->phone = $request->phone;
+            $user->address = $request->address;
+            $user->suite = $request->suite;
+            $user->city = $request->city;
+            $user->state = $request->state;
+            $user->zipcode = $request->zipcode;
+            $user->save();
+
             $time_slot = explode("#",$request->time_slot);
             //get_total detail 
             $total_detail = $this->get_total_detail($request->all());
@@ -144,8 +166,8 @@ class HomeController extends Controller
             $insertData['booking_id'] = (string) Str::uuid();
             $insertData['customer_id'] = Auth::user()->id;
             $insertData['services_id'] = $request->service_id;
-            $insertData['home_type_id']   = $request->has('home_type') ? $request->home_type : '';
-            $insertData['home_sub_type_id']   = $request->has('home_sub_type') ? $request->home_sub_type : '';
+            $insertData['home_type_id']   = $request->has('home_type') ? $request->home_type : 0;
+            $insertData['home_sub_type_id']   = $request->has('home_sub_type') ? $request->home_sub_type : 0;
             $insertData['discout_coupan_id']  = $total_detail['disId'];
             $insertData['discout_price'] = $total_detail['disAmt'];
             $insertData['total_price'] = $total_detail['total_amount'];
@@ -156,31 +178,32 @@ class HomeController extends Controller
             unset($insertData);
             $data = $request->except(['_token']);
             // save extra service id with amount and qty 
-            if(count($data['extra_service']) > 0) {
-                foreach($data['extra_service'] as $key => $value) {
-                    //get extra service price
-                    $extra_service = ExtraService::find($value);
-                    $qty=0;
-                     if(isset($data['extra_service_qty'][$value])) {
-                         $qty = $data['extra_service_qty'][$value];
-                         if($qty > 0) {
-                             $ex_price = $extra_service->price*$qty;
+            if(isset($data['extra_service']))  {
+                if(count($data['extra_service']) > 0) {
+                    foreach($data['extra_service'] as $key => $value) {
+                        //get extra service price
+                        $extra_service = ExtraService::find($value);
+                        $qty=0;
+                         if(isset($data['extra_service_qty'][$value])) {
+                             $qty = $data['extra_service_qty'][$value];
+                             if($qty > 0) {
+                                 $ex_price = $extra_service->price*$qty;
+                             } else {
+                                 $ex_price = $extra_service->price;
+                             }
                          } else {
                              $ex_price = $extra_service->price;
                          }
-                     } else {
-                         $ex_price = $extra_service->price;
-                     }
-                     $insertData['booking_id'] = $insertId;
-                     $insertData['extra_service_id'] = $extra_service->id;
-                     $insertData['qty'] = $qty;
-                     $insertData['base_price'] = $extra_service->price;
-                     $insertData['price'] = $ex_price;
-                     BookingItem::create($insertData);
-                }
-             }
-
-             return Response::json(array(
+                         $insertData['booking_id'] = $insertId;
+                         $insertData['extra_service_id'] = $extra_service->id;
+                         $insertData['qty'] = $qty;
+                         $insertData['base_price'] = $extra_service->price;
+                         $insertData['price'] = $ex_price;
+                         BookingItem::create($insertData);
+                    }
+                 }    
+            }
+            return Response::json(array(
                 'status' => true,
                 'message'  => 'New Booking has been created successfully',
             ), 200);
@@ -277,25 +300,27 @@ class HomeController extends Controller
 
         //check extra service
         $extra_services_price = 0;
-        if(count($data['extra_service']) > 0) {
-           foreach($data['extra_service'] as $key => $value) {
-               //get extra service price
-               $extra_service = ExtraService::find($value);
-                if(isset($data['extra_service_qty'][$value])) {
-                    $qty = $data['extra_service_qty'][$value];
-                    if($qty > 0) {
-                        $ex_price = $extra_service->price*$qty;
-                    } else {
-                        $ex_price = $extra_service->price;
-                    }
-                } else {
-                    $ex_price = $extra_service->price;
+        if(isset($data['extra_service'])) {
+            if(count($data['extra_service']) > 0) {
+                foreach($data['extra_service'] as $key => $value) {
+                    //get extra service price
+                    $extra_service = ExtraService::find($value);
+                        if(isset($data['extra_service_qty'][$value])) {
+                            $qty = $data['extra_service_qty'][$value];
+                            if($qty > 0) {
+                                $ex_price = $extra_service->price*$qty;
+                            } else {
+                                $ex_price = $extra_service->price;
+                            }
+                        } else {
+                            $ex_price = $extra_service->price;
+                        }
+                        $extra_services_price = $extra_services_price+$ex_price;
                 }
-                $extra_services_price = $extra_services_price+$ex_price;
-           }
-        }
+            }
+        }    
         //discount coupan 
-        $discount = 0;$disId='';
+        $discount = 0;$disId=0;
         if(isset($data['discount_code'])) {
             if($data['discount_code'] != '') {
                 $discount_detail = DiscountCode::where('discount_code',$data['discount_code'])->first();

@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    // protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -71,5 +71,13 @@ class RegisterController extends Controller
             'role'=>1,
             'status'=>1
         ]);
+    }
+
+    protected function redirectTo()
+    {
+        if (request()->session()->get('BOOKNOW')) {
+            return RouteServiceProvider::BOOKING;
+        }
+        return RouteServiceProvider::HOME;
     }
 }

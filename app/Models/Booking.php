@@ -9,7 +9,7 @@ class Booking extends Model
     protected $fillable = [
         'booking_date', 'time_slot_id','booking_id','services_id','home_type_id','home_sub_type_id','customer_id','discout_coupan_id','discout_price','total_price','schedule_type','status'
     ];
-
+     
     public function service()
     {
         return $this->hasOne(Service::class, 'id','services_id');

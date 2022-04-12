@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    {{ Form::open(['route' => 'ajax.book.order.now', 'method' => 'post','id' => 'Boooking-form','class'=>"form-horizontal",'enctype'=>"multipart/form-data"]) }}
+    {{ Form::open(['route' => 'ajax.book.order.now', 'method' => 'post','id' => 'Boooking-form','name'=>'booking_form','class'=>"form-horizontal",'enctype'=>"multipart/form-data"]) }}
     <div class="row booking-form">
         <div class="col-md-8">
             <h3 class="card-title" style="text-align:center">Complete your booking.</h3>
@@ -53,25 +53,35 @@
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">STEP 3: CONTACT INFORMATION</label>
                 <div class="col-sm-3 is-invalid">
-                    {{ Form::text('first_name',old('first_name'),['class' => 'form-control', 'placeholder' =>'Enter First Name*']) }}
-                    <span class="invalid-feedback" role="alert" id="first_name">
+                    @php 
+                        if(isset(Auth::user()->name)) {
+                            $name = explode(' ',Auth::user()->name);
+                            $first_name = $name[0];
+                            $last_name  = isset($name[1]) ? $name[1] : '';     
+                         } else {
+                             $first_name = '';
+                             $last_name  = '';
+                         }
+                    @endphp
+                    {{ Form::text('first_name',$first_name,['class' => 'form-control', 'placeholder' =>'Enter First Name*','id'=>'first_name']) }}
+                    <span class="invalid-feedback" role="alert" id="first_name_error">
                     </span>
                    
                 </div>
                 <div class="col-sm-3 @error('last_name') is-invalid @enderror">
-                    {{ Form::text('last_name',old('last_name'),['class' => 'form-control', 'placeholder' =>'Enter Last Name*']) }}
-                    <span class="invalid-feedback" role="alert" id="last_name">
+                    {{ Form::text('last_name',$last_name,['class' => 'form-control', 'placeholder' =>'Enter Last Name*','id'=>'last_name']) }}
+                    <span class="invalid-feedback" role="alert" id="last_name_error">
                     </span>
                    
                 </div>
                 <div class="col-sm-3 @error('email') is-invalid @enderror">
-                    {{ Form::text('email',old('email'),['class' => 'form-control', 'placeholder' =>'Enter Email*']) }}
-                    <span class="invalid-feedback" role="alert" id="email">
+                    {{ Form::text('email',isset(Auth::user()->email) ? Auth::user()->email : '',['class' => 'form-control', 'placeholder' =>'Enter Email*','id'=>'email']) }}
+                    <span class="invalid-feedback" role="alert" id="email_error">
                     </span>
                 </div>
                 <div class="col-sm-3 @error('phone') is-invalid @enderror">
-                    {{ Form::text('phone',old('phone'),['class' => 'form-control', 'placeholder' =>'Enter Phone*']) }}
-                    <span class="invalid-feedback" role="alert" id="phone">
+                    {{ Form::text('phone',isset(Auth::user()->phone) ? Auth::user()->phone : '',['class' => 'form-control', 'placeholder' =>'Enter Phone*','id'=>'phone']) }}
+                    <span class="invalid-feedback" role="alert" id="phone_error">
                     </span>
                 </div>
             </div>
@@ -79,28 +89,28 @@
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">STEP 4: ADDRESS INFORMATION</label>
                 <div class="col-sm-3 @error('address') is-invalid @enderror">
-                    {{ Form::text('address',old('address'),['class' => 'form-control', 'placeholder' =>'Enter Address*']) }}
-                    <span class="invalid-feedback" role="alert" id="address">
+                    {{ Form::text('address',isset(Auth::user()->address) ? Auth::user()->address : '',['class' => 'form-control', 'placeholder' =>'Enter Address*','id'=>'address']) }}
+                    <span class="invalid-feedback" role="alert" id="address_error">
                     </span>
                 </div>
                 <div class="col-sm-3 @error('suite') is-invalid @enderror">
-                    {{ Form::text('suite',old('suite'),['class' => 'form-control', 'placeholder' =>'Enter Apt/Suite #']) }}
-                    <span class="invalid-feedback" role="alert" id="suite">
+                    {{ Form::text('suite',isset(Auth::user()->suite) ? Auth::user()->suite : '',['class' => 'form-control', 'placeholder' =>'Enter Apt/Suite #','id'=>'suite']) }}
+                    <span class="invalid-feedback" role="alert" id="suite_error">
                     </span>
                 </div>
                 <div class="col-sm-3 @error('city') is-invalid @enderror">
-                    {{ Form::text('city',old('city'),['class' => 'form-control', 'placeholder' =>'Enter City*']) }}
-                    <span class="invalid-feedback" role="alert" id="city">
+                    {{ Form::text('city',isset(Auth::user()->city) ? Auth::user()->city : '',['class' => 'form-control', 'placeholder' =>'Enter City*','id'=>'city']) }}
+                    <span class="invalid-feedback" role="alert" id="city_error">
                     </span>
                 </div>
                 <div class="col-sm-3 @error('state') is-invalid @enderror">
-                    {{ Form::select('state',$states,null,['class' => 'form-control', 'placeholder' =>'Select State*']) }}
-                    <span class="invalid-feedback" role="alert" id="state">
+                    {{ Form::select('state',$states,isset(Auth::user()->state) ? Auth::user()->state : null,['class' => 'form-control', 'placeholder' =>'Select State*','id'=>'state']) }}
+                    <span class="invalid-feedback" role="alert" id="state_error">
                     </span>
                 </div>
                 <div class="col-sm-3 @error('zipcode') is-invalid @enderror">
-                    {{ Form::text('zipcode',old('zipcode'),['class' => 'form-control', 'placeholder' =>'Enter Zipcode*']) }}
-                    <span class="invalid-feedback" role="alert" id="zipcode">
+                    {{ Form::text('zipcode',isset(Auth::user()->zipcode) ? Auth::user()->zipcode : null,['class' => 'form-control', 'placeholder' =>'Enter Zipcode*','id'=>'zipcode']) }}
+                    <span class="invalid-feedback" role="alert" id="zipcode_error">
                     </span>
                 </div>
             </div>
@@ -140,16 +150,16 @@
                 <label class="col-sm-4 col-form-label">When would you like us to come?</label>
                 <br>
                 <div class="col-sm-3 @error('date') is-invalid @enderror">
-                    {{ Form::text('date',null,['class' => 'form-control', 'placeholder' =>'Click to choose a date','id'=>'dt2','readyonly'=>'readonly']) }}
-                    <span class="invalid-feedback" role="alert" id="date">
+                    {{ Form::text('date',null,['class' => 'form-control', 'placeholder' =>'Click to choose a date','id'=>'date','readyonly'=>'readonly']) }}
+                    <span class="invalid-feedback" role="alert" id="date_error">
                     </span>
                 </div>
 
                 <div class="col-sm-3 @error('time_slot') is-invalid @enderror">
                 <!-- <SELECT ID="my_select" class="select_time_slot"></SELECT> -->
-                    {{ Form::select('time_slot_select',array(),null,['class' => 'form-control select_time_slot', 'placeholder' =>'--','id'=>'my_select']) }}
+                    {{ Form::select('time_slot_select',array(),null,['class' => 'form-control select_time_slot', 'placeholder' =>'--','id'=>'time_slot']) }}
                     {{ Form::hidden('time_slot',null,['class' => 'form-control']) }}
-                    <span class="invalid-feedback" role="alert" id="time_slot_select">
+                    <span class="invalid-feedback" role="alert" id="time_slot_error">
                     </span>
                 </div>
             </div>

@@ -22,6 +22,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('book-now', 'HomeController@book_now')->name('book.now');
+Route::get('booknow-login', 'HomeController@booknow_login')->name('booknow.login');
 
 Route::get('gift-cards', 'HomeController@gift_card')->name('gift.card');
 Route::get('services', 'HomeController@services')->name('services');
@@ -71,6 +72,9 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::get('ajax.getHomeSubTypedata', '\App\Http\Controllers\Admin\HomeSubTypesController@ajaxGetHomeSubTypeData')->name('ajax.home_sub_type.data');
 	Route::post('ajax-check-discount', '\App\Http\Controllers\HomeController@ajaxCheckDiscountCode')->name('ajax.check.discount.code');
 	Route::post('ajax-book-order-now', '\App\Http\Controllers\HomeController@ajaxBookOrder')->name('ajax.book.order.now');
+
+	Route::get('stripe', '\App\Http\Controllers\StripeController@stripe')->name('stripe.get');
+	Route::get('stripe', '\App\Http\Controllers\StripeController@stripePost')->name('stripe.post');
 
 });
 

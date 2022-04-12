@@ -40,6 +40,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
+        // print_r(request()->session()->get('post_data')); die;
         if(\Request::route()->getName() == 'admin.login')
         {
             return view('auth.admin.login'); 
@@ -50,6 +51,9 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
+        if (request()->session()->get('BOOKNOW')) {
+            return RouteServiceProvider::BOOKING;
+        }
         // echo auth()->user()->role; die;
         if (auth()->user()->role == 3) {
             return RouteServiceProvider::DASHBOARD;
