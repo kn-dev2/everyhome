@@ -48,7 +48,7 @@ class BookingClass implements BookingRepository
     // All today list
     public function todayAll()
     {
-        return Booking::with('service')->with('home_type')->with('home_sub_type')->with('customer')->with('items')->where(['status'=>'success'])->paginate(10);
+        return Booking::with('service')->with('home_type')->with('home_sub_type')->with('customer')->with('items')->where(['status'=>'success','booking_date'=>carbon::now()->format('Y-m-d')])->paginate(10);
        
     }
     

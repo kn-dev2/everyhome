@@ -85,6 +85,7 @@
 
 <link rel="stylesheet" href="{{ asset('frontend/css/lightslider.css') }}" />
 <script src="{{ asset('frontend/js/lightslider.js') }}"></script>
+<script src="https://checkout.stripe.com/checkout.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.pro-gallery').lightSlider({
@@ -424,51 +425,128 @@
 		url = url.replace(':id', CurrentValue);
 		window.location.href = url;
 	})
+
+	var handler = StripeCheckout.configure({
+		key: "{{env('STRIPE_KEY')}}",
+		image: "{{env('STRIPE_IMAGE_URL')}}",
+		token: function(token) {
+			$('#stripeToken').val(token.id);
+			$('#stripeEmail').val(token.email);
+			var FinalAmount = $(".final-price-value").text().replace('$', '');
+			var amountInCents = Math.floor(FinalAmount * 100);
+			$('#amountInCents').val(amountInCents);
+
+			$('#booking_form_submit').hide();
+			$('#booking_form_loader').show();
+
+			$.LoadingOverlay("show");
+			jQuery.ajax({
+				url: "{{ route('ajax.book.order.now') }}",
+				method: 'POST',
+				data: $('#Boooking-form').serialize(),
+				type: 'json',
+				success: function(result) {
+					if (result.status == false) {
+
+						$('#booking_form_submit').show();
+						$('#booking_form_loader').hide();
+
+						ToastMessage(result.message, 'Warning', 'warning');
+						$.LoadingOverlay("hide");
+
+					} else {
+
+						ToastMessage(result.message, 'Success', 'success');
+						$('#booking_form_submit').prop('disabled', true);
+						$('#booking_form_submit').hide();
+						$('#booking_form_loader').show();
+						$.LoadingOverlay("hide");
+
+						// Your delay in milliseconds
+						var delay = 2000;
+						setTimeout(function() {
+							window.location.href = result.url
+						}, delay);
+					}
+				}
+			});
+		},
+		closed: function() {
+			$('#booking_form_submit').show();
+			$('#booking_form_loader').hide();
+		}
+	});
+
+	// Close Checkout on page navigation
+	$(window).on('popstate', function() {
+		handler.close();
+	});
+
 	$("#Boooking-form button#booking_form_submit").click(function(e) {
 		e.preventDefault();
 		// $("#Boooking-form").submit();
 		$.LoadingOverlay("show");
+		$('#booking_form_submit').hide();
+		$('#booking_form_loader').show();
 		jQuery.ajax({
-			url: "{{ route('ajax.book.order.now') }}",
+			url: "{{ route('ajax.book.order.validate') }}",
 			method: 'POST',
 			data: $('#Boooking-form').serialize(),
 			type: 'json',
 			success: function(result) {
 				$.LoadingOverlay("hide");
 				$('.invalid-feedback').empty();
+				
 
 				var GetErrors = result.errors;
 				var Message = result.message;
 				if (result.status == false) {
 
-					var AllFields = [];
-					$.each(GetErrors, function(i, v) {
-						var res = v.join(',');
-						$("#" + i + '_error').text(res);
-						AllFields.push(i);
-					});
+					$('#booking_form_submit').show();
+					$('#booking_form_loader').hide();
 
-					$.each(AllFields.reverse(), function(index, value) {
-						// focus of each required input
-						document.getElementById(value).focus();
-					});
-					// var ErrorDisplay = "";
-					// for (var error in GetErrors)
-					// {
-					// 	ErrorDisplay += "<p>"+GetErrors[error]+"</p>";
-					// }
+					if(GetErrors !== undefined)
+					{
 
-					// $('.alert_message').empty().append(ErrorDisplay);
-					// $('.alert_message').show(500).delay(3000).hide(500);
+						var AllFields = [];
+						$.each(GetErrors, function(i, v) {
+							var res = v.join(',');
+							$("#" + i + '_error').text(res);
+							AllFields.push(i);
+						});
+
+						$.each(AllFields.reverse(), function(index, value) {
+							// focus of each required input
+							document.getElementById(value).focus();
+						});
+					} else {
+
+						ToastMessage(result.message, 'Warning', 'warning');
+					}
+
 				} else {
-					ToastMessage(result.message, 'Success', 'success');
-					// Your delay in milliseconds
-					var delay = 3000; 
-					setTimeout(function(){ location.reload(); }, delay);
+
+					e.preventDefault();
+					$('#booking_form_submit').hide();
+					$('#booking_form_loader').show();
+
+					var FinalAmount = $(".final-price-value").text().replace('$', '');
+					var amountInCents = Math.floor(FinalAmount * 100);
+					var displayAmount = parseFloat(Math.floor(FinalAmount * 100) / 100).toFixed(2);
+					// Open Checkout with further options
+					handler.open({
+						name: "{{env('APP_NAME')}}",
+						description: 'Booking amount ($' + displayAmount + ')',
+						amount: amountInCents,
+						email: $('#email').val(),
+						payment_method_types: "card"
+					});
+
 				}
 			}
 		});
 	});
+
 
 	$("#Boooking-form button#discount_code_apply").click(function(e) {
 		e.preventDefault();

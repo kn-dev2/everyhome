@@ -199,7 +199,11 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-8">
+                    <input type="hidden" id="stripeToken" name="stripeToken" />
+                    <input type="hidden" id="stripeEmail" name="stripeEmail" />
+                    <input type="hidden" id="amountInCents" name="amountInCents" />
                     {{ Form::button('Book Now', ['class' => 'btn btn-lg btn-primary','id'=>'booking_form_submit']) }}
+                    {{ Form::button('<i class="fa fa-refresh fa-spin"></i> Loading', ['class' => 'btn btn-lg btn-primary','id'=>'booking_form_loader']) }}
                 </div>
             </div>
         </div>
@@ -367,8 +371,11 @@
     </div>
 </div>
 {{ Form::close() }}
-
 </div>
+
+<!-- <form action="/your-server-side-code" method="POST">
+            
+        </form> -->
 
 <section class="service-area clearfix" data-equalizer>
     <div class="medium-6 large-7 columns google-map" data-equalizer-watch>

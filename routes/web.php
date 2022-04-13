@@ -28,6 +28,15 @@ Route::get('gift-cards', 'HomeController@gift_card')->name('gift.card');
 Route::get('services', 'HomeController@services')->name('services');
 Route::get('hiring', 'HomeController@hiring')->name('hiring');
 
+Route::get('order-confirmation-email', function(){
+  
+	$details['email'] = 'your_email@gmail.com';
+  
+    dispatch(new App\Jobs\SendBookingEmailJob($details));
+  
+    dd('done');
+});
+
 Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::namespace('Auth')->group(function(){
 		Route::get('/', '\App\Http\Controllers\Auth\LoginController@showLoginForm')->name('admin');
@@ -71,10 +80,11 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::get('ajax.getHomeTypedata', '\App\Http\Controllers\Admin\HomeTypesController@ajaxGetHomeTypeData')->name('ajax.home_type.data');
 	Route::get('ajax.getHomeSubTypedata', '\App\Http\Controllers\Admin\HomeSubTypesController@ajaxGetHomeSubTypeData')->name('ajax.home_sub_type.data');
 	Route::post('ajax-check-discount', '\App\Http\Controllers\HomeController@ajaxCheckDiscountCode')->name('ajax.check.discount.code');
+	Route::post('ajax-book-order-validate', '\App\Http\Controllers\HomeController@ajaxBookOrderValidate')->name('ajax.book.order.validate');
 	Route::post('ajax-book-order-now', '\App\Http\Controllers\HomeController@ajaxBookOrder')->name('ajax.book.order.now');
 
-	Route::get('stripe', '\App\Http\Controllers\StripeController@stripe')->name('stripe.get');
-	Route::get('stripe', '\App\Http\Controllers\StripeController@stripePost')->name('stripe.post');
+	Route::get('payment/{transaction_id}', '\App\Http\Controllers\HomeController@payment')->name('payment');
+
 
 });
 

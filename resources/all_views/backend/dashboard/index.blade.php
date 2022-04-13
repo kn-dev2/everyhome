@@ -107,12 +107,12 @@
                     @endif
                     <tr>
                         <td>{{$i}}</td>
-                        <td>{{ date('d M Y',strtotime($SingleBooking->date)) }}</td>
+                        <td>{{ date('d M Y',strtotime($SingleBooking->booking_date)) }}</td>
                         <td>{{$SingleBooking->booking_id }}</td>
                         <td>{{ ucfirst($SingleBooking->customer->name) }}</td>
                         <td>{{$SingleBooking->service->title }}</td>
                         <td>{{$SingleBooking->home_type->title}}</td>
-                        <td>{{$SingleBooking->home_sub_type->title }}</td>
+                        <td>{{isset($SingleBooking->home_sub_type->title) ? $SingleBooking->home_sub_type->title : ''  }}</td>
                         <td>{{$SingleBooking->schedule_type }}</td>
                         <td>${{$SingleBooking->total_price }}</td>
                         <td>
@@ -134,7 +134,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content bg-secondary">
                         <div class="modal-header">
-                            <h4 class="modal-title">Booking ID : #{{$SingleBooking->booking_id}}</h4>
+                            <h6 class="modal-title">Booking ID : #{{$SingleBooking->booking_id}}</h6>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>

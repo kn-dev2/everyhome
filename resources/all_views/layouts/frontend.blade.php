@@ -25,6 +25,12 @@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <style>
+
+  #booking_form_loader{
+    display: none;;
+  }
+    </style>
 </head>
 <body {{ Request::is('home*') ? ' class=homepage' : null }}>
     <div id="app">

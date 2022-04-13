@@ -23,6 +23,9 @@ use Response;
 use Illuminate\Support\Str;
 use Auth;
 use App\Models\User;
+use Stripe\Stripe;
+use Stripe\Customer;
+use Stripe\Charge;
 
 class HomeController extends Controller
 {
@@ -68,6 +71,9 @@ class HomeController extends Controller
             request()->session()->put('BOOKNOW',true);
             return redirect()->route('booknow.login');
         }
+
+        request()->session()->forget('BOOKNOW');
+
         $Service_id = isset($_GET['service_id']) ? $_GET['service_id'] : 1;
         $services                 = $this->serciceRepository->dropdown();
         $home_types               = $this->hometypesRepository->dropdown($Service_id);
@@ -113,6 +119,45 @@ class HomeController extends Controller
         return view('frontend.book_now',['services'=>$services,'home_types'=>$home_types,'extra_services'=>$extra_services,'single_home_type'=>$Single_home_type,'states'=>$States,'service_id'=>$Service_id,'home_sub_type_dropdown'=>$HomeSubTypeDropdown,'home_sub_type_details'=>$HomeSubTypeDetails,'total_price'=>$TotalPrice,'hours' => $hours,'minutes' => $minutes]);
     }
 
+    public function ajaxBookOrderValidate(Request $request)
+    {
+        $rules = [
+                    'service_id' => 'required', 
+                    'home_type' => 'required',
+                    'first_name' => 'required',
+                    'last_name' => 'required',
+                    'email' => 'required',
+                    'phone' => 'required',
+                    'address' => 'required',
+                    'suite' => 'required',
+                    'city' => 'required',
+                    'state' => 'required',
+                    'zipcode' => 'required',
+                    'date' => 'required',
+                    'time_slot' => 'required',
+                    'schedule_type'=> 'required'
+
+                ];
+        $validator = Validator::make($request->all(), $rules);
+
+        // Validate the input and return correct response
+        if ($validator->fails())
+        {
+            return Response::json(array(
+                'status' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+            ), 200); // 400 being the HTTP code for an invalid request.
+
+        } else {
+
+            return Response::json(array(
+                'status' => true,
+                'message' => 'Validated Booking data.'
+            ), 200); 
+       
+        }
+    }
+
     public function ajaxBookOrder(Request $request)
     {
         $rules = [
@@ -144,7 +189,102 @@ class HomeController extends Controller
 
         } else {
 
-            //save user detail 
+            try {
+                
+                $SaveBookingData = $this->SaveBookingDetails($request);
+                if($SaveBookingData['status'] == true)
+                {
+                    Stripe::setApiKey(env('STRIPE_SECRET'));
+                
+                    $customer = Customer::create(array(
+                        'email' => $request->stripeEmail,
+                        'source' => $request->stripeToken
+                    ));
+                
+                    $charge = Charge::create(array(
+                        'customer' => $customer->id,
+                        'amount' => $request->amountInCents,
+                        'currency' => env('STRIPE_CURRENCY')
+                    ));
+
+                    if($charge)
+                    {
+                        try {
+
+                            $Booking                = Booking::findOrFail($SaveBookingData['booking_id']);
+                            $Booking->booking_id    = $charge->id;
+                            $Booking->status        = $charge->status;
+                            $Booking->full_response = json_encode($charge);
+                            $Booking->save();
+
+                            return Response::json(array(
+                                'status'   => true,
+                                'message'  => 'New Booking has been created successfully',
+                                'url'      => route('payment',$charge->id)
+                            ), 200);
+
+                            
+                        } catch (ModelNotFoundException $exception) {
+
+                            return Response::json(array(
+                                'status'   => false,
+                                'message'  => 'Something error found!',
+                            ), 200);
+                        }
+
+                    } else {
+
+                        return Response::json(array(
+                            'status'   => false,
+                            'message'  => 'Charge error found!',
+                        ), 200);
+
+                    }
+
+                } else {
+
+                    return Response::json(array(
+                        'status' => false,
+                        'message'  => $SaveBookingData['message'],
+                    ), 200);
+                }
+            
+            } catch (\Exception $ex) {
+
+                return Response::json(array(
+                    'status' => false,
+                    'message'  => $ex->getMessage(),
+                ), 200);
+            }          
+        }
+    }
+
+
+    public function payment($transaction_id)
+    {
+        try {
+                $Booking = Booking::where('booking_id',$transaction_id)->firstOrFail();
+                if(isset($Booking->status) && $Booking->status=== 'succeeded')
+                {
+                    return view('frontend.thank_you',['booking'=>$Booking]);
+
+                } else {
+                    return view('frontend.failed',['booking'=>$Booking]);
+
+                }
+        } catch (ModelNotFoundException $exception) {
+
+            return Response::json(array(
+                'status'   => false,
+                'message'  => 'Something error found!',
+            ), 200);
+        }
+    }
+
+    private function SaveBookingDetails($request)
+    {
+        try {
+            // Update user detail 
             $user = User::find(Auth::user()->id);
             $user->name  = $request->first_name." ".$request->last_name;
             $user->email = $request->email;
@@ -172,7 +312,7 @@ class HomeController extends Controller
             $insertData['discout_price'] = $total_detail['disAmt'];
             $insertData['total_price'] = $total_detail['total_amount'];
             $insertData['schedule_type'] = $request->schedule_type;
-            $insertData['status'] = 'success';
+            $insertData['status'] = 'failed';
             //save into booking table
             $insertId = Booking::create($insertData)->id;
             unset($insertData);
@@ -196,18 +336,22 @@ class HomeController extends Controller
                          }
                          $insertData['booking_id'] = $insertId;
                          $insertData['extra_service_id'] = $extra_service->id;
-                         $insertData['qty'] = $qty;
+                         $insertData['qty'] = $qty==0 ? 1 : $qty;
                          $insertData['base_price'] = $extra_service->price;
                          $insertData['price'] = $ex_price;
                          BookingItem::create($insertData);
                     }
                  }    
             }
-            return Response::json(array(
-                'status' => true,
-                'message'  => 'New Booking has been created successfully',
-            ), 200);
+
+            return ['status'=>true,'message'=>'Booking Data has been stored','booking_id'=>$insertId];
+
+        } catch (\Illuminate\Database\QueryException $exception) {
+
+            return ['status'=>false,'message'=>$exception->errorInfo];
+
         }
+
     }
 
     public function ajaxCheckDiscountCode(Request $request)
