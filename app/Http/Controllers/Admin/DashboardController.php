@@ -46,7 +46,14 @@ class DashboardController extends Controller
     }
 
     public function logout(Request $request) {
-        \Auth::logout();
-        return redirect(route('admin.login'));
+
+        if(\Auth::User()->role == 3)
+        {
+            \Auth::logout();
+            return redirect(route('admin.login'));
+        } else if(\Auth::User()->role == 1) {
+            \Auth::logout();
+            return redirect(route('login'));
+        }
     }
 }

@@ -40,8 +40,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        // print_r(request()->session()->get('post_data')); die;
-        if(\Request::route()->getName() == 'admin.login')
+        if(\Request::route()->getName() == 'admin.login' || \Request::route()->getName() == 'admin')
         {
             return view('auth.admin.login'); 
         } else {
@@ -51,6 +50,11 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
+        // if(\Auth::check() && \Auth::user()->status != 1){
+        //     \Auth::logout();
+        //     return redirect('/login')->with('error', 'Your account is not active. Please contact to administrator');
+        // }
+
         if (request()->session()->get('BOOKNOW')) {
             return RouteServiceProvider::BOOKING;
         }

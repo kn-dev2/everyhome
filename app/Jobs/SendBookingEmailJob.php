@@ -43,7 +43,7 @@ class SendBookingEmailJob implements ShouldQueue
         {
             Mail::to($this->details->customer->email)->send($OrderTemplate);
         } else if($this->userType=='admin') {
-            $Admin = User::where('role_id',3)->first();
+            $Admin = User::where('role',3)->first();
             Mail::to($Admin->email)->send($OrderTemplate);
         }
     }
