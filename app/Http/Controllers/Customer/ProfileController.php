@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Profile\CustomerPasswordRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User as Profile;
 use App\Models\State;
 
@@ -22,47 +24,33 @@ class ProfileController extends Controller
         return view('frontend.profile.index',['profile'=>$Profile,'states'=>$States]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function password()
     {
-        //
+        $Profile = Profile::findOrFail(Auth::User()->id);
+        return view('frontend.profile.change_password',['profile'=>$Profile]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function updatePassword(CustomerPasswordRequest $request)
     {
-        //
-    }
+        try {
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+            $Profile = Profile::find(Auth::User()->id);
+            $Profile->password = Hash::make($request->password);
+            $SaveProfile = $Profile->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit()
-    {
-        //
+            if ($SaveProfile) 
+            {
+                session()->flash('success', 'Password has been updated.');
+                return redirect()->route('customer.password');
+  
+            } else {
+                session()->flash('error', 'Password is not updated.');
+                return redirect()->route('customer.password');
+            }
+        } catch (\Illuminate\Database\QueryException $exception) {
+
+            return back()->withError($exception->errorInfo)->withInput();
+        }
     }
 
     /**
