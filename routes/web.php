@@ -28,15 +28,6 @@ Route::get('gift-cards', 'HomeController@gift_card')->name('gift.card');
 Route::get('services', 'HomeController@services')->name('services');
 Route::get('hiring', 'HomeController@hiring')->name('hiring');
 
-Route::get('order-confirmation-email', function(){
-  
-	$details['email'] = 'your_email@gmail.com';
-  
-    dispatch(new App\Jobs\SendBookingEmailJob($details));
-  
-    dd('done');
-});
-
 Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::namespace('Auth')->group(function(){
 		Route::get('/', '\App\Http\Controllers\Auth\LoginController@showLoginForm')->name('admin');

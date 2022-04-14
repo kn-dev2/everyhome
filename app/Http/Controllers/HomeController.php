@@ -26,6 +26,7 @@ use App\Models\User;
 use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\Charge;
+use App\Mail\SendBookingEmail;
 
 class HomeController extends Controller
 {
@@ -50,6 +51,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $services = $this->serciceRepository->listAll(1);
 
         return view('frontend.home',['services'=>$services]);
@@ -216,6 +218,11 @@ class HomeController extends Controller
                             $Booking->status        = $charge->status;
                             $Booking->full_response = json_encode($charge);
                             $Booking->save();
+
+                            // Send Mail to customer/Admin
+
+                            dispatch_now(new \App\Jobs\SendBookingEmailJob($Booking,'customer'));
+                            dispatch_now(new \App\Jobs\SendBookingEmailJob($Booking,'admin'));
 
                             return Response::json(array(
                                 'status'   => true,
