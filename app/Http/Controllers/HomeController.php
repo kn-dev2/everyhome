@@ -17,7 +17,6 @@ use App\Models\HomeType;
 use App\Models\HomeSubType;
 use App\Models\ExtraService;
 use App\Models\BookingItem;
-use Faker\Core\Uuid;
 use Validator;
 use Response;
 use Illuminate\Support\Str;
@@ -26,7 +25,7 @@ use App\Models\User;
 use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\Charge;
-use App\Mail\SendBookingEmail;
+use App\Jobs\SendBookingEmailJob;
 
 class HomeController extends Controller
 {
@@ -221,8 +220,8 @@ class HomeController extends Controller
 
                             // Send Mail to customer/Admin
 
-                            dispatch_now(new \App\Jobs\SendBookingEmailJob($Booking,'customer'));
-                            dispatch_now(new \App\Jobs\SendBookingEmailJob($Booking,'admin'));
+                            dispatch_now(new SendBookingEmailJob($Booking,'customer'));
+                            dispatch_now(new SendBookingEmailJob($Booking,'admin'));
 
                             return Response::json(array(
                                 'status'   => true,

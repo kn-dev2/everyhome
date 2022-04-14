@@ -42,7 +42,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	});
 	Route::post('logout', '\App\Http\Controllers\Admin\DashboardController@logout')->name('logout');
 
-	Route::group(['middleware' => ['auth']], function () {
+	Route::group(['middleware' => ['admin']], function () {
 		Route::get('/profile', '\App\Http\Controllers\Admin\ProfileController@edit')->name('profile');
 		Route::post('/profile/update', '\App\Http\Controllers\Admin\ProfileController@update')->name('profile.update');
 
@@ -81,6 +81,15 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 
 	Route::get('payment/{transaction_id}', '\App\Http\Controllers\HomeController@payment')->name('payment');
 
+
+});
+
+
+Route::group(['middleware' => ['auth']], function () {
+
+	Route::get('profile', '\App\Http\Controllers\Customer\ProfileController@index')->name('customer.profile');
+
+	Route::post('update/profile', '\App\Http\Controllers\Customer\ProfileController@update')->name('customer.profile.update');
 
 });
 

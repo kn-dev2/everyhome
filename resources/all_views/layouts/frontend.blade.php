@@ -30,6 +30,23 @@
   #booking_form_loader{
     display: none;;
   }
+  input.btn.btn-lg.btn-primary {
+    background: #3ac7dd;
+    color: white;
+    padding: 10px;
+    border: 1px solid #3ac7dd;
+    font-weight: bold;
+    border-radius: 7px;
+    cursor:pointer
+}
+.alert.alert-success.background-success {
+    background: #008cba;
+    padding: 7px;
+    line-height: 22px;
+    height: 41px;
+    margin-bottom: 16px;
+    color: white;
+}
     </style>
 </head>
 <body {{ Request::is('home*') ? ' class=homepage' : null }}>
