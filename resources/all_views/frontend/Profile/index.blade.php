@@ -108,7 +108,7 @@
                 <label class="col-sm-4 col-form-label">Address</label>
                 <div class="col-sm-6">
                     {{ Form::textarea('address',old('address'),null,['class' => 'form-control','placeholder'=>'Enter your address']) }}
-                    @error('phone')
+                    @error('address')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
