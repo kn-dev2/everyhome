@@ -25,6 +25,8 @@ class RouteServiceProvider extends ServiceProvider
 
     public const DASHBOARD = '/admin/dashboard';
 
+    public const MAID_DASHBOARD = '/maid/dashboard';
+
     public const BOOKING = '/book-now';
 
     /**

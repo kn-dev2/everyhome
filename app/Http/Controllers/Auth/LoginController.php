@@ -50,17 +50,15 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        // if(\Auth::check() && \Auth::user()->status != 1){
-        //     \Auth::logout();
-        //     return redirect('/login')->with('error', 'Your account is not active. Please contact to administrator');
-        // }
 
         if (request()->session()->get('BOOKNOW')) {
             return RouteServiceProvider::BOOKING;
         }
-        // echo auth()->user()->role; die;
         if (auth()->user()->role == 3) {
             return RouteServiceProvider::DASHBOARD;
+        }
+        if (auth()->user()->role == 2) {
+            return RouteServiceProvider::MAID_DASHBOARD;
         }
         return RouteServiceProvider::HOME;
     }

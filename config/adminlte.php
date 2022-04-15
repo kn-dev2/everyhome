@@ -259,11 +259,26 @@ return [
             'text' => 'Home',
             'route'  => 'home',
             'icon' => 'fas fa-home',
+            'permission'=> 'admin'
         ],
         [
             'text' => 'Dashboard',
             'route'  => 'dashboard',
             'icon' => 'fas fa-tachometer-alt',
+            'permission'=> 2
+        ],
+
+        [
+            'text' => 'Dashboard',
+            'route'  => 'maid.dashboard',
+            'icon' => 'fas fa-tachometer-alt',
+            'permission'=> 3
+        ],
+        [
+            'text' => 'Schedule',
+            'route'  => 'schedules.index',
+            'icon' => 'fas fa-calendar-alt',
+            'permission'=> 3
         ],
         
         // [
@@ -274,6 +289,7 @@ return [
         [
             'text'    => 'Customers',
             'icon'    => 'fas fa-fw fa-users',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of customers',
@@ -285,6 +301,7 @@ return [
         [
             'text'    => 'Maids',
             'icon'    => 'fas fa-fw fa-users',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of maids',
@@ -296,6 +313,7 @@ return [
         [
             'text'    => 'Services',
             'icon'    => 'fas fa fa-th',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of services',
@@ -308,6 +326,7 @@ return [
         [
             'text'    => 'Home Types',
             'icon'    => 'fas fa fa-chart-pie',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of home types',
@@ -320,6 +339,7 @@ return [
         [
             'text'    => 'Home Subtypes',
             'icon'    => 'fas fa fa-tree',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of home sub types',
@@ -332,6 +352,7 @@ return [
         [
             'text'    => 'Extra Services',
             'icon'    => 'fas fa fa-table',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of extra services',
@@ -344,6 +365,7 @@ return [
         [
             'text'    => 'Discount Codes',
             'icon'    => 'fas fa fa-plus-square',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of discount codes',
@@ -356,6 +378,7 @@ return [
         [
             'text'    => 'Time Slots',
             'icon'    => 'fas fa fa-calendar-alt',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of time slots',
@@ -368,6 +391,7 @@ return [
         [
             'text'    => 'Bookings',
             'icon'    => 'fas fa fa-plus-square',
+            'permission'=> 2,
             'submenu' => [
                 [
                     'text' => 'List of All Bookings',
@@ -381,6 +405,7 @@ return [
             'text'    => 'Setting',
             'icon'    => 'fas fa fa-cog',
             'route'  => 'setting',
+            'permission'=> 2
         ]
 
 
@@ -425,6 +450,7 @@ return [
         JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter::class,
+        App\MyMenuFilter::class,
     ],
 
     /*

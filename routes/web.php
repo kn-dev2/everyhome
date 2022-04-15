@@ -101,3 +101,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 
+Route::group(['middleware' => ['maid']], function () {
+	Route::get('/maid/dashboard', '\App\Http\Controllers\Maid\DashboardController@index')->name('maid.dashboard');
+	Route::resource('schedules', '\App\Http\Controllers\Maid\ScheduleController');
+});
+
