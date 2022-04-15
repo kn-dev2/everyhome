@@ -21,7 +21,7 @@
             <p>Home Type - {{$order_details->home_type->title}}</p>
             <p>Home Sub Type - {{isset($order_details->home_sub_type->title) ? $order_details->home_sub_type->title : '--'  }}</p>
             <p>Schedule Type - {{$order_details->schedule_type }}</p>
-            <p>Total Hours - {{$hours.' hours'.' '.$min.' minutes' }}</p>
+            <p>Total Hours - {{$order_details->total_hours }}</p>
             @if(isset($order_details->home_sub_type->price))
             <h4 style="text-align: right;">Sub Total : ${{$order_details->home_type->price + $order_details->home_sub_type->price }}</h4>
             @else

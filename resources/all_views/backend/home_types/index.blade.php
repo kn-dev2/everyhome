@@ -33,7 +33,7 @@
                 <td>{{ $homeType->service->title }}</td>
                 <td>{{ $homeType->title }}</td>
                 <td>${{ $homeType->price }}</td>
-                <td>{{ $homeType->hour.' hours '.$homeType->min.' Minutes' }}</td>
+                <td>{{ $homeType->hours }}</td>
                 <td>{{ $homeType->status==0 ? 'In-Active' : 'Active' }}</td>
                 <td>
                     <a href="{{route('hometypes.edit',$homeType->id)}}" class="btn btn-warning btn-mini">Edit</a>

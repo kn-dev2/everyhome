@@ -25,4 +25,13 @@ class HomeType extends Model
         return $this->belongsTo(HomeSubType::class);
     }
 
+    public function getHoursAttribute()
+    {
+        $minutes   = $this->min;
+
+        $hours = floor($minutes / 60).' hours '.($minutes -   floor($minutes / 60) * 60).' minutes';
+
+        return $hours;
+    }
+
 }

@@ -48,7 +48,7 @@
     </div>
     <h1>Payment Success !</h1>
     <p>Transaction ID : {{$booking->booking_id}}<br /> Amount : {{ env('STRIPE_CURRENCY_SIGN').$booking->total_price}}</p>
-    <a href="{{route('home')}}"><< Go to Home</a>
+    <a href="{{route('customer.order.details',$booking->id)}}"><< Go to Order Details</a>
 
 </div>
 @endsection

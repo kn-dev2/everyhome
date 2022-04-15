@@ -317,6 +317,7 @@ class HomeController extends Controller
             $insertData['discout_coupan_id']  = $total_detail['disId'];
             $insertData['discout_price'] = $total_detail['disAmt'];
             $insertData['total_price'] = $total_detail['total_amount'];
+            $insertData['total_hours'] = $total_detail['minutes'];
             $insertData['schedule_type'] = $request->schedule_type;
             $insertData['status'] = 'failed';
             //save into booking table
@@ -437,15 +438,25 @@ class HomeController extends Controller
             $home_type_detail = HomeType::find($data['home_type']);
             $home_type_price = $home_type_detail->price;
         } else {
+            $home_type_detail = HomeType::find($data['home_type']);
             $home_type_price = 0;
+
+            $total_min = $home_type_detail->min;
+            $minutes = floor($total_min / 60).' hours '.($total_min -   floor($total_min / 60) * 60).' minutes';
+
         }
         
         //get home sub type 
         if(isset($data['home_sub_type'])) {
             $home_sub_type_detail = HomeSubType::find($data['home_sub_type']);
             $home_sub_type_price = $home_sub_type_detail->price;
+
+            $total_min = $home_sub_type_detail->min + $home_type_detail->min;
+            $minutes = floor($total_min / 60).' hours '.($total_min -   floor($total_min / 60) * 60).' minutes';
+
         } else {
             $home_sub_type_price = 0;
+            
         }
 
         //check extra service
@@ -486,6 +497,7 @@ class HomeController extends Controller
         $data1['total_amount'] = $total_amount;
         $data1['disAmt'] = $discount;
         $data1['disId'] = $disId;
+        $data1['minutes'] = $minutes;
 
         return $data1;
     }

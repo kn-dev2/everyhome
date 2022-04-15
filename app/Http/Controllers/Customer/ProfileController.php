@@ -100,17 +100,7 @@ class ProfileController extends Controller
     public function singleOrder($order_id)
     {
         $BookingDetails = Booking::where(['customer_id'=>Auth::User()->id,'id'=>$order_id])->firstOrFail();
-        if(isset($BookingDetails->home_sub_type->min)) {
-            $total_min = $BookingDetails->home_type->min + $BookingDetails->home_sub_type->min;
-            $hours   = floor($total_min/60);
-            $minutes = ($total_min -   floor($total_min / 60) * 60); 
-            
-        } else {
-            $total_min = $BookingDetails->home_type->min;
-            $hours   = floor($total_min/60);
-            $minutes = ($total_min -   floor($total_min / 60) * 60); 
-        }
-        return view('frontend.profile.single_order_details',['order_details'=>$BookingDetails,'hours'=>$hours,'min'=>$minutes]);
+        return view('frontend.profile.single_order_details',['order_details'=>$BookingDetails]);
     }
 
     /**

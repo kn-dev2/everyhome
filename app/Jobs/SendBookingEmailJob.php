@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Mail\SendBookingEmail;
+use App\Models\User;
 use Mail;
 
 class SendBookingEmailJob implements ShouldQueue
