@@ -95,5 +95,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::post('/password/update', '\App\Http\Controllers\Customer\ProfileController@updatePassword')->name('customer.password.update');
 
+	Route::get('/orders', '\App\Http\Controllers\Customer\ProfileController@allOrders')->name('customer.orders');
+
+	Route::get('/order/{order_id}', '\App\Http\Controllers\Customer\ProfileController@singleOrder')->name('customer.order.details');
+
 });
 
