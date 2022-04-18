@@ -21,6 +21,7 @@
                     <th>Service</th>
                     <th>Home Type</th>
                     <th>Home Sub Type</th>
+                    <th>Time Slot</th>
                     <th>Schedule Type</th>
                     <th>Total Price</th>
                     <th>Status</th>
@@ -41,6 +42,7 @@
                     <td>{{$SingleBooking->service->title }}</td>
                     <td>{{$SingleBooking->home_type->title}}</td>
                     <td>{{isset($SingleBooking->home_sub_type->title) ? $SingleBooking->home_sub_type->title : '--'  }}</td>
+                    <td>{{$SingleBooking->time_slot->slot }}</td>
                     <td>{{$SingleBooking->schedule_type }}</td>
                     <td>${{$SingleBooking->total_price }}</td>
                     <td>

@@ -17,6 +17,8 @@ use App\Models\HomeType;
 use App\Models\HomeSubType;
 use App\Models\ExtraService;
 use App\Models\BookingItem;
+use App\Models\BookingRequest;
+use App\Models\MaidTimeSlot;
 use Validator;
 use Response;
 use Illuminate\Support\Str;
@@ -67,7 +69,8 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function book_now()
-    {
+    {        
+
         if (!Auth::check()) {
             request()->session()->put('BOOKNOW',true);
             return redirect()->route('booknow.login');
@@ -216,18 +219,48 @@ class HomeController extends Controller
                             $Booking->booking_id    = $charge->id;
                             $Booking->status        = $charge->status;
                             $Booking->full_response = json_encode($charge);
-                            $Booking->save();
+                            
+                            if($Booking->save())
+                            {
 
-                            // Send Mail to customer/Admin
+                                // Send Mail to customer/Admin
 
-                            dispatch_now(new SendBookingEmailJob($Booking,'customer'));
-                            dispatch_now(new SendBookingEmailJob($Booking,'admin'));
+                                dispatch_now(new SendBookingEmailJob($Booking,'customer'));
+                                dispatch_now(new SendBookingEmailJob($Booking,'admin'));
 
-                            return Response::json(array(
-                                'status'   => true,
-                                'message'  => 'New Booking has been created successfully',
-                                'url'      => route('payment',$charge->id)
-                            ), 200);
+                                // Get time slots from maids
+
+                                $MaidTimeSlots = MaidTimeSlot::where(['time_slot_id'=>$Booking->time_slot_id,'date'=>$Booking->booking_date])->get();
+
+                                foreach($MaidTimeSlots as $SingleMaidTimeSlot)
+                                {
+                                     // Send Booking Requests to maid according to matched time slots
+                                    $BookingRequests = new BookingRequest();
+                                    $BookingRequests->booking_id = $Booking->id;
+                                    $BookingRequests->maid_id = $SingleMaidTimeSlot->maid_id;
+                                    $BookingRequests->maid_time_slot_id = $SingleMaidTimeSlot->id;
+                                    $BookingRequests->status = 1;
+                                    $BookingRequests->created_at = Carbon::now();
+                                    $BookingRequests->updated_at = Carbon::now();
+                                    $BookingRequests->save();
+                                }
+                                
+
+                                return Response::json(array(
+                                    'status'   => true,
+                                    'message'  => 'New Booking has been created successfully',
+                                    'url'      => route('payment',$charge->id)
+                                ), 200);
+
+                            } else {
+
+                                return Response::json(array(
+                                    'status'   => false,
+                                    'message'  => 'Booking details has not been saved',
+                                ), 200);
+                                
+
+                            }
 
                             
                         } catch (ModelNotFoundException $exception) {
@@ -317,7 +350,7 @@ class HomeController extends Controller
             $insertData['discout_coupan_id']  = $total_detail['disId'];
             $insertData['discout_price'] = $total_detail['disAmt'];
             $insertData['total_price'] = $total_detail['total_amount'];
-            $insertData['total_hours'] = $total_detail['minutes'];
+            $insertData['total_hours'] = isset($total_detail['minutes']) ? $total_detail['minutes'] : '';
             $insertData['schedule_type'] = $request->schedule_type;
             $insertData['status'] = 'failed';
             //save into booking table
@@ -437,6 +470,8 @@ class HomeController extends Controller
         if(isset($data['home_type'])) {
             $home_type_detail = HomeType::find($data['home_type']);
             $home_type_price = $home_type_detail->price;
+            $total_min = $home_type_detail->min;
+            $minutes = floor($total_min / 60).' hours '.($total_min -   floor($total_min / 60) * 60).' minutes';
         } else {
             $home_type_detail = HomeType::find($data['home_type']);
             $home_type_price = 0;
@@ -456,6 +491,9 @@ class HomeController extends Controller
 
         } else {
             $home_sub_type_price = 0;
+            $total_min = $home_type_detail->min;
+            $minutes = floor($total_min / 60).' hours '.($total_min -   floor($total_min / 60) * 60).' minutes';
+
             
         }
 

@@ -9,6 +9,7 @@ use App\Http\Requests\TimeSlots\TimeSlotEditRequest;
 use App\Repositories\TimeSlotsRepository;
 use Illuminate\Support\Carbon;
 use App\Models\TimeSlot;
+use App\Models\MaidTimeSlot;
 
 class TimeSlotsController extends Controller
 {
@@ -44,8 +45,19 @@ class TimeSlotsController extends Controller
             {
                 $Date = Carbon::parse($date)->addDays($i)->format('D M, d');
                 $Date1 = Carbon::parse($date)->addDays($i)->format('Y-m-d');
-                $Options .= '<OPTGROUP LABEL="'.$Date.'" id="'.$Date.'">'.$this->GetOptions($Date1).'</OPTGROUP>';
+
+                $AvailableMaidTimeSlot = MaidTimeSlot::where(['date'=>$Date1])->count();
+                if($AvailableMaidTimeSlot>0)
+                {
+                    $Options .= '<OPTGROUP LABEL="'.$Date.'" id="'.$Date.'">'.$this->GetOptions($Date1).'</OPTGROUP>';
+
+                } else {
+
+                    $Options .= '<OPTGROUP LABEL="'.$Date.'"><OPTION LABEL="">No data available</OPTION></OPTGROUP>';
+
+                }
             }
+           
             return response()->json([$Options]);
 
         }
@@ -62,7 +74,11 @@ class TimeSlotsController extends Controller
             $timeslots = $this->timeslotRepository->getAllTimeSlot();
             foreach ($timeslots as $SingletimeSlot)
             {
-                $Option .= '<OPTION LABEL="'.$SingletimeSlot->slot.'" value="'.Carbon::parse($date)->format('m/d/Y').'#'.$SingletimeSlot->id.'#'.$SingletimeSlot->slot.'">'.$SingletimeSlot->slot.'</OPTION>';
+                $AvailableMaidTimeSlot = MaidTimeSlot::where(['time_slot_id'=>$SingletimeSlot->id,'date'=>$date])->count();
+                if($AvailableMaidTimeSlot>0)
+                {
+                    $Option .= '<OPTION LABEL="'.$SingletimeSlot->slot.'" value="'.Carbon::parse($date)->format('m/d/Y').'#'.$SingletimeSlot->id.'#'.$SingletimeSlot->slot.'">'.$SingletimeSlot->slot.'</OPTION>';
+                } 
             }
         }
         

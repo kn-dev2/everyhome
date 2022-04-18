@@ -78,6 +78,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::post('ajax-check-discount', '\App\Http\Controllers\HomeController@ajaxCheckDiscountCode')->name('ajax.check.discount.code');
 	Route::post('ajax-book-order-validate', '\App\Http\Controllers\HomeController@ajaxBookOrderValidate')->name('ajax.book.order.validate');
 	Route::post('ajax-book-order-now', '\App\Http\Controllers\HomeController@ajaxBookOrder')->name('ajax.book.order.now');
+	Route::post('ajax-booking-request', '\App\Http\Controllers\Maid\ScheduleController@AjaxBookingRequest')->name('ajax.booking.request');
 
 	Route::get('payment/{transaction_id}', '\App\Http\Controllers\HomeController@payment')->name('payment');
 

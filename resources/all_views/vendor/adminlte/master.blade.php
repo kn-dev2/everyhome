@@ -620,6 +620,7 @@
     <script src="{{ asset('js/jquery.timepicker.js') }}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{env('MAP_KEY')}}&libraries=places"></script>
     <script src="{{ asset('js/loadingoverlay.min.js') }}"></script>
+    <link media="screen" rel="stylesheet" type="text/css" href="{{ asset('frontend/css/jquery.toast.css') }}" />
 
     {{-- Configured Scripts --}}
     @include('adminlte::plugins', ['type' => 'js'])
@@ -627,6 +628,8 @@
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     @else
     <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
+    <script type="text/javascript" src="{{ asset('frontend/js/jquery.toast.js') }}"></script>
+
     @endif
 
     {{-- Livewire Script --}}
@@ -713,6 +716,58 @@
                 $('#myTab a[href="' + activeTab + '"]').tab('show');
             }
         });
+
+	$(".booking_request_action").click(function(e) {
+		e.preventDefault();
+        e.preventDefault();
+        if(confirm('Are you sure to perform this action'))
+        {
+		jQuery.ajax({
+			url: "{{ route('ajax.booking.request') }}",
+			method: 'POST',
+			data: {
+				"_token": "{{ csrf_token() }}",
+				request_id: $(this).attr('data-request'),
+                type: $(this).attr('data-type'),
+                status: $(this).attr('data-status')
+			},
+			type: 'json',
+			success: function(result) {
+
+                var Message = result.message;
+				if (result.status == false) {
+                    alert(Message);
+					// ToastMessage(Message, 'Errors', 'warning');
+				} else {
+                    alert(Message);
+                    location.reload();
+					// ToastMessage(Message, 'Success', 'success');
+				}
+			}
+		});
+    }
+	});
+
+    function ToastMessage(message, heading, icon) {
+		return $.toast({
+			text: message, // Text that is to be shown in the toast
+			heading: heading, // Optional heading to be shown on the toast
+			icon: icon, // Type of toast icon
+			showHideTransition: 'fade', // fade, slide or plain
+			allowToastClose: true, // Boolean value true or false
+			hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+			stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+			position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values										
+			textAlign: 'left', // Text alignment i.e. left, right or center
+			loader: true, // Whether to show loader or not. True by default
+			loaderBg: '#9EC600', // Background color of the toast loader
+			beforeShow: function() {}, // will be triggered before the toast is shown
+			afterShown: function() {}, // will be triggered after the toat has been shown
+			beforeHide: function() {}, // will be triggered before the toast gets hidden
+			afterHidden: function() {} // will be triggered after the toast has been hidden
+		})
+	}
+
     </script>
     @yield('adminlte_js')
 </body>

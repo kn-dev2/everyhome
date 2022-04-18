@@ -20,6 +20,7 @@
             <p>Service - {{$order_details->service->title }}</p>
             <p>Home Type - {{$order_details->home_type->title}}</p>
             <p>Home Sub Type - {{isset($order_details->home_sub_type->title) ? $order_details->home_sub_type->title : '--'  }}</p>
+            <p>Time Slot - {{$order_details->time_slot->slot }}</p>
             <p>Schedule Type - {{$order_details->schedule_type }}</p>
             <p>Total Hours - {{$order_details->total_hours }}</p>
             @if(isset($order_details->home_sub_type->price))

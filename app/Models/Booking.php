@@ -15,6 +15,11 @@ class Booking extends Model
         return $this->hasOne(Service::class, 'id','services_id');
     }
 
+    public function time_slot()
+    {
+        return $this->hasOne(TimeSlot::class, 'id','time_slot_id');
+    }
+
     public function home_type()
     {
         return $this->hasOne(HomeType::class, 'id','home_type_id');

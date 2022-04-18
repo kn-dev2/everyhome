@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\MaidTimeSlots\MaidTimeSlotCreateRequest;
 use App\Http\Requests\MaidTimeSlots\MaidTimeSlotEditRequest;
+use App\Jobs\SendBookingRequestEmailJob;
+use App\Mail\SendBookingRequestEmail;
 use Illuminate\Http\Request;
 use App\Models\MaidTimeSlot;
+use App\Models\BookingRequest;
 use App\Models\TimeSlot;
 use Carbon\Carbon;
 use Auth;
@@ -86,7 +89,17 @@ class ScheduleController extends Controller
      */
     public function show($id)
     {
-        //
+        // return view('frontend.emails.booking_request');
+
+        try {
+                $BookingRequests = BookingRequest::with('maid_time_slot.timeSlot')->where('maid_time_slot_id',$id)->get();
+
+                return view('backend.schedule.booking_requests',['booking_requests'=>$BookingRequests]);
+                
+            } catch (ModelNotFoundException $exception) {
+                session()->flash('error', 'No data found of this booking request');
+                return redirect()->route('schedules.index');
+            }
     }
 
     /**
@@ -97,6 +110,7 @@ class ScheduleController extends Controller
      */
     public function edit($id)
     {
+
         try {
             $MaidTimeSlot = MaidTimeSlot::findOrFail($id);
             $TimeSlots = TimeSlot::where('status',1)->pluck('slot','id');
@@ -136,6 +150,39 @@ class ScheduleController extends Controller
         } catch (\Illuminate\Database\QueryException $exception) {
 
             return back()->withError($exception->errorInfo)->withInput();
+        }
+    }
+
+    public function AjaxBookingRequest()
+    {
+        if (request()->ajax()) {
+
+            $BookingRequests = BookingRequest::where(['id'=>request()->input('request_id'),'maid_id'=>Auth::User()->id])->first();
+
+            $CheckBookingStatus = BookingRequest::where('booking_id',$BookingRequests->booking_id)->where('status',2)->count();
+
+            if($CheckBookingStatus==0)
+            {
+                $BookingRequests->status = request()->input('status');
+                if($BookingRequests->save())
+                {
+                    if(request()->input('status')==2)
+                    {
+                        // Send Alert to user
+                        dispatch_now(new SendBookingRequestEmailJob($BookingRequests->booking_details->customer));
+                    }
+
+                    return response()->json(['status'=>true,'message'=>'Booking request has been '.request()->input('type')]);
+
+                } else {
+
+                    return response()->json(['status'=>false,'message'=>'Sorry! Booking request has not been updated']);
+
+                }
+            } else {
+
+                return response()->json(['status'=>false,'message'=>'Sorry! This booking id request has already accepted']);
+            }
         }
     }
 
