@@ -39,4 +39,9 @@ class Booking extends Model
     {
         return $this->hasOne(User::class, 'id','customer_id');
     }
+
+    public function acceptRequests() {
+        return $this->hasOne(BookingRequest::class, 'booking_id','id')->where('status','=', 2);
+    }
+
 }
