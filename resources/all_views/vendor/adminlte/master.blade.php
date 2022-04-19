@@ -628,9 +628,9 @@
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     @else
     <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
-    <script type="text/javascript" src="{{ asset('frontend/js/jquery.toast.js') }}"></script>
 
     @endif
+    <script type="text/javascript" src="{{ asset('frontend/js/jquery.toast.js') }}"></script>
 
     {{-- Livewire Script --}}
     @if(config('adminlte.livewire'))
@@ -719,13 +719,13 @@
 
         $(".booking_request_action").click(function(e) {
             e.preventDefault();
-            if (confirm('Are you sure to perform this action')) {
                 $.LoadingOverlay("show");
                 var RequestId = $(this).attr('data-request');
                 var Type = $(this).attr('data-type');
                 var Status = $(this).attr('data-status');
-                var ArriveDate = $('#arrive_date'+RequestId).val();
-                var ArriveTime = $('#arrive_time'+RequestId).val();
+                var ArriveDate = $('#arrive_date' + RequestId).val();
+                var ArriveTime = $('#arrive_time' + RequestId).val();
+                var SpecialInstructions = $('#special_instructions' + RequestId).val();
                 $('.booking_request_action').prop('disabled', true);
                 jQuery.ajax({
                     url: "{{ route('ajax.booking.request') }}",
@@ -736,7 +736,8 @@
                         type: Type,
                         status: Status,
                         arrive_date: ArriveDate,
-                        arrive_time: ArriveTime
+                        arrive_time: ArriveTime,
+                        special_instructions: SpecialInstructions
                     },
                     type: 'json',
                     success: function(result) {
@@ -744,20 +745,25 @@
 
                         var Message = result.message;
                         if (result.status == false) {
-                            alert(Message);
+                            // alert(Message);
                             $.LoadingOverlay("hide");
 
-                            // ToastMessage(Message, 'Errors', 'warning');
+                            $.each(Message, function(i, v) {
+                                ToastMessage(v, 'Errors', 'warning');
+						});
+
                         } else {
-                            alert(Message);
-                            location.reload();
+                            // alert(Message);
                             $.LoadingOverlay("hide");
+                            ToastMessage(Message, 'Success', 'success');
+                            var delay = 2000;
+                            setTimeout(function() {
+                                location.reload();
+                            }, delay);
 
-                            // ToastMessage(Message, 'Success', 'success');
                         }
                     }
                 });
-            }
         });
 
         function ToastMessage(message, heading, icon) {

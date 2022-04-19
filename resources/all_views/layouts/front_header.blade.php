@@ -20,15 +20,17 @@
 							<li {{ Request::is('hiring*') ? ' class=current' : null }}><a href="{{route('hiring')}}">We're Hiring</a></li>
 							@if(Auth::User())
 							<li {{ Request::is('profile*') ? ' class=current' : null }}><a href="{{route('customer.profile')}}">Profile</a></li>
-							<div class="dropdown">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
-									<span class="caret"></span></button>
-								<ul class="dropdown-menu">
-									<li><a href="#">HTML</a></li>
-									<li><a href="#">CSS</a></li>
-									<li><a href="#">JavaScript</a></li>
-								</ul>
+							<!-- <li>
+							<div class="dropdowns">
+								<button class="dropbtns">Dropdown</button>
+								<div class="dropdowns-content">
+									<a href="#">Link 1</a>
+									<a href="#">Link 2</a>
+									<a href="#">Link 3</a>
+								</div>
 							</div>
+							</li>
+							 -->
 							<li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 									{{ __('Logout') }}
 								</a>

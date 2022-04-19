@@ -14,6 +14,8 @@ use App\Models\BookingRequest;
 use App\Models\TimeSlot;
 use Carbon\Carbon;
 use Auth;
+use Validator;
+use Response;
 
 class ScheduleController extends Controller
 {
@@ -173,6 +175,22 @@ class ScheduleController extends Controller
     {
         if (request()->ajax()) {
 
+            $rules = [
+                'request_id' => 'required', 
+                'arrive_date' => 'required',
+                'arrive_time' => 'required',
+                'special_instructions' => 'required',
+                'status' => 'required'
+            ];
+            $validator = Validator::make(request()->all(), $rules);
+
+            // Validate the input and return correct response
+            if ($validator->fails())
+            {
+                return response()->json(['status'=>false,'message'=>$validator->errors()]);
+
+            } else {
+
             $BookingRequests = BookingRequest::where(['id'=>request()->input('request_id'),'maid_id'=>Auth::User()->id])->first();
 
             $CheckBookingStatus = BookingRequest::where('booking_id',$BookingRequests->booking_id)->where('status',2)->count();
@@ -181,6 +199,7 @@ class ScheduleController extends Controller
             {
                 $BookingRequests->arrive_date = request() ->input('arrive_date');
                 $BookingRequests->arrive_time = request()->input('arrive_time');
+                $BookingRequests->special_instructions = request()->input('special_instructions');
                 $BookingRequests->status = request()->input('status');
 
                 if($BookingRequests->save())
@@ -205,6 +224,7 @@ class ScheduleController extends Controller
 
                 return response()->json(['status'=>false,'message'=>'Sorry! This booking id request has already accepted']);
             }
+        }
         }
     }
 

@@ -66,6 +66,7 @@
                            <p>Phone No : {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone : '' }} </p>
                            <p> Arrive Date : {{ isset($SingleBooking->acceptRequests->arrive_date) ? date('d M Y',strtotime($SingleBooking->acceptRequests->arrive_date)) : ''}} </p>
                            <p>Arrive Time : {{isset($SingleBooking->acceptRequests->arrive_time) ? $SingleBooking->acceptRequests->arrive_time : ''}} </p>
+                           <p>Special Instructions : {{isset($SingleBooking->acceptRequests->special_instructions) ? $SingleBooking->acceptRequests->special_instructions : ''}} </p>
                         </div>
                     </div>
                 </div>

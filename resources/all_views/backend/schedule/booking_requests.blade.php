@@ -36,7 +36,7 @@
                         <td>{{$booking_request->booking_details->home_type->title}}</td>
                         <td>{{isset($booking_request->booking_details->home_sub_type->title) ? $booking_request->booking_details->home_sub_type->title : '--' }}</td>
                         <td>{{ $booking_request->maid_time_slot->timeSlot->slot }}</td>
-                        <td>{{ $booking_request->booking_details->home_type->hours }}</td>
+                        <td>{{ $booking_request->calculateTotalTime($booking_request->booking_details->home_type->min,$booking_request->booking_details->home_sub_type->min) }}</td>
                         <td>
                             @if($booking_request->status==1)
                             <a href="javascript:void(0)" data-toggle="modal" data-target="#modal{{$booking_request->id}}" class="btn btn-warning btn-mini">Accept</a>
@@ -46,6 +46,8 @@
                             <a href="javascript:void(0)" class="btn btn-info btn-mini" data-toggle="modal" data-target="#viewDetailsModal{{$booking_request->id}}">View Details</a>
                             @elseif($booking_request->status==3)
                             <a href="javascript:void(0)" class="btn btn-danger btn-mini">Declined</a>
+                            @elseif($booking_request->status==4)
+                            <a href="javascript:void(0)" class="btn btn-success btn-mini">Finally Accepted</a>
                             @endif
                         </td>
                     </tr>
@@ -66,6 +68,8 @@
                                     {{ Form::time('time',old('time'), ['class' => 'form-control', 'placeholder' =>'Time','id'=>'arrive_time'.$booking_request->id, 'required' => 'required']) }}
                                     <br>
 
+                                    {{ Form::textarea('special_instructions',old('special_instructions'), ['class' => 'form-control', 'placeholder' =>'Special Instructions','id'=>'special_instructions'.$booking_request->id, 'required' => 'required']) }}
+                                    <br>
                                     <a href="javascript:void(0)" data-request="{{$booking_request->id}}" data-status="2" data-type="Accepted" data-toggle="modal" class="btn btn-warning btn-mini booking_request_action">Accept</a>
                                     <a href="javascript:void(0)" data-dismiss="modal" class="btn btn-danger btn-mini close">Cancel</a>
                                 </div>
@@ -93,10 +97,10 @@
                                     <p>Service - {{$booking_request->booking_details->service->title}}</p>
                                     <p>Home Type - {{$booking_request->booking_details->home_type->title}}</p>
                                     <p>Home Sub Type - {{isset($booking_request->booking_details->home_sub_type->title) ? $booking_request->booking_details->home_sub_type->title : '--' }}</td>
-                                    <p>Time Slot - {{ $booking_request->maid_time_slot->timeSlot->slot }}</p>
-                                    <p>Total Hours - {{ $booking_request->booking_details->home_type->hours }}</p>
-                                    <p>Arrive Date - {{ date('d M, Y',strtotime($booking_request->arrive_date)) }}</p>
-                                    <p>Arrive Time - {{ $booking_request->arrive_time }}</p>
+                                    <p>Time Slot - {{ isset($booking_request->maid_time_slot->timeSlot->slot) ? $booking_request->maid_time_slot->timeSlot->slot : '' }}</p>
+                                    <p>Total Hours - {{ isset($booking_request->booking_details->home_type->hours) ? $booking_request->calculateTotalTime($booking_request->booking_details->home_type->min,$booking_request->booking_details->home_sub_type->min) : '--' }}</p>
+                                    <p>Arrive Date - {{ isset($booking_request->arrive_date) ? date('d M, Y',strtotime($booking_request->arrive_date)) : '' }}</p>
+                                    <p>Arrive Time - {{ isset($booking_request->arrive_time) ? $booking_request->arrive_time : ''  }}</p>
                                 </div>
                             </div>
 
