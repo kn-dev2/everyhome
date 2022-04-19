@@ -9,7 +9,7 @@ class BookingRequest extends Model
     //
 
     protected $fillable = [
-        'booking_id', 'maid_id','maid_time_slot_id','status'
+        'booking_id', 'maid_id','maid_time_slot_id','arrive_date','arrive_time','status'
     ];
 
     public function maid_time_slot()

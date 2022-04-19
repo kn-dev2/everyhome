@@ -13,10 +13,11 @@
         @enderror
     </div>
 </div>
+@if(!isset($maid_time_slot->time_slot_id))
 <div class="form-group row @error('time_slot_id') is-invalid @enderror">
     <label class="col-sm-4 col-form-label">Time Slot</label>
     <div class="col-sm-6">
-        {{ Form::select('time_slot_id',$slots,null, ['class' => 'form-control', 'placeholder' =>'Time Slot', 'required' => 'required']) }}
+        {{ Form::select('time_slot_id[]',$slots,null, ['class' => 'form-control', 'required' => 'required','multiple'=>true]) }}
         @error('time_slot_id')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
@@ -24,6 +25,22 @@
         @enderror
     </div>
 </div>
+@else
+
+<div class="form-group row @error('time_slot_id') is-invalid @enderror">
+    <label class="col-sm-4 col-form-label">Time Slot</label>
+    <div class="col-sm-6">
+        {{ Form::select('time_slot_id',$slots,null, ['class' => 'form-control', 'required' => 'required']) }}
+        @error('time_slot_id')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+        @enderror
+    </div>
+</div>
+
+@endif
+
 
 
 <div class="form-group row @error('status') is-invalid @enderror">

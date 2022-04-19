@@ -60,14 +60,24 @@ class ScheduleController extends Controller
          //
          try {
 
-            $MaidTimeSlot = new MaidTimeSlot();
-            $MaidTimeSlot->maid_id = Auth::User()->id;
-            $MaidTimeSlot->date = Carbon::parse($request->date)->format('Y-m-d');
-            $MaidTimeSlot->time_slot_id = $request->time_slot_id;
-            $MaidTimeSlot->status = $request->status;
-            $SaveTimeSlot= $MaidTimeSlot->save();
+            $SaveTimeSlot = array();
+            $TimeSlots = $request->time_slot_id;
+            for($i=0; $i<count($request->time_slot_id);$i++)
+            {
+                $CheckExistingTimeSlot = MaidTimeSlot::CheckExistingTimeSlot(Carbon::parse($request->date)->format('Y-m-d'),$TimeSlots[$i]);
 
-            if($SaveTimeSlot)
+                if($CheckExistingTimeSlot==0)
+                {
+                    $MaidTimeSlot = new MaidTimeSlot();
+                    $MaidTimeSlot->maid_id = Auth::User()->id;
+                    $MaidTimeSlot->date = Carbon::parse($request->date)->format('Y-m-d');
+                    $MaidTimeSlot->time_slot_id = $TimeSlots[$i];
+                    $MaidTimeSlot->status = $request->status;
+                    $SaveTimeSlot[]= $MaidTimeSlot->save();
+                }
+            }
+
+            if(count($SaveTimeSlot)>0)
             {
                     session()->flash('success', 'Your schedule has been saved.');
                     return redirect()->route('schedules.index');
@@ -133,20 +143,29 @@ class ScheduleController extends Controller
     {
         try {
 
-            $MaidTimeSlot = MaidTimeSlot::findOrFail($id);
-            $MaidTimeSlot->date = Carbon::parse($request->date)->format('Y-m-d');
-            $MaidTimeSlot->time_slot_id = $request->time_slot_id;
-            $MaidTimeSlot->status = $request->status;
-            $SaveTimeSlot= $MaidTimeSlot->save();
+            $CheckExistingTimeSlot = MaidTimeSlot::CheckExistingTimeSlot(Carbon::parse($request->date)->format('Y-m-d'),$request->time_slot_id,$id);
 
-            if($SaveTimeSlot)
-            {
-                    session()->flash('success', 'Your schedule has been saved.');
-                    return redirect()->route('schedules.index');
-            } else {
-                session()->flash('error', 'Time slot Data is not saved.');
-                return redirect()->route('schedules.index');
-            }
+                if($CheckExistingTimeSlot==0)
+                {
+                    $MaidTimeSlot = MaidTimeSlot::findOrFail($id);
+                    $MaidTimeSlot->date = Carbon::parse($request->date)->format('Y-m-d');
+                    $MaidTimeSlot->time_slot_id = $request->time_slot_id;
+                    $MaidTimeSlot->status = $request->status;
+                    $SaveTimeSlot= $MaidTimeSlot->save();
+
+                    if($SaveTimeSlot)
+                    {
+                            session()->flash('success', 'Your schedule has been saved.');
+                            return redirect()->route('schedules.index');
+                    } else {
+                        session()->flash('error', 'Time slot Data is not saved.');
+                        return redirect()->route('schedules.index');
+                    }
+
+                } else {
+                    session()->flash('error', 'Sorry! this time slot Data is already existing with selected date.');
+                        return redirect()->route('schedules.index');
+                }
         } catch (\Illuminate\Database\QueryException $exception) {
 
             return back()->withError($exception->errorInfo)->withInput();

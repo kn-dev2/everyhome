@@ -25,7 +25,7 @@ class MaidTimeSlotCreateRequest extends FormRequest
     {
         return [
             'date' => ['required'],
-            'time_slot_id' => ['required'],
+            'time_slot_id' => ['required','array'],
             'status' => ['required'],
         ];
     }

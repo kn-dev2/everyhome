@@ -33,7 +33,9 @@
                 <td>{{ $SingleTimeSlot->status==0 ? 'In-Active' : 'Active' }}</td>
                 <td>
                     <a href="{{route('schedules.edit',$SingleTimeSlot->id)}}" class="btn btn-warning btn-mini">Edit</a> 
+                    @if($SingleTimeSlot->bookingRequests)
                     <a href="{{route('schedules.show',$SingleTimeSlot->id)}}" class="btn btn-success btn-mini">View Requests</a>
+                    @endif
                 </td>
             </tr>
             @empty
