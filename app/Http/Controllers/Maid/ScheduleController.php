@@ -99,8 +99,6 @@ class ScheduleController extends Controller
      */
     public function show($id)
     {
-        // return view('frontend.emails.booking_request');
-
         try {
                 $BookingRequests = BookingRequest::with('maid_time_slot.timeSlot')->where('maid_time_slot_id',$id)->get();
 
@@ -120,7 +118,6 @@ class ScheduleController extends Controller
      */
     public function edit($id)
     {
-
         try {
             $MaidTimeSlot = MaidTimeSlot::findOrFail($id);
             $TimeSlots = TimeSlot::where('status',1)->pluck('slot','id');
@@ -182,13 +179,19 @@ class ScheduleController extends Controller
 
             if($CheckBookingStatus==0)
             {
+                $BookingRequests->arrive_date = request() ->input('arrive_date');
+                $BookingRequests->arrive_time = request()->input('arrive_time');
                 $BookingRequests->status = request()->input('status');
+
                 if($BookingRequests->save())
                 {
                     if(request()->input('status')==2)
                     {
                         // Send Alert to user
-                        dispatch_now(new SendBookingRequestEmailJob($BookingRequests->booking_details->customer));
+                        dispatch_now(new SendBookingRequestEmailJob($BookingRequests->booking_details->customer,$BookingRequests,'sent_to_customer'));
+
+                        // Delete other requests who have sent to another maids
+                        $DeleteOtherBookingRequests = BookingRequest::where('id','<>',$BookingRequests->id)->where(['booking_id'=>$BookingRequests->booking_id,'status'=>1])->delete();
                     }
 
                     return response()->json(['status'=>true,'message'=>'Booking request has been '.request()->input('type')]);

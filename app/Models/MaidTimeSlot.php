@@ -29,4 +29,9 @@ class MaidTimeSlot extends Model
     {
         return $this->hasOne(BookingRequest::class,'maid_time_slot_id','id');
     }
+
+    public function maidDetails()
+    {
+        return $this->hasOne(User::class,'id','maid_id');
+    }
 }

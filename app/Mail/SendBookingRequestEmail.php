@@ -10,17 +10,22 @@ use Illuminate\Queue\SerializesModels;
 class SendBookingRequestEmail extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $customer;
+    protected $user;
+    protected $bookingRequest;
+    protected $type;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($customer)
+    public function __construct($user,$bookingRequest,$type)
     {
         //
-        $this->customer = $customer;
+        $this->user = $user;
+        $this->type = $type;
+        $this->bookingRequest = $bookingRequest;
+
     }
 
     /**
@@ -30,6 +35,6 @@ class SendBookingRequestEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('frontend.emails.booking_request',['customer'=>$this->customer]);
+        return $this->view('frontend.emails.booking_request',['user'=>$this->user,'bookingRequest'=>$this->bookingRequest,'type'=>$this->type]);
     }
 }

@@ -28,6 +28,7 @@ use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\Charge;
 use App\Jobs\SendBookingEmailJob;
+use App\Jobs\SendBookingRequestEmailJob;
 
 class HomeController extends Controller
 {
@@ -231,6 +232,7 @@ class HomeController extends Controller
                                 // Get time slots from maids
 
                                 $MaidTimeSlots = MaidTimeSlot::where(['time_slot_id'=>$Booking->time_slot_id,'date'=>$Booking->booking_date])->get();
+                                
 
                                 foreach($MaidTimeSlots as $SingleMaidTimeSlot)
                                 {
@@ -243,8 +245,11 @@ class HomeController extends Controller
                                     $BookingRequests->created_at = Carbon::now();
                                     $BookingRequests->updated_at = Carbon::now();
                                     $BookingRequests->save();
+
+                                      // sent to maid
+                                    dispatch_now(new SendBookingRequestEmailJob($SingleMaidTimeSlot->maidDetails,$BookingRequests,'sent_to_maid'));                                
                                 }
-                                
+
 
                                 return Response::json(array(
                                     'status'   => true,

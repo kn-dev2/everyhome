@@ -297,8 +297,11 @@
                                 mso-line-height-alt: 36px;
                                 margin: 0;
                               ">
-														<span style="font-size: 30px"> ‘hi there! 
-Your Maid {{$customer->name}} is scheduled to arrive on this date and this time, see you then!</span>
+                              @if($type=='sent_to_maid')
+														<span style="font-size: 30px"> Job alert in your area! Log in to your account to <a href="{{route('schedules.show',$bookingRequest->id)}}">Click here to view details</a> </span>
+                            @elseif($type=='sent_to_customer')
+														<span style="font-size: 30px"> ‘Hi there! Your Maid {{$user->name}} is scheduled to arrive on this {{date('d M, Y',strtotime($bookingRequest->arrive_date))}} and this {{$bookingRequest->arrive_time}}, see you then!</span>
+                            @endif
 													</p>
 												</div>
 											</div>

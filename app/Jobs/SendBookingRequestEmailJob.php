@@ -15,17 +15,22 @@ class SendBookingRequestEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $customer;
+    protected $user;
+    protected $bookingRequest;
+    protected $type;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($customer)
+    public function __construct($user,$bookingRequest,$type)
     {
         //
-        $this->customer = $customer;
+        $this->user = $user;
+        $this->bookingRequest = $bookingRequest;
+        $this->type = $type;
+
     }
 
     /**
@@ -36,7 +41,7 @@ class SendBookingRequestEmailJob implements ShouldQueue
     public function handle()
     {
         //
-        $OrderTemplate = new SendBookingRequestEmail($this->customer);
-        Mail::to($this->customer->email)->send($OrderTemplate);
+        $OrderTemplate = new SendBookingRequestEmail($this->user,$this->bookingRequest ,$this->type);
+        Mail::to($this->user->email)->send($OrderTemplate);
     }
 }

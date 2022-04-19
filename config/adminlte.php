@@ -278,7 +278,8 @@ return [
             'text' => 'Schedule',
             'route'  => 'schedules.index',
             'icon' => 'fas fa-calendar-alt',
-            'permission'=> 3
+            'permission'=> 3,
+            'active' => ['/admin/Schedules/','/admin/Schedules/','regex:@^admin/Schedules/[0-9]+$@'],
         ],
         
         // [
