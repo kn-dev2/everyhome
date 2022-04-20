@@ -257,6 +257,14 @@
 				type: 'html',
 				success: function(result) {
 					$('#time_slot').html(result);
+					var GetTime = $("#time_slot optgroup option:first").val();
+					$('input[name="time_slot"]').val(GetTime);
+					// $('.service_date_summary').html(result[0] + ' @ ' + result[2]);
+					const myArray = GetTime.split("#");
+					// console.log(myArray[2]);
+					$('.service_date_summary').html(myArray[0] + ' @ ' + myArray[2]);
+
+
 				}
 			});
 		},

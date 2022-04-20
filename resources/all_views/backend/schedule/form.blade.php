@@ -5,7 +5,7 @@
     <div class="col-sm-6">
     {{ Form::hidden('id',null, ['class' => 'form-control']) }}
 
-        {{ Form::date('date',old('date'), ['class' => 'form-control', 'placeholder' =>'Date', 'required' => 'required']) }}
+        {{ Form::text('date',old('date'), ['class' => 'form-control', 'placeholder' =>'Date','id'=>'dt2', 'required' => 'required']) }}
         @error('date')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
