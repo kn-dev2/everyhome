@@ -77,12 +77,32 @@ class TimeSlotsController extends Controller
                 $AvailableMaidTimeSlot = MaidTimeSlot::where(['time_slot_id'=>$SingletimeSlot->id,'date'=>$date])->count();
                 if($AvailableMaidTimeSlot>0)
                 {
-                    $Option .= '<OPTION LABEL="'.$SingletimeSlot->slot.'" value="'.Carbon::parse($date)->format('m/d/Y').'#'.$SingletimeSlot->id.'#'.$SingletimeSlot->slot.'">'.$SingletimeSlot->slot.'</OPTION>';
+                    $GetFirst = explode('-',$SingletimeSlot->slot);
+                    $Check = $this->compareTime($GetFirst[0],Carbon::parse($date)->format('m/d/Y'));
+                    if($Check==true)
+                    {
+                     $Option .= '<OPTION LABEL="'.$SingletimeSlot->slot.'" value="'.Carbon::parse($date)->format('m/d/Y').'#'.$SingletimeSlot->id.'#'.$SingletimeSlot->slot.'" >'.$SingletimeSlot->slot.'</OPTION>';
+                    }
                 } 
             }
         }
         
         return $Option;
+    }
+
+    private function compareTime($chooseTime,$date)
+    {
+        $chooseTime = Carbon::createFromTimeString($date.' '.$chooseTime)->timestamp;
+        $CurrentTime = Carbon::now()->timestamp;
+
+        $Date = Carbon::parse($date)->timestamp;
+        $CDate = Carbon::now()->timestamp;
+
+         if ($chooseTime > $CurrentTime) {
+                return true;
+         } else {
+             return false;
+         }
     }
 
     /**
