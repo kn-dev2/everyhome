@@ -19,18 +19,18 @@
 							<li {{ Request::is('services*') ? ' class=current' : null }}><a href="{{route('services')}}">Services</a></li>
 							<li {{ Request::is('hiring*') ? ' class=current' : null }}><a href="{{route('hiring')}}">We're Hiring</a></li>
 							@if(Auth::User())
-							<li {{ Request::is('profile*') ? ' class=current' : null }}><a href="{{route('customer.profile')}}">Profile</a></li>
-							<!-- <li>
-							<div class="dropdowns">
-								<button class="dropbtns">Dropdown</button>
-								<div class="dropdowns-content">
-									<a href="#">Link 1</a>
-									<a href="#">Link 2</a>
-									<a href="#">Link 3</a>
+							<!-- <li {{ Request::is('profile*') ? ' class=current' : null }}><a href="{{route('customer.profile')}}">Profile</a></li> -->
+							<li>
+							<div class="dropdown">
+								<button class="dropbtn">MY PROFILE</button>
+								<div class="dropdown-content">
+								<a href="{{route('customer.profile')}}">Profile</a>
+								<a href="{{route('customer.password')}}">Password</a>
+								<a href="{{route('customer.orders')}}">Orders</a>
 								</div>
 							</div>
 							</li>
-							 -->
+							
 							<li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 									{{ __('Logout') }}
 								</a>
