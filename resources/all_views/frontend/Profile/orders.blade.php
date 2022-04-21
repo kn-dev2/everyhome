@@ -50,9 +50,10 @@
                         <span class="badge {{$Status}}">{{$SingleBooking->status }}</span>
                     </td>
                     <td>
-                {!! isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? '<a class="button" href="#popup'.$SingleBooking->id.'">Show Maid Details</a>' : 'Not accepted yet' !!}
+                        {!! isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? '<a class="button" href="#popup'.$SingleBooking->id.'">Show Maid Details</a>' : 'Not accepted yet' !!}
                     </td>
-                    <td><a href="{{route('customer.order.details',$SingleBooking->id)}}" class="button">Order Details</a>
+                    <td>
+                        <a href="{{route('customer.order.details',$SingleBooking->id)}}" class="button">Order Details</a>
                     </td>
                 </tr>
 
@@ -61,16 +62,155 @@
                         <h2>Maid Details</h2>
                         <a class="close" href="#">&times;</a>
                         <div class="content">
-                           <p>Name : {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->name : '' }} </p>
-                           <p>Email : {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->email) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->email : ''}} </p>
-                           <p>Phone No : {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone : '' }} </p>
-                           <p> Arrive Date : {{ isset($SingleBooking->acceptRequests->arrive_date) ? date('d M Y',strtotime($SingleBooking->acceptRequests->arrive_date)) : ''}} </p>
-                           <p>Arrive Time : {{isset($SingleBooking->acceptRequests->arrive_time) ? $SingleBooking->acceptRequests->arrive_time : ''}} </p>
-                           <p>Special Instructions : {{isset($SingleBooking->acceptRequests->special_instructions) ? $SingleBooking->acceptRequests->special_instructions : ''}} </p>
+                            <p>Name : {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->name : '' }} </p>
+                            <p>Email : {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->email) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->email : ''}} </p>
+                            <p>Phone No : {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone : '' }} </p>
+                            <p> Arrive Date : {{ isset($SingleBooking->acceptRequests->arrive_date) ? date('d M Y',strtotime($SingleBooking->acceptRequests->arrive_date)) : ''}} </p>
+                            <p>Arrive Time : {{isset($SingleBooking->acceptRequests->arrive_time) ? $SingleBooking->acceptRequests->arrive_time : ''}} </p>
+                            <p>Special Instructions : {{isset($SingleBooking->acceptRequests->special_instructions) ? $SingleBooking->acceptRequests->special_instructions : ''}} </p>
+                            @if(isset($SingleBooking->acceptRequests))
+                            @if($SingleBooking->acceptRequests->status==2 || $SingleBooking->acceptRequests->status== 4)
+                            <a class="button" href="#popup_review{{$SingleBooking->acceptRequests->id}}">Give Review</a>
+                            @endif
+                            @if($SingleBooking->acceptRequests->status==6 || $SingleBooking->acceptRequests->status== 7)
+                            <div class='rating-stars text-center'>
+                                <ul class='stars'>
+                                    @if($SingleBooking->acceptRequests->rating==1)
+                                    <li class='star selected' title='Poor' data-value='1'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Fair' data-value='2'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Good' data-value='3' >
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Excellent' data-value='4'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='WOW!!!' data-value='5'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    @elseif($SingleBooking->acceptRequests->rating==2)
+                                    <li class='star selected' title='Poor' data-value='1'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Fair' data-value='2'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Good' data-value='3' >
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Excellent' data-value='4'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='WOW!!!' data-value='5'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+
+                                    @elseif($SingleBooking->acceptRequests->rating==3)
+                                    <li class='star selected' title='Poor' data-value='1'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Fair' data-value='2'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Good' data-value='3' >
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Excellent' data-value='4'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='WOW!!!' data-value='5'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+
+                                    @elseif($SingleBooking->acceptRequests->rating==4)
+                                    <li class='star selected' title='Poor' data-value='1'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Fair' data-value='2'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Good' data-value='3' >
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Excellent' data-value='4'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='WOW!!!' data-value='5'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    @elseif($SingleBooking->acceptRequests->rating==5)
+                                    <li class='star selected' title='Poor' data-value='1'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Fair' data-value='2'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Good' data-value='3' >
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='Excellent' data-value='4'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star selected' title='WOW!!!' data-value='5'>
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    @endif
+                                </ul>
+                            </div>
+                            <textarea class="form-control" disabled>{{$SingleBooking->acceptRequests->review_by_customer}}</textarea>
+
+                            @endif
+                            @endif
                         </div>
                     </div>
                 </div>
+                @if(isset($SingleBooking->acceptRequests))
 
+                @if($SingleBooking->acceptRequests->status==2 || $SingleBooking->acceptRequests->status== 4)
+                <div id="popup_review{{$SingleBooking->acceptRequests->id}}" class="overlay">
+                    <div class="popup">
+                        <a class="close" href="#">&times;</a>
+                        <section class='rating-widget'>
+                            <div class="profile" style="width: 50%">
+                            <img class="circular--square" src="https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png" />
+                            </div>
+                            <div class="profile" style="width: 50%;top: -21px;position: relative;">
+                            {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->name : '' }}<br>
+                            {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->email) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->email : '' }}<br>
+                            {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone : '' }}
+                            </div>
+                            <!-- Rating Stars Box -->
+                            <div class='rating-stars text-center'>
+                                <ul class='stars'>
+                                    <li class='star' title='Poor' data-value='1' data-id="{{$SingleBooking->acceptRequests->id}}">
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Fair' data-value='2' data-id="{{$SingleBooking->acceptRequests->id}}">
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Good' data-value='3' data-id="{{$SingleBooking->acceptRequests->id}}">
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='Excellent' data-value='4' data-id="{{$SingleBooking->acceptRequests->id}}">
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                    <li class='star' title='WOW!!!' data-value='5' data-id="{{$SingleBooking->acceptRequests->id}}">
+                                        <i class='fa fa-star fa-fw'></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        <input class="form-control" type="hidden" name="rating" id="rating{{$SingleBooking->acceptRequests->id}}">
+                        <textarea class="form-control" placeholder="Enter Review" name="review" id="review{{$SingleBooking->acceptRequests->id}}"></textarea>
+                        <a href="javascript:void(0)" class="button order_request_click" data-id="{{$SingleBooking->acceptRequests->id}}" data-status="completed">Completed</a>
+                        <a href="javascript:void(0)" class="button order_request_click" data-id="{{$SingleBooking->acceptRequests->id}}" data-status="not_completed">Not Completed</a>
+                    </div>
+                </div>
+                @endif
+                @endif
                 @php $i++; @endphp
                 @endforeach
             </table>
@@ -188,4 +328,53 @@
             width: 70%;
         }
     }
+
+    .rating-stars ul {
+        list-style-type: none;
+        padding: 0;
+
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .rating-stars ul>li.star {
+        display: inline-block;
+
+    }
+
+    /* Idle State of the stars */
+    .rating-stars ul>li.star>i.fa {
+        font-size: 2.5em;
+        /* Change the size of the stars */
+        color: #ccc;
+        /* Color on idle state */
+    }
+
+    /* Hover state of the stars */
+    .rating-stars ul>li.star.hover>i.fa {
+        color: #FFCC36;
+    }
+
+    /* Selected state of the stars */
+    .rating-stars ul>li.star.selected>i.fa {
+        color: #FF912C;
+    }
+
+    .circular--square {
+        border-radius: 50%;
+    }
+
+    .circular--square {
+        border-top-left-radius: 50% 50%;
+        border-top-right-radius: 50% 50%;
+        border-bottom-right-radius: 50% 50%;
+        border-bottom-left-radius: 50% 50%;
+    }
+
+    .circular--square {
+        width: 100px;
+    }
+    .rating-widget .profile {
+  display: table-cell;
+}
 </style>

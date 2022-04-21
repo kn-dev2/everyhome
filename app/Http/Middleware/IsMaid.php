@@ -15,8 +15,10 @@ class IsMaid
      */
     public function handle($request, Closure $next)
     {
-        if (\Auth::user()->role == 2) {
+        if (isset(\Auth::user()->role)) {
+            if (\Auth::user()->role == 2) {
             return $next($request);
+            }
      }
 
         return redirect(route('admin.login'));

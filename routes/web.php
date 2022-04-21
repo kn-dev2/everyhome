@@ -81,6 +81,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::post('ajax-booking-request', '\App\Http\Controllers\Maid\ScheduleController@AjaxBookingRequest')->name('ajax.booking.request');
 
 	Route::get('payment/{transaction_id}', '\App\Http\Controllers\HomeController@payment')->name('payment');
+	Route::post('ajax-booking-review', '\App\Http\Controllers\HomeController@AjaxBookingReview')->name('ajax.booking.review');
 
 
 });

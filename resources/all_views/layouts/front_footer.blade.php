@@ -504,7 +504,7 @@
 			success: function(result) {
 				$.LoadingOverlay("hide");
 				$('.invalid-feedback').empty();
-				
+
 
 				var GetErrors = result.errors;
 				var Message = result.message;
@@ -513,8 +513,7 @@
 					$('#booking_form_submit').show();
 					$('#booking_form_loader').hide();
 
-					if(GetErrors !== undefined)
-					{
+					if (GetErrors !== undefined) {
 
 						var AllFields = [];
 						$.each(GetErrors, function(i, v) {
@@ -589,6 +588,50 @@
 		});
 	});
 
+
+	$(".order_request_click").click(function(e) {
+		e.preventDefault();
+		$.LoadingOverlay("show");
+		var BookingId = $(this).attr('data-id');
+		var Status = $(this).attr('data-status');
+		$('.order_request_click').prop('disabled', true);
+		jQuery.ajax({
+			url: "{{ route('ajax.booking.review') }}",
+			method: 'POST',
+			data: {
+				"_token": "{{ csrf_token() }}",
+				booking_id: BookingId,
+				status: Status,
+				rating: $('#rating'+BookingId).val(),
+				review: $('#review'+BookingId).val(),
+			},
+			type: 'json',
+			success: function(result) {
+				$('.order_request_click').prop('disabled', false);
+
+				var Message = result.message;
+				if (result.status == false) {
+					// alert(Message);
+					$.LoadingOverlay("hide");
+
+					$.each(Message, function(i, v) {
+						ToastMessage(v, 'Errors', 'warning');
+					});
+
+				} else {
+					// alert(Message);
+					$.LoadingOverlay("hide");
+					ToastMessage(Message, 'Success', 'success');
+					var delay = 2000;
+					setTimeout(function() {
+						location.reload();
+					}, delay);
+
+				}
+			}
+		});
+	});
+
 	function ToastMessage(message, heading, icon) {
 		return $.toast({
 			text: message, // Text that is to be shown in the toast
@@ -608,5 +651,56 @@
 			afterHidden: function() {} // will be triggered after the toast has been hidden
 		})
 	}
+
+	$(document).ready(function() {
+
+		/* 1. Visualizing things on Hover - See next part for action on click */
+		$('.stars li').on('mouseover', function() {
+			var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+			// Now highlight all the stars that's not after the current hovered star
+			$(this).parent().children('li.star').each(function(e) {
+				if (e < onStar) {
+					$(this).addClass('hover');
+				} else {
+					$(this).removeClass('hover');
+				}
+			});
+
+		}).on('mouseout', function() {
+			$(this).parent().children('li.star').each(function(e) {
+				$(this).removeClass('hover');
+			});
+		});
+
+
+		/* 2. Action to perform on click */
+		$('.stars li').on('click', function() {
+			var ID = $(this).attr('data-id');
+			var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+			var stars = $(this).parent().children('li.star');
+			for (i = 0; i < stars.length; i++) {
+				$(stars[i]).removeClass('selected');
+			}
+
+			for (i = 0; i < onStar; i++) {
+				$(stars[i]).addClass('selected');
+			}
+
+			// JUST RESPONSE (Not needed)
+			var ratingValue = parseInt($('.stars li.selected').last().data('value'), 10);
+			var msg = "";
+			if (ratingValue < 1) 
+			{
+				ToastMessage('Please give at least one star', 'Errors', 'warning');
+			} else {
+
+				$('#rating'+ID).val(ratingValue);
+			}
+		});
+
+
+	});
+
 
 </script>

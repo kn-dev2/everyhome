@@ -22,9 +22,14 @@ class BookingRequest extends Model
         return $this->hasOne(Booking::class, 'id','booking_id');
     }
 
-    public function calculateTotalTime($home_type_min,$home_sub_type_min)
+    public function calculateTotalTime($booking_details)
     {
-        $Totalminutes = (int)$home_type_min + (int)$home_sub_type_min;
+        if(isset($booking_details->home_sub_type->min))
+        {
+            $Totalminutes = (int)$booking_details->home_type->min + (int)$booking_details->home_sub_type->min;
+        } else {
+            $Totalminutes = (int)$booking_details->home_type->min;
+        }
 
         $hours = floor($Totalminutes / 60).' hours '.($Totalminutes -   floor($Totalminutes / 60) * 60).' minutes';
 

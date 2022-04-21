@@ -719,51 +719,55 @@
 
         $(".booking_request_action").click(function(e) {
             e.preventDefault();
-                $.LoadingOverlay("show");
-                var RequestId = $(this).attr('data-request');
-                var Type = $(this).attr('data-type');
-                var Status = $(this).attr('data-status');
-                var ArriveDate = $('#arrive_date' + RequestId).val();
-                var ArriveTime = $('#arrive_time' + RequestId).val();
-                var SpecialInstructions = $('#special_instructions' + RequestId).val();
-                $('.booking_request_action').prop('disabled', true);
-                jQuery.ajax({
-                    url: "{{ route('ajax.booking.request') }}",
-                    method: 'POST',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        request_id: RequestId,
-                        type: Type,
-                        status: Status,
-                        arrive_date: ArriveDate,
-                        arrive_time: ArriveTime,
-                        special_instructions: SpecialInstructions
-                    },
-                    type: 'json',
-                    success: function(result) {
-                        $('.booking_request_action').prop('disabled', false);
+            $.LoadingOverlay("show");
+            var RequestId = $(this).attr('data-request');
+            var Type = $(this).attr('data-type');
+            var Status = $(this).attr('data-status');
+            var ArriveDate = $('#arrive_date' + RequestId).val();
+            var ArriveTime = $('#arrive_time' + RequestId).val();
+            var SpecialInstructions = $('#special_instructions' + RequestId).val();
+            $('.booking_request_action').prop('disabled', true);
+            jQuery.ajax({
+                url: "{{ route('ajax.booking.request') }}",
+                method: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    request_id: RequestId,
+                    type: Type,
+                    status: Status,
+                    arrive_date: ArriveDate,
+                    arrive_time: ArriveTime,
+                    special_instructions: SpecialInstructions
+                },
+                type: 'json',
+                success: function(result) {
+                    $('.booking_request_action').prop('disabled', false);
 
-                        var Message = result.message;
-                        if (result.status == false) {
-                            // alert(Message);
-                            $.LoadingOverlay("hide");
+                    var Message = result.message;
+                    if (result.status == false) {
+                        // alert(Message);
+                        $.LoadingOverlay("hide");
 
+                        if (typeof Message !== 'string') {
                             $.each(Message, function(i, v) {
                                 ToastMessage(v, 'Errors', 'warning');
-						});
-
+                            });
                         } else {
-                            // alert(Message);
-                            $.LoadingOverlay("hide");
-                            ToastMessage(Message, 'Success', 'success');
-                            var delay = 2000;
-                            setTimeout(function() {
-                                location.reload();
-                            }, delay);
-
+                            ToastMessage(Message, 'Errors', 'warning');
                         }
+
+                    } else {
+                        // alert(Message);
+                        $.LoadingOverlay("hide");
+                        ToastMessage(Message, 'Success', 'success');
+                        var delay = 2000;
+                        setTimeout(function() {
+                            location.reload();
+                        }, delay);
+
                     }
-                });
+                }
+            });
         });
 
         function ToastMessage(message, heading, icon) {
@@ -785,6 +789,27 @@
                 afterHidden: function() {} // will be triggered after the toast has been hidden
             })
         }
+        
+        $(document).ready(function() {
+            /* 1. Visualizing things on Hover - See next part for action on click */
+            $('.stars li').on('mouseover', function() {
+                var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+                // Now highlight all the stars that's not after the current hovered star
+                $(this).parent().children('li.star').each(function(e) {
+                    if (e < onStar) {
+                        $(this).addClass('hover');
+                    } else {
+                        $(this).removeClass('hover');
+                    }
+                });
+
+            }).on('mouseout', function() {
+                $(this).parent().children('li.star').each(function(e) {
+                    $(this).removeClass('hover');
+                });
+            });
+        });
     </script>
     @yield('adminlte_js')
 </body>

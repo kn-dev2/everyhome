@@ -41,7 +41,7 @@ class Booking extends Model
     }
 
     public function acceptRequests() {
-        return $this->hasOne(BookingRequest::class, 'booking_id','id')->where('status','=', 2);
+        return $this->hasOne(BookingRequest::class, 'booking_id','id')->WhereIn('status', [2,4,5,6,7]);
     }
 
 }

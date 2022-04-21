@@ -566,5 +566,7 @@
     font-size: 15px;
     padding: 10px;
 }
-
+option[disabled] {
+  color: red;
+}
 </style>

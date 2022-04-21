@@ -15,9 +15,12 @@ class IsAdmin
      */
     public function handle($request, Closure $next)
     {
+        if (isset(\Auth::user()->role)) {
+
         if (\Auth::user()->role == 3) {
             return $next($request);
      }
+    }
 
         return redirect(route('admin.login'));
     }
