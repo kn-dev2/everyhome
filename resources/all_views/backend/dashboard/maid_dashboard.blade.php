@@ -273,7 +273,9 @@
                       @endif
                     </ul>
                   </div>
+                  @if(isset($booking_request->review_by_customer))
                   <textarea class="form-control" disabled>{{$booking_request->review_by_customer}}</textarea>
+                  @endif
                 </div>
               </div>
 

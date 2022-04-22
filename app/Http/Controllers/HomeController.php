@@ -217,8 +217,9 @@ class HomeController extends Controller
 
                                 // Send Mail to customer/Admin
 
-                                dispatch_now(new SendBookingEmailJob($Booking, 'customer'));
-                                dispatch_now(new SendBookingEmailJob($Booking, 'admin'));
+                                dispatch(new SendBookingEmailJob($Booking, 'customer'));
+                                dispatch(new SendBookingEmailJob($Booking, 'admin'));
+                                
 
                                 // Get time slots from maids
 
@@ -237,7 +238,7 @@ class HomeController extends Controller
                                     $BookingRequests->save();
 
                                     // sent to maid
-                                    dispatch_now(new SendBookingRequestEmailJob($SingleMaidTimeSlot->maidDetails, $BookingRequests, 'sent_to_maid'));
+                                    dispatch(new SendBookingRequestEmailJob($SingleMaidTimeSlot->maidDetails, $BookingRequests, 'sent_to_maid'));
                                 }
 
 
