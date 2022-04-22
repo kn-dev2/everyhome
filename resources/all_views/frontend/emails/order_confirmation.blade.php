@@ -430,7 +430,7 @@
                                 mso-line-height-alt: 17px;
                                 margin: 0;
                               ">
-														Transaction Date: {{$order->booking_date}}
+														Transaction Date: {{date('d M,Y',strtotime($order->booking_date))}}
 													</p>
 												</div>
 												<br>
@@ -579,7 +579,7 @@
                                   mso-line-height-alt: 32px;
                                 ">View Order Details</span></span></a>
 								@elseif ($user_type == 'customer')
-								<a href="{{route('home')}}" style="
+								<a href="{{route('customer.order.details',$order->id)}}" style="
                               -webkit-text-size-adjust: none;
                               text-decoration: none;
                               display: inline-block;

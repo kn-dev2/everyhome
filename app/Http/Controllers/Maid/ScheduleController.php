@@ -7,15 +7,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\MaidTimeSlots\MaidTimeSlotCreateRequest;
 use App\Http\Requests\MaidTimeSlots\MaidTimeSlotEditRequest;
 use App\Jobs\SendBookingRequestEmailJob;
-use App\Mail\SendBookingRequestEmail;
-use Illuminate\Http\Request;
+use App\Models\Booking;
 use App\Models\MaidTimeSlot;
 use App\Models\BookingRequest;
 use App\Models\TimeSlot;
 use Carbon\Carbon;
 use Auth;
 use Validator;
-use Response;
 
 class ScheduleController extends Controller
 {
@@ -66,7 +64,6 @@ class ScheduleController extends Controller
             $TimeSlots = $request->time_slot_id;
             for ($i = 0; $i < count($request->time_slot_id); $i++) {
                 $CheckExistingTimeSlot = MaidTimeSlot::CheckExistingTimeSlot(Carbon::parse($request->date)->format('Y-m-d'), $TimeSlots[$i]);
-
                 if ($CheckExistingTimeSlot == 0) {
                     $MaidTimeSlot = new MaidTimeSlot();
                     $MaidTimeSlot->maid_id = Auth::User()->id;
@@ -74,6 +71,7 @@ class ScheduleController extends Controller
                     $MaidTimeSlot->time_slot_id = $TimeSlots[$i];
                     $MaidTimeSlot->status = $request->status;
                     $SaveTimeSlot[] = $MaidTimeSlot->save();
+                    $this->StoreBookingRequest($TimeSlots[$i], $MaidTimeSlot->id);
                 }
             }
 
@@ -87,6 +85,39 @@ class ScheduleController extends Controller
         } catch (\Illuminate\Database\QueryException $exception) {
 
             return back()->withError($exception->errorInfo)->withInput();
+        }
+    }
+
+    private function StoreBookingRequest($timeslot, $maidTimeSlot)
+    {
+        $Booking = Booking::where('time_slot_id', $timeslot)->get();
+        if (isset($Booking)) 
+        {
+            foreach ($Booking as $SingleBooking) 
+            {
+                if($SingleBooking->AlreadyRequests($SingleBooking->id)==0)
+                {
+                        try {
+                            // Send Booking Requests to maid according to matched time slots
+                            $BookingRequests = new BookingRequest();
+                            $BookingRequests->booking_id = $SingleBooking->id;
+                            $BookingRequests->maid_id = Auth::User()->id;
+                            $BookingRequests->maid_time_slot_id = $maidTimeSlot;
+                            $BookingRequests->status = 1;
+                            $BookingRequests->created_at = Carbon::now();
+                            $BookingRequests->updated_at = Carbon::now();
+                            $BookingRequests->save();
+
+                            $MaidDetails = Auth::User();
+                            // sent to maid
+                            dispatch(new SendBookingRequestEmailJob($MaidDetails, $BookingRequests, 'sent_to_maid'));
+                        } catch (ModelNotFoundException $exception) {
+
+                            session()->flash('error', 'Time slot Data is not saved for booking request.');
+                            return redirect()->route('schedules.index');
+                        }
+                }
+            }
         }
     }
 
@@ -178,8 +209,7 @@ class ScheduleController extends Controller
                 return response()->json(['status' => false, 'message' => $validator->errors()]);
             } else {
 
-                if(request()->status==2)
-                {
+                if (request()->status == 2) {
                     $rules = [
                         'arrive_date' => 'required',
                         'arrive_time' => 'required',
@@ -192,8 +222,7 @@ class ScheduleController extends Controller
                     if ($validator->fails()) {
                         return response()->json(['status' => false, 'message' => $validator->errors()]);
                     }
-
-                } 
+                }
                 $BookingRequests = BookingRequest::where(['id' => request()->input('request_id'), 'maid_id' => Auth::User()->id])->first();
 
                 $CheckBookingStatus = BookingRequest::where(['booking_id' => $BookingRequests->booking_id, 'maid_id' => Auth::User()->id])->where('status', 2)->count();
@@ -207,15 +236,14 @@ class ScheduleController extends Controller
                         $Time = $TimeSlot[0];
                     } else {
                         $Time = '';
-                    }   
-                    
-                    if(request()->status==2)
-                    {
+                    }
+
+                    if (request()->status == 2) {
 
                         $Check = $this->compareTime($Time, request()->input('arrive_time'), Carbon::parse($BookingRequests->booking_details->booking_date)->format('m/d/Y'));
 
                         if ($Check) {
-                        
+
                             $BookingRequests->arrive_date = request()->input('arrive_date');
                             $BookingRequests->arrive_time = request()->input('arrive_time');
                             $BookingRequests->special_instructions = request()->input('special_instructions');
@@ -224,13 +252,12 @@ class ScheduleController extends Controller
                             if ($BookingRequests->save()) {
                                 if (request()->input('status') == 2) {
                                     // Send Alert to user
-                                    dispatch_now(new SendBookingRequestEmailJob($BookingRequests->booking_details->customer, $BookingRequests, 'sent_to_customer'));
+                                    dispatch(new SendBookingRequestEmailJob($BookingRequests->booking_details->customer, $BookingRequests, 'sent_to_customer'));
 
                                     // update other requests who have sent to another maids
                                     $UpdateOtherBookingRequests = BookingRequest::where('id', '<>', $BookingRequests->id)->where(['booking_id' => $BookingRequests->booking_id, 'status' => 1])->get();
 
-                                    foreach($UpdateOtherBookingRequests as $SingleBookingRequest)
-                                    {
+                                    foreach ($UpdateOtherBookingRequests as $SingleBookingRequest) {
                                         $SingleBookingRequest->status = 8; // accepted by other.
                                         $SingleBookingRequest->save();
                                     }
@@ -244,15 +271,12 @@ class ScheduleController extends Controller
                         } else {
                             return response()->json(['status' => false, 'message' => 'Sorry! Time should be less than as per selected time slot']);
                         }
-
                     } else {
 
                         $BookingRequests->status = request()->input('status');
-                        if ($BookingRequests->save()) 
-                        {
+                        if ($BookingRequests->save()) {
                             return response()->json(['status' => true, 'message' => 'Booking request has been ' . request()->input('type')]);
                         }
-
                     }
                 } else {
 

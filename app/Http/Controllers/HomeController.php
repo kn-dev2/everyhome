@@ -52,7 +52,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-
         $services = $this->serciceRepository->listAll(1);
 
         return view('frontend.home', ['services' => $services]);

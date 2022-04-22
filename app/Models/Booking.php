@@ -44,4 +44,12 @@ class Booking extends Model
         return $this->hasOne(BookingRequest::class, 'booking_id','id')->WhereIn('status', [2,4,5,6,7]);
     }
 
+    public function notacceptRequests() {
+        return $this->hasOne(BookingRequest::class, 'booking_id','id')->Where('status', 1);
+    }
+
+    public function AlreadyRequests($bid) {
+        return BookingRequest::where(['maid_id'=>\Auth::User()->id,'booking_id'=>$bid])->count();
+    }
+
 }
