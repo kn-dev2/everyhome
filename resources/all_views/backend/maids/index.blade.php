@@ -33,6 +33,7 @@
                 <td>{{ $maid->status==0 ? 'In-Active' : 'Active' }}</td>
                 <td>
                     <a href="{{route('maids.edit',$maid->id)}}" class="btn btn-warning btn-mini">Edit</a>
+                    <a href="{{route('maids.show',$maid->id)}}" class="btn btn-info btn-mini">Show</a>
                 </td>
             </tr>
             @empty

@@ -89,7 +89,7 @@
                             <td>{{$SingleBooking->booking_id }}</td>
                             <td>{{$SingleBooking->service->title }}</td>
                             <td>{{$SingleBooking->home_type->title}}</td>
-                            <td>{{$SingleBooking->home_sub_type->title }}</td>
+                            <td>{{ isset($SingleBooking->home_sub_type->title) ? $SingleBooking->home_sub_type->title : '' }}</td>
                             <td>{{$SingleBooking->schedule_type }}</td>
                             <td>${{$SingleBooking->total_price }}</td>
                             <td>

@@ -9,6 +9,7 @@ use App\Http\Requests\Maids\MaidEditRequest;
 use App\Repositories\MaidRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User as Maid;
+use App\Models\BookingRequest;
 use Auth;
 
 class MaidController extends Controller
@@ -90,6 +91,15 @@ class MaidController extends Controller
     public function show($id)
     {
         //
+        try {
+            $Maid = $this->maidRepository->maidDetails($id,$this->roles);
+            $booking_requests = BookingRequest::with('maid_time_slot.timeSlot')->where('maid_id', $id)->orderBy('created_at','desc')->get();
+
+       } catch (ModelNotFoundException $exception) {
+           session()->flash('error', 'No data found of this id');
+           return redirect()->route('backend.maids.index');
+       }
+       return view('backend.maids.show')->with(['maid'=>$Maid,'booking_requests'=>$booking_requests]);
     }
 
     /**

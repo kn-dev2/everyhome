@@ -700,10 +700,10 @@
 					// alert(Message);
 					$.LoadingOverlay("hide");
 					ToastMessage(Message, 'Success', 'success');
-					// var delay = 2000;
-					// setTimeout(function() {
-					// 	location.reload();
-					// }, delay);
+					var delay = 2000;
+					setTimeout(function() {
+						location.reload();
+					}, delay);
 
 				}
 			}
