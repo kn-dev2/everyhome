@@ -269,8 +269,44 @@
 			});
 		},
 	});
+
 	$("#time_slot").on('change', function() {
 		$('input[name="time_slot"]').val($(this).val());
+	});
+
+
+	$('.date').datepicker({
+		dateFormat: "mm/dd/yy",
+		minDate: 0,
+		beforeShowDay: $.datepicker.noWeekends,
+		onSelect: function(date, instance) {
+			var ID = $(this).attr('data-id');
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+				}
+			});
+			jQuery.ajax({
+				url: "{{ route('ajax.time.slots') }}",
+				method: 'get',
+				data: {
+					date: date
+				},
+				type: 'html',
+				success: function(result) {
+					$('#time_slot'+ID).html(result);
+					var GetTime = $("#time_slot"+ID+" optgroup option:first").val();
+					// const myArray = GetTime.split("#");
+					$('#final_time_slot'+ID).val(GetTime);
+				}
+			});
+		},
+	});
+
+
+	$(".select_time_slot").on('change', function() {
+		var ID = $(this).attr('data-id');
+		$('#final_time_slot'+ID).val($(this).val());
 	});
 
 	// function Options(value)
@@ -626,6 +662,48 @@
 					setTimeout(function() {
 						location.reload();
 					}, delay);
+
+				}
+			}
+		});
+	});
+
+
+	$(".updateTimeDetails").click(function(e) {
+		e.preventDefault();
+		$.LoadingOverlay("show");
+		var BookingId = $(this).attr('data-id');
+		$('.updateTimeDetails').prop('disabled', true);
+		jQuery.ajax({
+			url: "{{ route('ajax.edit.booking.schedule') }}",
+			method: 'POST',
+			data: {
+				"_token": "{{ csrf_token() }}",
+				booking_id: BookingId,
+				date: $('#date'+BookingId).val(),
+				time_slot: $('#final_time_slot'+BookingId).val(),
+			},
+			type: 'json',
+			success: function(result) {
+				$('.updateTimeDetails').prop('disabled', false);
+
+				var Message = result.message;
+				if (result.status == false) {
+					// alert(Message);
+					$.LoadingOverlay("hide");
+
+					$.each(Message, function(i, v) {
+						ToastMessage(v, 'Errors', 'warning');
+					});
+
+				} else {
+					// alert(Message);
+					$.LoadingOverlay("hide");
+					ToastMessage(Message, 'Success', 'success');
+					// var delay = 2000;
+					// setTimeout(function() {
+					// 	location.reload();
+					// }, delay);
 
 				}
 			}

@@ -53,9 +53,42 @@
                         {!! isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? '<a class="button" href="#popup'.$SingleBooking->id.'">Show Maid Details</a>' : 'Not accepted yet' !!}
                     </td>
                     <td>
-                        <a href="{{route('customer.order.details',$SingleBooking->id)}}" class="button">Order Details</a>
+                        @if($SingleBooking->NotacceptedByOther($SingleBooking->id)< 600) 
+                            <a href="#edit_popup{{$SingleBooking->id}}" class="button">Edit Details</a>
+                            <a href="{{route('customer.order.details',$SingleBooking->id)}}" class="button">Order Details</a>
+
+                            @else
+                            <a href="{{route('customer.order.details',$SingleBooking->id)}}" class="button">Order Details</a>
+                            @endif
                     </td>
                 </tr>
+
+                <div id="edit_popup{{$SingleBooking->id}}" class="overlay">
+                    <div class="popup">
+                        <h2>Edit Booking Details</h2>
+                        <a class="close" href="#">&times;</a>
+                        <div class="content">
+                            <div class="form-group">
+                                <label class="col-sm-4 col-form-label">When would you like us to come?</label>
+                                <br>
+                                <div class="col-sm-3">
+                                    {{ Form::text('date',null,['class' => 'form-control date', 'placeholder' =>'Click to choose a date','data-id'=>$SingleBooking->id,'id'=>'date'.$SingleBooking->id,'readyonly'=>'readonly']) }}
+                                    <span class="invalid-feedback" role="alert" id="date_error{{$SingleBooking->id}}">
+                                    </span>
+                                </div>
+
+                                <div class="col-sm-3 @error('time_slot') is-invalid @enderror">
+                                    <!-- <SELECT ID="my_select" class="select_time_slot"></SELECT> -->
+                                    {{ Form::select('time_slot_select',array(),null,['class' => 'form-control select_time_slot', 'placeholder' =>'--','data-id'=>$SingleBooking->id,'id'=>'time_slot'.$SingleBooking->id]) }}
+                                    {{ Form::hidden('time_slot',null,['class' => 'form-control','id'=>'final_time_slot'.$SingleBooking->id]) }}
+                                    <span class="invalid-feedback" role="alert" id="time_slot_error{{$SingleBooking->id}}">
+                                    </span>
+                                </div>
+                            </div>
+                            <button class="button updateTimeDetails" data-id="{{$SingleBooking->id}}">Update Details</button>
+                        </div>
+                    </div>
+                </div>
 
                 <div id="popup{{$SingleBooking->id}}" class="overlay">
                     <div class="popup">
@@ -82,7 +115,7 @@
                                     <li class='star' title='Fair' data-value='2'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
-                                    <li class='star' title='Good' data-value='3' >
+                                    <li class='star' title='Good' data-value='3'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
                                     <li class='star' title='Excellent' data-value='4'>
@@ -98,7 +131,7 @@
                                     <li class='star selected' title='Fair' data-value='2'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
-                                    <li class='star' title='Good' data-value='3' >
+                                    <li class='star' title='Good' data-value='3'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
                                     <li class='star' title='Excellent' data-value='4'>
@@ -115,7 +148,7 @@
                                     <li class='star selected' title='Fair' data-value='2'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
-                                    <li class='star selected' title='Good' data-value='3' >
+                                    <li class='star selected' title='Good' data-value='3'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
                                     <li class='star' title='Excellent' data-value='4'>
@@ -132,7 +165,7 @@
                                     <li class='star selected' title='Fair' data-value='2'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
-                                    <li class='star selected' title='Good' data-value='3' >
+                                    <li class='star selected' title='Good' data-value='3'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
                                     <li class='star selected' title='Excellent' data-value='4'>
@@ -148,7 +181,7 @@
                                     <li class='star selected' title='Fair' data-value='2'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
-                                    <li class='star selected' title='Good' data-value='3' >
+                                    <li class='star selected' title='Good' data-value='3'>
                                         <i class='fa fa-star fa-fw'></i>
                                     </li>
                                     <li class='star selected' title='Excellent' data-value='4'>
@@ -175,12 +208,12 @@
                         <a class="close" href="#">&times;</a>
                         <section class='rating-widget'>
                             <div class="profile" style="width: 50%">
-                            <img class="circular--square" src="https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png" />
+                                <img class="circular--square" src="https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png" />
                             </div>
                             <div class="profile" style="width: 50%;top: -21px;position: relative;">
-                            {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->name : '' }}<br>
-                            {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->email) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->email : '' }}<br>
-                            {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone : '' }}
+                                {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->name : '' }}<br>
+                                {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->email) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->email : '' }}<br>
+                                {{isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone) ? $SingleBooking->acceptRequests->maid_time_slot->maidDetails->phone : '' }}
                             </div>
                             <!-- Rating Stars Box -->
                             <div class='rating-stars text-center'>
@@ -374,7 +407,8 @@
     .circular--square {
         width: 100px;
     }
+
     .rating-widget .profile {
-  display: table-cell;
-}
+        display: table-cell;
+    }
 </style>

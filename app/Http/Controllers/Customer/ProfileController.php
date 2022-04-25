@@ -102,6 +102,7 @@ class ProfileController extends Controller
         $BookingDetails = Booking::where(['customer_id'=>Auth::User()->id,'id'=>$order_id])->firstOrFail();
         return view('frontend.profile.single_order_details',['order_details'=>$BookingDetails]);
     }
+    
 
     /**
      * Remove the specified resource from storage.

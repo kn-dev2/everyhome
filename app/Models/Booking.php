@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Booking extends Model
 {
@@ -50,6 +51,44 @@ class Booking extends Model
 
     public function AlreadyRequests($bid) {
         return BookingRequest::where(['maid_id'=>\Auth::User()->id,'booking_id'=>$bid])->count();
+    }
+
+    public function NotacceptedByOther($id)
+    {
+        $BookingRequests = BookingRequest::with('booking_details.customer')->with('booking_details.time_slot')->where('booking_id',$id)->where('status','<>',2)->distinct()->select('booking_id')->first();
+
+        $TimeSlot        = explode('-',$BookingRequests->booking_details->time_slot->slot);
+
+        $start_slot_timestamp           = Carbon::createFromTimeString($BookingRequests->booking_date.' '.$TimeSlot[0])->timestamp;
+        $currentTime                    = Carbon::now()->format('h:i A');
+        $currentTime_timestamp          = Carbon::now()->timestamp;
+        $difference_timestamp           = $start_slot_timestamp - $currentTime_timestamp;
+
+        return $difference_timestamp;
+
+
+        // $CustomerData = array();
+        // $i=0;
+        // foreach($BookingRequests as $SingleBookingRequest)
+        // {
+        //     $TimeSlot                                           = explode('-',$SingleBookingRequest->booking_details->time_slot->slot);
+        //     $CustomerData[$i]['customer_name']                  = $SingleBookingRequest->booking_details->customer->name;
+        //     $CustomerData[$i]['customer_email']                 = $SingleBookingRequest->booking_details->customer->email;
+        //     $CustomerData[$i]['booking_date']                   = $SingleBookingRequest->booking_details->booking_date;
+        //     $CustomerData[$i]['time_slot']                      = $SingleBookingRequest->booking_details->time_slot->slot;
+        //     $CustomerData[$i]['start_slot_time']                = $TimeSlot[0];
+        //     $CustomerData[$i]['start_slot_timestamp']           = Carbon::createFromTimeString($CustomerData[$i]['booking_date'].' '.$TimeSlot[0])->timestamp;
+        //     $CustomerData[$i]['currentTime']                    = Carbon::now()->format('h:i A');
+        //     $CustomerData[$i]['currentTime_timestamp']          = Carbon::now()->timestamp;
+        //     $CustomerData[$i]['difference_timestamp']           = $CustomerData[$i]['start_slot_timestamp'] - Carbon::now()->timestamp;
+
+        //     if($CustomerData[$i]['difference_timestamp']==600)
+        //     {
+        //         dispatch(new SendTenMinAlertEmailJob($CustomerData));
+        //     }
+            
+        //     $i++;
+        // }
     }
 
 }

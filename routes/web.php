@@ -82,8 +82,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 
 	Route::get('payment/{transaction_id}', '\App\Http\Controllers\HomeController@payment')->name('payment');
 	Route::post('ajax-booking-review', '\App\Http\Controllers\HomeController@AjaxBookingReview')->name('ajax.booking.review');
-
-
+	Route::post('ajax-edit-booking-schedule', '\App\Http\Controllers\HomeController@AjaxEditBookingSchedule')->name('ajax.edit.booking.schedule');
 });
 
 

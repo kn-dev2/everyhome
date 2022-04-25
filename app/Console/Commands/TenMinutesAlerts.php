@@ -40,8 +40,6 @@ class TenMinutesAlerts extends Command
      */
     public function handle()
     {
-        $Today = Carbon::parse()->format('Y-m-d');
-
         $BookingRequests = BookingRequest::with('booking_details.customer')->with('booking_details.time_slot')->where('status',1)->distinct()->select('booking_id')->get();
 
         $CustomerData = array();

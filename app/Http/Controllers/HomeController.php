@@ -470,6 +470,7 @@ class HomeController extends Controller
 
                 if($BookingRequest->save())
                 {
+                    
                     return Response::json(array(
                         'status' => true,
                         'message'  => 'Review has been submitted Successfully.',
@@ -491,6 +492,78 @@ class HomeController extends Controller
                     'status' => false,
                     // 'errors' => $exception->getMessage()
                     'message' => 'This booking review data is not found.'
+
+                ), 200);
+            }
+        }
+    }
+
+    public function AjaxEditBookingSchedule(Request $request)
+    {
+        $rules = [
+            'booking_id' => 'required',
+            'date' => 'required',
+            'time_slot' => 'required',
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        // Validate the input and return correct response
+        if ($validator->fails()) {
+            return Response::json(array(
+                'status' => false,
+                'message' => $validator->messages()->all()
+
+            ), 200); // 400 being the HTTP code for an invalid request.
+
+        } else {
+            try {
+
+                $Booking                            = Booking::where(['id'=>$request->booking_id,'customer_id'=>Auth::User()->id])->firstOrFail();
+                $TimeSlot                           = explode("#", $request->time_slot);
+                $Booking->booking_date              = Carbon::parse($request->date)->format('Y-m-d');
+                $Booking->time_slot_id              = $TimeSlot[1];
+
+                if($Booking->save())
+                {
+                    $MaidTimeSlots = MaidTimeSlot::where(['time_slot_id' => $TimeSlot[1], 'date' => Carbon::parse($request->date)->format('Y-m-d')])->get();
+
+                    // print_r($MaidTimeSlots); die;
+
+                    foreach ($MaidTimeSlots as $SingleMaidTimeSlot) 
+                    {
+                        // Send Booking Requests to maid according to matched time slots
+                        $BookingRequests = BookingRequest::where(['maid_id'=>$SingleMaidTimeSlot->maid_id,'booking_id'=>$request->booking_id])->first();
+                        $BookingRequests->maid_time_slot_id = $SingleMaidTimeSlot->id;
+                        $BookingRequests->status = 1;
+                        $BookingRequests->updated_at = Carbon::now();
+                        $BookingRequests->save();
+
+                        // sent to maid
+                        dispatch(new SendBookingRequestEmailJob($SingleMaidTimeSlot->maidDetails, $BookingRequests, 'sent_to_maid'));
+                    }
+
+                    return Response::json(array(
+                        'status' => true,
+                        'message'  => 'Schedule has been updated Successfully.',
+
+                    ), 200);
+                } else {
+
+                    return Response::json(array(
+                        'status' => false,
+                        'message'  => 'Schedule has not been submitted.',
+
+                    ), 200);
+
+                }
+
+            } catch (ModelNotFoundException $exception) {
+
+                return Response::json(array(
+                    'status' => false,
+                    // 'errors' => $exception->getMessage()
+                    'message' => 'This booking Schedule data is not found.'
 
                 ), 200);
             }
