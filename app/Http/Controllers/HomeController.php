@@ -29,6 +29,9 @@ use Stripe\Customer;
 use Stripe\Charge;
 use App\Jobs\SendBookingEmailJob;
 use App\Jobs\SendBookingRequestEmailJob;
+use App\Jobs\SendOneHourAlertEmailJob;
+use App\Jobs\SendTenMinAlertEmailJob;
+use App\Mail\SendTenMinAlertEmail;
 
 class HomeController extends Controller
 {

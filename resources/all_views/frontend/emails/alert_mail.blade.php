@@ -76,7 +76,7 @@
                                   min-width: 100%;
                                   -ms-text-size-adjust: 100%;
                                   -webkit-text-size-adjust: 100%;
-                                  padding-top: 0px;
+                                  padding-top: 0px;z
                                   padding-right: 0px;
                                   padding-bottom: 0px;
                                   padding-left: 0px;
@@ -297,9 +297,14 @@
                                 mso-line-height-alt: 36px;
                                 margin: 0;
                               ">
-
-                                                        <span style="font-size: 30px"> ‘uh oh! Its taking a little longer for a cleaner to reach you,
+                                                        @if($type=='customer')
+                                                        <span style="font-size: 30px">Uh oh! Its taking a little longer for a cleaner to reach you,
                                                             please log back in to your profile and select a new date and time.</span>
+                                                        @else
+                                                        <span style="font-size: 30px">Your job at {{ucfirst($data['customer']['address']).', '.$data['customer']['suite'].', '.$data['customer']['city'].', '.$data['customer']['zipcode']}} starts in 1 hour. </span>
+                                                        <br>
+                                                        Click here to <a href="{{route('maid.confirm.request',['status'=>'yes','schedule_id'=>$data['schedule_id'],'maid_id'=>$data['maid_id']])}}">Yes</a> Or <a href="{{route('maid.confirm.request',['status'=>'no','schedule_id'=>$data['schedule_id'],'maid_id'=>$data['maid_id']])}}">No</a>
+                                                        @endif
                                                     </p>
                                                 </div>
                                             </div>

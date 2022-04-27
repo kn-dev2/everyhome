@@ -57,14 +57,21 @@ class Booking extends Model
     {
         $BookingRequests = BookingRequest::with('booking_details.customer')->with('booking_details.time_slot')->where('booking_id',$id)->where('status','<>',2)->distinct()->select('booking_id')->first();
 
-        $TimeSlot        = explode('-',$BookingRequests->booking_details->time_slot->slot);
+        // if(isset($BookingRequests->booking_details))
+        // {
 
-        $start_slot_timestamp           = Carbon::createFromTimeString($BookingRequests->booking_date.' '.$TimeSlot[0])->timestamp;
-        $currentTime                    = Carbon::now()->format('h:i A');
-        $currentTime_timestamp          = Carbon::now()->timestamp;
-        $difference_timestamp           = $start_slot_timestamp - $currentTime_timestamp;
+            $TimeSlot        = explode('-',$BookingRequests->booking_details->time_slot->slot);
 
-        return $difference_timestamp;
+            $start_slot_timestamp           = Carbon::createFromTimeString($BookingRequests->booking_date.' '.$TimeSlot[0])->timestamp;
+            $currentTime                    = Carbon::now()->format('h:i A');
+            $currentTime_timestamp          = Carbon::now()->timestamp;
+            $difference_timestamp           = $start_slot_timestamp - $currentTime_timestamp;
+
+            return $difference_timestamp;
+        // } else {
+
+        //     return 1000;
+        // }
 
 
         // $CustomerData = array();

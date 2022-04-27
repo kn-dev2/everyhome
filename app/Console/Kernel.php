@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         Commands\OneHourAlerts::class,
+        Commands\TenMinutesAlerts::class,
     ];
 
     /**
@@ -26,6 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('one:hour_alerts')->everyMinute();
+        $schedule->command('ten:minutes_alerts')->everyMinute();
+
     }
 
     /**

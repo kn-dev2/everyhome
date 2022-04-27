@@ -40,7 +40,7 @@ class TenMinutesAlerts extends Command
      */
     public function handle()
     {
-        $BookingRequests = BookingRequest::with('booking_details.customer')->with('booking_details.time_slot')->where('status',1)->distinct()->select('booking_id')->get();
+        $BookingRequests = BookingRequest::with('booking_details.customer')->with('booking_details.time_slot')->where('status',2)->distinct()->select('booking_id')->get();
 
         $CustomerData = array();
         $i=0;
@@ -59,7 +59,8 @@ class TenMinutesAlerts extends Command
 
             if($CustomerData[$i]['difference_timestamp']==600)
             {
-                dispatch(new SendTenMinAlertEmailJob($CustomerData));
+                // Send alert to customer before 10 min.
+                dispatch(new SendTenMinAlertEmailJob($CustomerData[$i],'customer'));
             }
             
             $i++;

@@ -7,12 +7,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Mail\SendTenMinAlertEmail;
+use App\Mail\SendOneHourAlertEmail;
 use Mail;
 
-class SendTenMinAlertEmailJob implements ShouldQueue
+class SendOneHourAlertEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $data;
 
     protected $email;
 
@@ -23,9 +25,10 @@ class SendTenMinAlertEmailJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($email,$type)
+    public function __construct($data,$email,$type)
     {
         //
+        $this->data = $data;
         $this->email = $email;
         $this->type = $type;
 
@@ -39,7 +42,7 @@ class SendTenMinAlertEmailJob implements ShouldQueue
     public function handle()
     {
         //
-        $AlertTemplate = new SendTenMinAlertEmail($this->email,$this->type);
+        $AlertTemplate = new SendOneHourAlertEmail($this->data,$this->email,$this->type);
 
         Mail::to($this->email)->send($AlertTemplate);
        

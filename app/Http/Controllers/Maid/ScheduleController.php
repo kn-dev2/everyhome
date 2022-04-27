@@ -13,6 +13,7 @@ use App\Models\BookingRequest;
 use App\Models\TimeSlot;
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Http\Request;
 use Validator;
 
 class ScheduleController extends Controller
@@ -135,6 +136,23 @@ class ScheduleController extends Controller
             return view('backend.schedule.booking_requests', ['booking_requests' => $BookingRequests]);
         } catch (ModelNotFoundException $exception) {
             session()->flash('error', 'No data found of this booking request');
+            return redirect()->route('schedules.index');
+        }
+    }
+
+    public function confirmRequest(Request $request)
+    {
+        try {
+            $BookingRequest = BookingRequest::where(['maid_id'=>base64_decode($request->maid_id),'id'=>base64_decode($request->schedule_id),'status'=>2])->firstOrFail();
+            $BookingRequest->status = $request->status=='yes' ? 4 : 5;
+            if($BookingRequest->save())
+            {
+                session()->flash('success', 'Status has been updated.');
+                return redirect()->route('schedules.show',$BookingRequest->maid_time_slot_id);
+            }
+
+        } catch (ModelNotFoundException $exception) {
+            session()->flash('error', 'No data found of this id');
             return redirect()->route('schedules.index');
         }
     }

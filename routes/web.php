@@ -104,6 +104,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::group(['middleware' => ['maid']], function () {
 	Route::get('/maid/dashboard', '\App\Http\Controllers\Maid\DashboardController@index')->name('maid.dashboard');
+	Route::get('/maid/schedule', '\App\Http\Controllers\Maid\ScheduleController@confirmRequest')->name('maid.confirm.request');
 	Route::resource('schedules', '\App\Http\Controllers\Maid\ScheduleController');
 });
 

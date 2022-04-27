@@ -10,6 +10,8 @@
         <h3 class="card-title">List of Booking Requests</h3>
     </div>
     <div class="card-body">
+    @include("backend.alerts.success")
+    @include("backend.alerts.error")
         <div class="table-responsive dt-responsive">
             <table id="dom-jqry" class="table table-striped table-bordered nowrap">
                 <thead>

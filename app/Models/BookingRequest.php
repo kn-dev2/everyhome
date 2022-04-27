@@ -17,6 +17,11 @@ class BookingRequest extends Model
         return $this->hasOne(MaidTimeSlot::class, 'id','maid_time_slot_id');
     }
 
+    public function maid_details()
+    {
+        return $this->hasOne(User::class, 'id','maid_id');
+    }
+
     public function booking_details()
     {
         return $this->hasOne(Booking::class, 'id','booking_id');
