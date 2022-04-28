@@ -80,7 +80,7 @@
               <a href="javascript:void(0)" class="btn btn-warning btn-mini">Not Fully Completed</a>
               <a href="javascript:void(0)" class="btn btn-info btn-mini" data-toggle="modal" data-target="#viewDetailsModal{{$booking_request->id}}">View Details</a>
               @elseif($booking_request->status==8)
-              <a href="javascript:void(0)" class="btn btn-danger btn-mini">Accepted by other</a>
+              <a href="javascript:void(0)" class="btn btn-warning btn-mini">Accepted by {{$booking_request->maid_details->name}}</a>
               @endif
             </td>
           </tr>

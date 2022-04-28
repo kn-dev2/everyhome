@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Auth;
 class LoginController extends Controller
 {
     /*
@@ -50,17 +50,30 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
+        if(Auth::User()->status==1)
+        {
+            if (request()->session()->get('BOOKNOW')) {
+                return RouteServiceProvider::BOOKING;
+            }
+            if (auth()->user()->role == 3) {
+                return RouteServiceProvider::DASHBOARD;
+            }
+            if (auth()->user()->role == 2) {
+                return RouteServiceProvider::MAID_DASHBOARD;
+            }
+            return RouteServiceProvider::HOME;
+        } else {
+            if (auth()->user()->role == 3 || auth()->user()->role == 2) {
+                \Auth::logout();
+                session()->flash('error', 'Your account is not active');
+                return RouteServiceProvider::ADMIN;
+            } else if (auth()->user()->role == 1) {
+                \Auth::logout();
+                session()->flash('error', 'Your account is not active');
+                return RouteServiceProvider::LOGIN;
+            }
 
-        if (request()->session()->get('BOOKNOW')) {
-            return RouteServiceProvider::BOOKING;
         }
-        if (auth()->user()->role == 3) {
-            return RouteServiceProvider::DASHBOARD;
-        }
-        if (auth()->user()->role == 2) {
-            return RouteServiceProvider::MAID_DASHBOARD;
-        }
-        return RouteServiceProvider::HOME;
     }
 
 }

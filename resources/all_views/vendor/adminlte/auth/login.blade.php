@@ -21,6 +21,11 @@
 @section('auth_header', __('adminlte::adminlte.login_message'))
 
 @section('auth_body')
+@if(session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session()->get('error') }}
+                </div>
+                @endif
     <form action="{{ $login_url }}" method="post">
         {{ csrf_field() }}
 
