@@ -200,7 +200,25 @@ class ScheduleController extends Controller
     {
         try {
             $MaidTimeSlot = MaidTimeSlot::findOrFail($id);
-            $TimeSlots = TimeSlot::where('status', 1)->pluck('slot', 'id');
+
+            $TimeSlotArray = array();
+
+            $GetTimeSlots = TimeSlot::where('status', 1)->get();
+
+            foreach($GetTimeSlots as $SingleTimeSlot)
+            {
+                $FirstTime = explode('-',$SingleTimeSlot->slot);
+    
+                if($this->checkDifferenceTime($FirstTime[0],$MaidTimeSlot->date))
+                {
+                    $TimeSlotArray[] = $SingleTimeSlot->id;
+                }
+    
+            }
+
+            $TimeSlots = TimeSlot::where('status', 1)->whereIn('id',$TimeSlotArray)->pluck('slot', 'id');
+
+            // print_r($MaidTimeSlot->bookingRequests); die;
         } catch (ModelNotFoundException $exception) {
             session()->flash('error', 'No data found of this id');
             return redirect()->route('schedules.index');
@@ -221,20 +239,24 @@ class ScheduleController extends Controller
 
             $CheckExistingTimeSlot = MaidTimeSlot::CheckExistingTimeSlot(Carbon::parse($request->date)->format('Y-m-d'), $request->time_slot_id, $id);
 
-            if ($CheckExistingTimeSlot == 0) {
-                $MaidTimeSlot = MaidTimeSlot::findOrFail($id);
-                $MaidTimeSlot->date = Carbon::parse($request->date)->format('Y-m-d');
-                $MaidTimeSlot->time_slot_id = $request->time_slot_id;
-                $MaidTimeSlot->status = $request->status;
-                $SaveTimeSlot = $MaidTimeSlot->save();
+            if ($CheckExistingTimeSlot == 0) 
+            {
+                    $MaidTimeSlot = MaidTimeSlot::findOrFail($id);
+                    $MaidTimeSlot->date = Carbon::parse($request->date)->format('Y-m-d');
+                    $MaidTimeSlot->time_slot_id = $request->time_slot_id;
+                    $MaidTimeSlot->status = $request->status;
+                    $SaveTimeSlot = $MaidTimeSlot->save();
 
-                if ($SaveTimeSlot) {
-                    session()->flash('success', 'Your schedule has been saved.');
-                    return redirect()->route('schedules.index');
-                } else {
-                    session()->flash('error', 'Time slot Data is not saved.');
-                    return redirect()->route('schedules.index');
-                }
+                    if ($SaveTimeSlot) {
+                        session()->flash('success', 'Your schedule has been saved.');
+                        return redirect()->route('schedules.index');
+                    } else {
+                        session()->flash('error', 'Time slot Data is not saved.');
+                        return redirect()->route('schedules.index');
+                    }
+
+                
+                
             } else {
                 session()->flash('error', 'Sorry! this time slot Data is already existing with selected date.');
                 return redirect()->route('schedules.index');

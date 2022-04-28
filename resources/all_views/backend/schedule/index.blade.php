@@ -32,9 +32,11 @@
                 <td>{{ $SingleTimeSlot->timeSlot->slot }}</td>
                 <td>{{ $SingleTimeSlot->status==0 ? 'In-Active' : 'Active' }}</td>
                 <td>
-                    <a href="{{route('schedules.edit',$SingleTimeSlot->id)}}" class="btn btn-warning btn-mini">Edit</a> 
                     @if($SingleTimeSlot->bookingRequests)
+                    <a href="javascript:void(0)" class="btn btn-warning btn-mini" disabled="disabled" title="You can not edit this schedule details">Edit</a> 
                     <a href="{{route('schedules.show',$SingleTimeSlot->id)}}" class="btn btn-success btn-mini">View Requests</a>
+                    @else
+                    <a href="{{route('schedules.edit',$SingleTimeSlot->id)}}" class="btn btn-warning btn-mini">Edit</a> 
                     @endif
                 </td>
             </tr>
