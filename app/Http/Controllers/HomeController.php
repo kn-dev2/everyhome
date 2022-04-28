@@ -397,12 +397,38 @@ class HomeController extends Controller
             try {
                 $DiscountCode = DiscountCode::where('discount_code', $request->discount_code)->whereRaw('? between vaild_from and valid_till', [Carbon::now()->format('Y-m-d')])->firstOrFail();
 
-                return Response::json(array(
-                    'status' => true,
-                    'message'  => 'Discount code has been applied Successfully.',
-                    'data' => $DiscountCode
+                if($DiscountCode->customer_id!='')
+                {
+                    if($DiscountCode->customer_id==Auth::User()->id)
+                    {
+                        return Response::json(array(
+                            'status' => true,
+                            'message'  => 'Discount code has been applied Successfully.',
+                            'data' => $DiscountCode
+        
+                        ), 200);
 
-                ), 200);
+                    } else {
+
+                        return Response::json(array(
+                            'status' => false,
+                            // 'errors' => $exception->getMessage()
+                            'errors' => 'This discount code is not vaild for you.'
+        
+                        ), 200);
+
+                    }
+
+                } else {
+
+                    return Response::json(array(
+                        'status' => true,
+                        'message'  => 'Discount code has been applied Successfully.',
+                        'data' => $DiscountCode
+    
+                    ), 200);
+                }
+
             } catch (ModelNotFoundException $exception) {
 
                 return Response::json(array(
@@ -522,13 +548,27 @@ class HomeController extends Controller
         } else {
             try {
 
+                $LateCoupan = Str::random(6);
                 $Booking                            = Booking::where(['id'=>$request->booking_id,'customer_id'=>Auth::User()->id])->firstOrFail();
                 $TimeSlot                           = explode("#", $request->time_slot);
                 $Booking->booking_date              = Carbon::parse($request->date)->format('Y-m-d');
                 $Booking->time_slot_id              = $TimeSlot[1];
+                $Booking->late_coupan_recieved      = $LateCoupan;
 
                 if($Booking->save())
                 {
+                    // Add Discount Code for customer
+                    $DiscountCode                       = new DiscountCode();
+                    $DiscountCode->customer_id          = Auth::User()->id;
+                    $DiscountCode->discount_code        = $LateCoupan;
+                    $DiscountCode->amount               = 10;
+                    $DiscountCode->vaild_from           = Carbon::now()->format('Y-m-d');
+                    $DiscountCode->valid_till           = Carbon::now()->format('Y-m-d');
+                    $DiscountCode->type                 = 1;
+                    $DiscountCode->no_of_usage_customer = 1;
+                    $DiscountCode->min_spend            = 300;
+                    $DiscountCode->save();
+
                     $MaidTimeSlots = MaidTimeSlot::where(['time_slot_id' => $TimeSlot[1], 'date' => Carbon::parse($request->date)->format('Y-m-d')])->get();
 
                     // print_r($MaidTimeSlots); die;

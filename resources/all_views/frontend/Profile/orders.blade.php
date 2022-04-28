@@ -25,6 +25,7 @@
                     <th>Schedule Type</th>
                     <th>Total Price</th>
                     <th>Status</th>
+                    <th>Coupan Recieved<br/><small>(Will be use on next booking for <br/>10% discount & validity up to one month )</small></th>
                     <th>Accept Status by Maid</th>
                     <th>Action</th>
                 </tr>
@@ -50,10 +51,13 @@
                         <span class="badge {{$Status}}">{{$SingleBooking->status }}</span>
                     </td>
                     <td>
+                       {{$SingleBooking->late_coupan_recieved=='' ? 'No coupan recieved' : $SingleBooking->late_coupan_recieved }}
+                    </td>
+                    <td>
                         {!! isset($SingleBooking->acceptRequests->maid_time_slot->maidDetails->name) ? '<a class="button" href="#popup'.$SingleBooking->id.'">Show Maid Details</a>' : 'Not accepted yet' !!}
                     </td>
                     <td>
-                        @if($SingleBooking->NotacceptedByOther($SingleBooking->id)< 600) 
+                        @if($SingleBooking->NotacceptedByOther($SingleBooking->id)<= 600) 
                             <a href="#edit_popup{{$SingleBooking->id}}" class="button">Edit Details</a>
                             <a href="{{route('customer.order.details',$SingleBooking->id)}}" class="button">Order Details</a>
 

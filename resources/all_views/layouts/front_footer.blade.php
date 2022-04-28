@@ -609,10 +609,21 @@
 					ToastMessage(GetErrors, 'Errors', 'warning');
 				} else {
 					var Data = result.data;
-					console.log(Data);
-					$('.discount-value').text('$' + Data.amount);
-					var SubTotal = $('.sub-total-value').html().replace('$', '');
-					var DiscountCalculate = parseInt(SubTotal) - parseInt(Data.amount);
+					if(Data.type==2)
+					{
+						$('.discount-value').text('$' + Data.amount);
+						var SubTotal = $('.sub-total-value').html().replace('$', '');
+						var DiscountCalculate = parseInt(SubTotal) - parseInt(Data.amount);
+
+					} else if(Data.type==1) {
+
+						var SubTotal = $('.sub-total-value').html().replace('$', '');
+						var DiscountedValue = SubTotal*Data.amount/100;
+						$('.discount-value').text(Data.amount+'%');
+						var DiscountCalculate = parseInt(SubTotal) - parseInt(DiscountedValue);
+
+					}
+
 					$('.sub-total-value').html('$' + DiscountCalculate);
 					$('.final-price-value').html('$' + DiscountCalculate);
 					$('input[name="discount_code"]').attr('readonly', true);

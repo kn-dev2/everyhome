@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class Booking extends Model
 {
     protected $fillable = [
-        'booking_date', 'time_slot_id','booking_id','services_id','home_type_id','home_sub_type_id','customer_id','discout_coupan_id','discout_price','total_price','total_hours','schedule_type','full_response','status'
+        'booking_date', 'time_slot_id','booking_id','services_id','home_type_id','home_sub_type_id','customer_id','discout_coupan_id','discout_price','total_price','total_hours','schedule_type','full_response','late_coupan_recieved','status'
     ];
      
     public function service()
@@ -57,8 +57,8 @@ class Booking extends Model
     {
         $BookingRequests = BookingRequest::with('booking_details.customer')->with('booking_details.time_slot')->where('booking_id',$id)->where('status','<>',2)->distinct()->select('booking_id')->first();
 
-        // if(isset($BookingRequests->booking_details))
-        // {
+        if(isset($BookingRequests->booking_details))
+        {
 
             $TimeSlot        = explode('-',$BookingRequests->booking_details->time_slot->slot);
 
@@ -68,10 +68,10 @@ class Booking extends Model
             $difference_timestamp           = $start_slot_timestamp - $currentTime_timestamp;
 
             return $difference_timestamp;
-        // } else {
+        } else {
 
-        //     return 1000;
-        // }
+            return 1000;
+        }
 
 
         // $CustomerData = array();

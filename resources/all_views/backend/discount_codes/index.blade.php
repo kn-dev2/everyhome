@@ -19,6 +19,7 @@
     <table id="dom-jqry" class="table table-striped table-bordered nowrap">
         <thead>
             <tr>
+                <th>Customer</th>
                 <th>Discount Code</th>
                 <th>Amount</th>
                 <th>Vaild From</th>
@@ -29,6 +30,7 @@
         <tbody>
             @forelse($discount_codes as $discount_code)
             <tr>
+                <td>{{ isset($discount_code->customer->name) ? $discount_code->customer->name : '--'  }}</td>
                 <td>{{ $discount_code->discount_code }}</td>
                 <td>{{ $discount_code->amount }}</td>
                 <td>{{ $discount_code->vaild_from }}</td>
