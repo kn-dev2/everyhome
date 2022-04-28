@@ -563,7 +563,7 @@ class HomeController extends Controller
                     $DiscountCode->discount_code        = $LateCoupan;
                     $DiscountCode->amount               = 10;
                     $DiscountCode->vaild_from           = Carbon::now()->format('Y-m-d');
-                    $DiscountCode->valid_till           = Carbon::now()->format('Y-m-d');
+                    $DiscountCode->valid_till           = Carbon::now()->addDays(30)->format('Y-m-d');
                     $DiscountCode->type                 = 1;
                     $DiscountCode->no_of_usage_customer = 1;
                     $DiscountCode->min_spend            = 300;
