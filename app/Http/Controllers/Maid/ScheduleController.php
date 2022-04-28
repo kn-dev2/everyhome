@@ -45,9 +45,41 @@ class ScheduleController extends Controller
     public function create()
     {
         //
-        $TimeSlots = TimeSlot::where('status', 1)->pluck('slot', 'id');
+        $GetTimeSlots = TimeSlot::where('status', 1)->get();
+
+        $TimeSlotArray = array();
+
+        foreach($GetTimeSlots as $SingleTimeSlot)
+        {
+            $FirstTime = explode('-',$SingleTimeSlot->slot);
+
+            if($this->checkDifferenceTime($FirstTime[0],Carbon::now()->format('Y-m-d')))
+            {
+                $TimeSlotArray[] = $SingleTimeSlot->id;
+            }
+
+        }
+
+        $TimeSlots = TimeSlot::where('status', 1)->whereIn('id',$TimeSlotArray)->pluck('slot', 'id');
 
         return view('backend.schedule.create', ['status_dropdown' => $this->status_dropdown, 'slots' => $TimeSlots]);
+    }
+
+    private function checkDifferenceTime($chooseTime,$date)
+    {
+        $chooseTime = Carbon::createFromTimeString($date.' '.$chooseTime)->timestamp;
+        $CurrentTime = Carbon::now()->timestamp;
+
+        $Date = Carbon::parse($date)->timestamp;
+        $CDate = Carbon::now()->timestamp;
+
+        $DifferenceTime = $chooseTime - $CurrentTime;
+
+         if ($chooseTime > $CurrentTime && $DifferenceTime>1800) {
+                return true;
+         } else {
+             return false;
+         }
     }
 
     /**
@@ -65,7 +97,8 @@ class ScheduleController extends Controller
             $TimeSlots = $request->time_slot_id;
             for ($i = 0; $i < count($request->time_slot_id); $i++) {
                 $CheckExistingTimeSlot = MaidTimeSlot::CheckExistingTimeSlot(Carbon::parse($request->date)->format('Y-m-d'), $TimeSlots[$i]);
-                if ($CheckExistingTimeSlot == 0) {
+                if ($CheckExistingTimeSlot == 0) 
+                {
                     $MaidTimeSlot = new MaidTimeSlot();
                     $MaidTimeSlot->maid_id = Auth::User()->id;
                     $MaidTimeSlot->date = Carbon::parse($request->date)->format('Y-m-d');
@@ -303,6 +336,8 @@ class ScheduleController extends Controller
             }
         }
     }
+
+    
 
     private function compareTime($chooseTime, $selectTime, $date)
     {

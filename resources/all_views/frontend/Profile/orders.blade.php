@@ -25,7 +25,7 @@
                     <th>Schedule Type</th>
                     <th>Total Price</th>
                     <th>Status</th>
-                    <th>Coupan Recieved<br/><small>(Will be use on next booking for <br/>10% discount & validity up to one month )</small></th>
+                    <th>Coupan Recieved<br/><small>(Will be use on next booking for <br/>10% discount & validity up to 30 days )</small></th>
                     <th>Accept Status by Maid</th>
                     <th>Action</th>
                 </tr>

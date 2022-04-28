@@ -98,7 +98,9 @@ class TimeSlotsController extends Controller
         $Date = Carbon::parse($date)->timestamp;
         $CDate = Carbon::now()->timestamp;
 
-         if ($chooseTime > $CurrentTime) {
+        $DifferenceTime = $chooseTime - $CurrentTime;
+
+         if ($chooseTime > $CurrentTime && $DifferenceTime>1800) {
                 return true;
          } else {
              return false;
