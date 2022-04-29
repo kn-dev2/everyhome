@@ -40,33 +40,35 @@ class TenMinutesAlerts extends Command
      */
     public function handle()
     {
-        $BookingRequests = BookingRequest::with('booking_details.customer')->with('booking_details.time_slot')->where('status',2)->distinct()->select('booking_id')->get();
+        try {
+            $BookingRequests = BookingRequest::with('booking_details.customer')->with('booking_details.time_slot')->where('status', 1)->distinct()->select('booking_id')->get();
 
-        $CustomerData = array();
-        $i=0;
-        foreach($BookingRequests as $SingleBookingRequest)
-        {
-            $TimeSlot                                           = explode('-',$SingleBookingRequest->booking_details->time_slot->slot);
-            $CustomerData[$i]['customer_name']                  = $SingleBookingRequest->booking_details->customer->name;
-            $CustomerData[$i]['customer_email']                 = $SingleBookingRequest->booking_details->customer->email;
-            $CustomerData[$i]['booking_date']                   = $SingleBookingRequest->booking_details->booking_date;
-            $CustomerData[$i]['time_slot']                      = $SingleBookingRequest->booking_details->time_slot->slot;
-            $CustomerData[$i]['start_slot_time']                = $TimeSlot[0];
-            $CustomerData[$i]['start_slot_timestamp']           = Carbon::createFromTimeString($CustomerData[$i]['booking_date'].' '.$TimeSlot[0])->timestamp;
-            $CustomerData[$i]['currentTime']                    = Carbon::now()->format('h:i A');
-            $CustomerData[$i]['currentTime_timestamp']          = Carbon::now()->timestamp;
-            $CustomerData[$i]['difference_timestamp']           = $CustomerData[$i]['start_slot_timestamp'] - Carbon::now()->timestamp;
+            $CustomerData = array();
+            $i = 0;
+            foreach ($BookingRequests as $SingleBookingRequest) {
+                $TimeSlot                                           = explode('-', $SingleBookingRequest->booking_details->time_slot->slot);
+                $CustomerData[$i]['customer_name']                  = $SingleBookingRequest->booking_details->customer->name;
+                $CustomerData[$i]['customer_email']                 = $SingleBookingRequest->booking_details->customer->email;
+                $CustomerData[$i]['booking_date']                   = $SingleBookingRequest->booking_details->booking_date;
+                $CustomerData[$i]['time_slot']                      = $SingleBookingRequest->booking_details->time_slot->slot;
+                $CustomerData[$i]['start_slot_time']                = $TimeSlot[0];
+                $CustomerData[$i]['start_slot_timestamp']           = Carbon::createFromTimeString($CustomerData[$i]['booking_date'] . ' ' . $TimeSlot[0])->timestamp;
+                $CustomerData[$i]['currentTime']                    = Carbon::now()->format('h:i A');
+                $CustomerData[$i]['currentTime_timestamp']          = Carbon::now()->timestamp;
+                $CustomerData[$i]['difference_timestamp']           = $CustomerData[$i]['start_slot_timestamp'] - Carbon::now()->timestamp;
 
-            if($CustomerData[$i]['difference_timestamp']==600)
-            {
-                // Send alert to customer before 10 min.
-                dispatch(new SendTenMinAlertEmailJob($CustomerData[$i],'customer'));
+                if ($CustomerData[$i]['difference_timestamp'] == 600) {
+                    // Send alert to customer before 10 min.
+                    dispatch_now(new SendTenMinAlertEmailJob($CustomerData[$i]['customer_email'], 'customer'));
+                }
+
+                $i++;
             }
-            
-            $i++;
+
+            $this->info('Ten minutes alert sent to client !');
+        } catch (\Illuminate\Database\QueryException $exception) {
+
+            return back()->withError($exception->errorInfo)->withInput();
         }
-
-        $this->info('Ten minutes alert sent to client !');
     }
-
 }

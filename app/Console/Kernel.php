@@ -26,8 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('one:hour_alerts')->everyMinute();
-        $schedule->command('ten:minutes_alerts')->everyMinute();
+        $schedule->command('one:hour_alerts')->everyMinute()->appendOutputTo(storage_path('logs/inspire.log'));
+        $schedule->command('ten:minutes_alerts')->everyMinute()->appendOutputTo(storage_path('logs/inspire.log'));
 
     }
 
