@@ -556,7 +556,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
     <link href="https://adminlte.io/themes/v3/plugins/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('css/jquery.timepicker.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('frontend/css/jquery.timepicker.css') }}" rel="stylesheet" type="text/css">
 
 
     @else
@@ -631,6 +631,8 @@
 
     @endif
     <script type="text/javascript" src="{{ asset('frontend/js/jquery.toast.js') }}"></script>
+    
+    <script src="{{ asset('frontend/js/jquery-clock-timepicker.min.js') }}"></script>
 
     {{-- Livewire Script --}}
     @if(config('adminlte.livewire'))
@@ -641,6 +643,16 @@
     @endif
     @endif
     <script type="text/javascript">
+         $(document).ready(function(){
+            $(".clock").clockTimePicker({
+                required:true,
+                timeFormat: 'h:mm:ss p',
+                separator:'.',
+                precision:5,
+                duration:true, 
+                durationNegative:false
+            });
+        });
         $(function() {
             $("#dt1").datepicker({
                 dateFormat: "dd-M-yy",

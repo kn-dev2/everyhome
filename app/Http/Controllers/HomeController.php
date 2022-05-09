@@ -153,6 +153,13 @@ class HomeController extends Controller
 
         } else {
 
+            $time_slot = explode("#", $request->time_slot);
+
+            if(!isset($time_slot[1]))
+            {
+                return ['status' => false, 'message' => 'Sorry! Time slot is not accurate.'];
+            }
+
             return Response::json(array(
                 'status' => true,
                 'message' => 'Validated Booking data.'
@@ -193,6 +200,7 @@ class HomeController extends Controller
             try {
 
                 $SaveBookingData = $this->SaveBookingDetails($request);
+                // print_r($SaveBookingData); die;
                 if ($SaveBookingData['status'] == true) {
                     Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -323,6 +331,7 @@ class HomeController extends Controller
             $user->save();
 
             $time_slot = explode("#", $request->time_slot);
+
             //get_total detail 
             $total_detail = $this->get_total_detail($request->all());
 

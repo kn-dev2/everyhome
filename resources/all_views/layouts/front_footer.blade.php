@@ -1,3 +1,4 @@
+@if(!Request::is('login*') && !Request::is('register*') && !Request::is('booknow-login*'))
 <footer>
 	<div class="row">
 		<div class="medium-6 columns">
@@ -8,12 +9,14 @@
 		</div>
 	</div>
 </footer>
+@endif
 
 <a id="back-to-top" href="#"><img src="{{ asset('frontend/img/arrow-top.png') }}" alt="" /></a>
 
 <script src="{{ asset('frontend/js/vendor/jquery.js') }}"></script>
 <script src="{{ asset('frontend/js/foundation.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <link media="screen" rel="stylesheet" type="text/css" href="{{ asset('frontend/css/jquery.toast.css') }}" />
 <script type="text/javascript" src="{{ asset('frontend/js/jquery.toast.js') }}"></script>
 
@@ -29,6 +32,14 @@
 			bullets: true
 		}
 	});
+	$(document).ready(function() {
+		$('.datatable').DataTable({
+			rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
+			responsive: true
+		});
+	});
 </script>
 
 <link rel="stylesheet" href="{{ asset('frontend/css/aos.css') }}">
@@ -39,13 +50,13 @@
 </script>
 
 <script type="text/javascript">
-	$(window).scroll(function() {
-		var sticky = $('.header'),
-			scroll = $(window).scrollTop();
+	// $(window).scroll(function() {
+	// 	var sticky = $('.header'),
+	// 		scroll = $(window).scrollTop();
 
-		if (scroll >= 100) sticky.addClass('sticky');
-		else sticky.removeClass('sticky');
-	});
+	// 	if (scroll > 150) sticky.addClass('sticky');
+	// 	else sticky.removeClass('sticky');
+	// });
 </script>
 
 <script type="text/javascript">
@@ -294,10 +305,10 @@
 				},
 				type: 'html',
 				success: function(result) {
-					$('#time_slot'+ID).html(result);
-					var GetTime = $("#time_slot"+ID+" optgroup option:first").val();
+					$('#time_slot' + ID).html(result);
+					var GetTime = $("#time_slot" + ID + " optgroup option:first").val();
 					// const myArray = GetTime.split("#");
-					$('#final_time_slot'+ID).val(GetTime);
+					$('#final_time_slot' + ID).val(GetTime);
 				}
 			});
 		},
@@ -306,7 +317,7 @@
 
 	$(".select_time_slot").on('change', function() {
 		var ID = $(this).attr('data-id');
-		$('#final_time_slot'+ID).val($(this).val());
+		$('#final_time_slot' + ID).val($(this).val());
 	});
 
 	// function Options(value)
@@ -609,17 +620,16 @@
 					ToastMessage(GetErrors, 'Errors', 'warning');
 				} else {
 					var Data = result.data;
-					if(Data.type==2)
-					{
+					if (Data.type == 2) {
 						$('.discount-value').text('$' + Data.amount);
 						var SubTotal = $('.sub-total-value').html().replace('$', '');
 						var DiscountCalculate = parseInt(SubTotal) - parseInt(Data.amount);
 
-					} else if(Data.type==1) {
+					} else if (Data.type == 1) {
 
 						var SubTotal = $('.sub-total-value').html().replace('$', '');
-						var DiscountedValue = SubTotal*Data.amount/100;
-						$('.discount-value').text(Data.amount+'%');
+						var DiscountedValue = SubTotal * Data.amount / 100;
+						$('.discount-value').text(Data.amount + '%');
 						var DiscountCalculate = parseInt(SubTotal) - parseInt(DiscountedValue);
 
 					}
@@ -649,8 +659,8 @@
 				"_token": "{{ csrf_token() }}",
 				booking_id: BookingId,
 				status: Status,
-				rating: $('#rating'+BookingId).val(),
-				review: $('#review'+BookingId).val(),
+				rating: $('#rating' + BookingId).val(),
+				review: $('#review' + BookingId).val(),
 			},
 			type: 'json',
 			success: function(result) {
@@ -691,8 +701,8 @@
 			data: {
 				"_token": "{{ csrf_token() }}",
 				booking_id: BookingId,
-				date: $('#date'+BookingId).val(),
-				time_slot: $('#final_time_slot'+BookingId).val(),
+				date: $('#date' + BookingId).val(),
+				time_slot: $('#final_time_slot' + BookingId).val(),
 			},
 			type: 'json',
 			success: function(result) {
@@ -779,17 +789,14 @@
 			// JUST RESPONSE (Not needed)
 			var ratingValue = parseInt($('.stars li.selected').last().data('value'), 10);
 			var msg = "";
-			if (ratingValue < 1) 
-			{
+			if (ratingValue < 1) {
 				ToastMessage('Please give at least one star', 'Errors', 'warning');
 			} else {
 
-				$('#rating'+ID).val(ratingValue);
+				$('#rating' + ID).val(ratingValue);
 			}
 		});
 
 
 	});
-
-
 </script>

@@ -6,7 +6,7 @@
 @section('content')
 <div class="card card-primary">
     <div class="card-header">
-        <a href="{{route('customers.index')}}">
+        <a href="{{route('maids.index')}}">
             <h3 class="card-title">
                 << Back </h3>
         </a>

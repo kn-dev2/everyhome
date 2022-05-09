@@ -1,6 +1,9 @@
 @extends('layouts.frontend')
 
 @section('content')
+<link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css">
+<link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 
 <div class="container">
     <div class="columns">
@@ -13,7 +16,8 @@
     </div>
     <div class="row profile-form">
         <div class="col-md-8">
-            <table style="width: 100%;">
+            <table style="width: 100%;" class="datatable">
+            <thead>
                 <tr>
                     <th>#</th>
                     <th>Date</th>
@@ -29,6 +33,7 @@
                     <th>Accept Status by Maid</th>
                     <th>Action</th>
                 </tr>
+            </thead>
                 @php $i=1; $Status;@endphp
                 @foreach($orders as $SingleBooking)
 
@@ -37,6 +42,7 @@
                 @else
                 @php $Status = 'bg-success'; @endphp
                 @endif
+                <tbody>
                 <tr>
                     <td>{{$i}}</td>
                     <td>{{ date('d M Y',strtotime($SingleBooking->booking_date)) }}</td>
@@ -66,6 +72,7 @@
                             @endif
                     </td>
                 </tr>
+                </tbody>
 
                 <div id="edit_popup{{$SingleBooking->id}}" class="overlay">
                     <div class="popup">

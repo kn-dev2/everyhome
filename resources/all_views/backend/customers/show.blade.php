@@ -85,7 +85,7 @@
                             @endif
                         <tr>
                             <td>{{$i}}</td>
-                            <td>{{ date('d M Y',strtotime($SingleBooking->date)) }}</td>
+                            <td>{{ date('d M Y',strtotime($SingleBooking->booking_date)) }}</td>
                             <td>{{$SingleBooking->booking_id }}</td>
                             <td>{{$SingleBooking->service->title }}</td>
                             <td>{{$SingleBooking->home_type->title}}</td>

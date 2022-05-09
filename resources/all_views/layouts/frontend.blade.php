@@ -24,7 +24,6 @@
   <script src="{{ asset('frontend/js/vendor/modernizr.js') }}"></script>
   <!-- Fonts -->
   <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
   <style>
     #booking_form_loader {
@@ -56,7 +55,7 @@
       background-color: transparent;
       color: black;
       padding: 16px;
-      font-size: 17px !important;
+      font-size: 15px;
       border: none;
       cursor: pointer;
     }
@@ -102,10 +101,10 @@
 
     .top-bar-section li div.dropdown {
       position: relative !important;
-      height: 133px !important;
-      width: 136px !important;
+      height: 149px !important;
+      width: 149px !important;
       border-top-left-radius: 20px;
-      border-bottom-right-radius: 20px;
+      /* border-bottom-right-radius: 20px; */
       padding: 0px 0px;
       font-family: 'Titillium Web', sans-serif;
       font-size: 17px;
@@ -118,25 +117,28 @@
     }
 
     .dropdown:hover .dropbtn {
-    background: #36d0dc;
-    background: -moz-linear-gradient(left, #36d0dc 0%, #5b86e5 100%);
-    background: -webkit-linear-gradient(left, #36d0dc 0%,#5b86e5 100%);
-    background: linear-gradient(to right, #36d0dc 0%,#5b86e5 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#36d0dc', endColorstr='#5b86e5',GradientType=1 );
-}
-.dropdown-content a {
-    height: 30px;
-}
-.large-3.columns.logo {
-    margin-top: -80px;
-}
-button.dropbtn:hover {
-    background: #36d0dc;
-    background: -moz-linear-gradient(left, #36d0dc 0%, #5b86e5 100%);
-    background: -webkit-linear-gradient(left, #36d0dc 0%,#5b86e5 100%);
-    background: linear-gradient(to right, #36d0dc 0%,#5b86e5 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#36d0dc', endColorstr='#5b86e5',GradientType=1 );
-}
+      background: #36d0dc;
+      background: -moz-linear-gradient(left, #36d0dc 0%, #5b86e5 100%);
+      background: -webkit-linear-gradient(left, #36d0dc 0%, #5b86e5 100%);
+      background: linear-gradient(to right, #36d0dc 0%, #5b86e5 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#36d0dc', endColorstr='#5b86e5', GradientType=1);
+    }
+
+    .dropdown-content a {
+      height: 40px;
+    }
+
+    .large-3.columns.logo {
+      margin-top: -80px;
+    }
+
+    button.dropbtn:hover {
+      background: #36d0dc;
+      background: -moz-linear-gradient(left, #36d0dc 0%, #5b86e5 100%);
+      background: -webkit-linear-gradient(left, #36d0dc 0%, #5b86e5 100%);
+      background: linear-gradient(to right, #36d0dc 0%, #5b86e5 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#36d0dc', endColorstr='#5b86e5', GradientType=1);
+    }
   </style>
 </head>
 
@@ -146,9 +148,8 @@ button.dropbtn:hover {
     {{ View::make('layouts/front_header') }}
     <!--class header ends-->
     @yield('content')
-    @if(!Request::is('login*') && !Request::is('register*'))
+
     {{ View::make('layouts/front_footer') }}
-    @endif
 
   </div>
 </body>

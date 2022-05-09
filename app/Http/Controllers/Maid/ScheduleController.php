@@ -296,6 +296,11 @@ class ScheduleController extends Controller
                         return response()->json(['status' => false, 'message' => $validator->errors()]);
                     }
                 }
+
+                if(Auth::User()->role!=2)
+                {
+                    return response()->json(['status' => false, 'message' => 'Sorry! This action only performed by maid']);
+                }
                 $BookingRequests = BookingRequest::where(['id' => request()->input('request_id'), 'maid_id' => Auth::User()->id])->first();
 
                 $CheckBookingStatus = BookingRequest::where(['booking_id' => $BookingRequests->booking_id, 'maid_id' => Auth::User()->id])->where('status', 2)->count();

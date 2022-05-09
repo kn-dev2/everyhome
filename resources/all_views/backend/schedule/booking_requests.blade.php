@@ -84,7 +84,7 @@
                                     {{ Form::text('time_slot',$booking_request->maid_time_slot->timeSlot->slot, ['class' => 'form-control', 'disabled' => 'disabled']) }}
                                     <br>
                                     <label>Arrive Time</label>
-                                    {{ Form::time('time',old('time'), ['class' => 'form-control', 'placeholder' =>'Time','id'=>'arrive_time'.$booking_request->id, 'required' => 'required']) }}
+                                    {{ Form::text('time',old('time'), ['class' => 'form-control clock', 'placeholder' =>'Time','id'=>'arrive_time'.$booking_request->id, 'required' => 'required']) }}
 
                                     {{ Form::textarea('special_instructions',old('special_instructions'), ['class' => 'form-control', 'placeholder' =>'Special Instructions','id'=>'special_instructions'.$booking_request->id, 'required' => 'required']) }}
                                     <br>
@@ -260,4 +260,5 @@
         color: #FF912C;
     }
 </style>
+
 @stop
